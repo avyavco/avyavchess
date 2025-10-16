@@ -5,26 +5,25 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Avyav Chess</title>
 
-  <!-- Orbitron font (your preferred font) -->
+  <!-- Orbitron font -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --cyan: #00ccff;
-      --cyan-strong: #00e6ff;
+      --cyan: #00ccff; /* bright cyan */
       --bg: #000000;
       --yt-red: #FF0000;
     }
 
-    * { box-sizing: border-box; }
+    *{box-sizing:border-box}
     html,body{
       height:100%;
       margin:0;
       background:var(--bg);
       font-family:'Orbitron', sans-serif;
+      color:var(--cyan);
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
-      color:var(--cyan);
     }
 
     /* wrapper keeps footer from overlapping */
@@ -35,10 +34,10 @@
       align-items:center;
       justify-content:center;
       position:relative;
-      padding-bottom:70px; /* room for footer */
+      padding-bottom:80px; /* room for footer */
     }
 
-    /* Title in center then moves to top-left */
+    /* Title */
     #title {
       position:absolute;
       top:50%;
@@ -46,8 +45,8 @@
       transform:translate(-50%,-50%);
       font-size:4rem;
       color:var(--cyan);
-      /* sharp inner glow */
-      text-shadow: 0 0 1px var(--cyan), 0 0 2px var(--cyan), 0 0 4px var(--cyan-strong);
+      /* no fuzzy glow, keep sharp color */
+      text-shadow: 0 0 1px var(--cyan);
       opacity:0;
       animation: titleFadeIn 1.6s ease forwards, titleMove 2s ease 1.8s forwards;
       will-change: transform, top, left, font-size;
@@ -76,7 +75,7 @@
       justify-content:center;
       gap:18px;
       pointer-events:none;
-      margin-top:40px; /* so it sits below moved title visually on large screens */
+      margin-top:40px;
     }
 
     /* Intro typing text: above button */
@@ -94,13 +93,9 @@
       box-sizing:border-box;
       transition:opacity .35s ease;
       pointer-events:auto;
-      /* make glow sharp and subtle */
-      text-shadow: 0 0 1px var(--cyan), 0 0 2px var(--cyan-strong);
+      text-shadow: 0 0 1px var(--cyan);
     }
-
     #introText.visible { opacity:1; }
-
-    /* Remove caret once done */
     #introText.done { border-right: none; }
 
     /* Get Started button - hidden until typing done */
@@ -116,20 +111,18 @@
       font-size:1rem;
       border-radius:8px;
       cursor:pointer;
-      text-shadow: 0 0 2px var(--cyan);
-      box-shadow: inset 0 0 6px rgba(0,204,255,0.12), 0 0 6px rgba(0,204,255,0.06);
+      text-shadow: 0 0 1px var(--cyan);
+      box-shadow: inset 0 0 4px rgba(0,204,255,0.08), 0 0 4px rgba(0,204,255,0.04);
     }
-
     #getStarted.show {
       opacity:1;
       transform:translateY(0);
     }
-
     #getStarted:hover{
       background:var(--cyan);
       color:#000;
-      box-shadow: 0 0 18px var(--cyan), 0 0 36px rgba(0,204,255,0.25);
-      transform:scale(1.03);
+      box-shadow: 0 0 10px var(--cyan);
+      transform:scale(1.02);
     }
 
     /* Coming soon section */
@@ -157,47 +150,44 @@
       opacity:0;
       transition:opacity .5s ease;
     }
-
     footer.visible{ opacity:1; }
+    footer span { color:var(--cyan); text-shadow: 0 0 1px var(--cyan); }
 
-    footer span { color:var(--cyan); text-shadow: 0 0 2px var(--cyan); }
-
-    /* YouTube button with larger play triangle like before */
+    /* YouTube button with larger play triangle (previous design) */
     .youtube-btn {
       background:var(--yt-red);
       border:none;
-      padding:6px 8px;
+      padding:6px 10px;
       border-radius:10px;
       display:inline-flex;
       align-items:center;
-      gap:8px;
+      gap:10px;
       cursor:pointer;
-      box-shadow: 0 0 22px rgba(255,0,0,0.36), 0 0 60px rgba(255,0,0,0.18);
+      box-shadow: 0 0 26px rgba(255,0,0,0.38), 0 0 80px rgba(255,0,0,0.18);
       transition:transform .18s ease, box-shadow .18s ease;
     }
-
     .youtube-btn:hover{
       transform:scale(1.07);
-      box-shadow: 0 0 36px rgba(255,0,0,0.6), 0 0 90px rgba(255,0,0,0.28);
+      box-shadow: 0 0 40px rgba(255,0,0,0.65), 0 0 120px rgba(255,0,0,0.28);
     }
 
-    /* big play triangle inside - kept large */
+    /* large play triangle */
     .yt-icon {
-      width:56px;
-      height:36px;
+      width:64px;
+      height:42px;
       background:var(--yt-red);
-      border-radius:8px;
+      border-radius:9px;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      box-shadow: 0 0 20px rgba(255,0,0,0.34);
+      box-shadow: 0 0 30px rgba(255,0,0,0.38);
       flex: none;
     }
-    .yt-icon svg { width:28px; height:28px; }
+    .yt-icon svg { width:34px; height:34px; }
 
     @media (max-width:600px){
       #title{ font-size:2.2rem; top:18px; left:18px; }
-      .yt-icon { width:44px; height:30px; }
+      .yt-icon { width:48px; height:32px; }
       #introText { font-size:0.95rem; padding: 0 6px; }
       #getStarted { padding:10px 26px; font-size:0.95rem; }
       footer { font-size:13px; gap:8px; }
@@ -220,12 +210,12 @@
   </div>
 
   <!-- Footer with subscribe -->
-  <footer id="footer">
+  <footer id="footer" aria-hidden="true">
     <span>Subscribe to my YouTube channel</span>
     <button class="youtube-btn" id="youtubeBtn" title="Subscribe on YouTube" aria-label="YouTube"
       onclick="window.open('https://www.youtube.com/@AvyavChessYT','_blank')">
       <div class="yt-icon" aria-hidden="true">
-        <!-- Larger white triangle play icon -->
+        <!-- larger white triangle play icon -->
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path fill="#FFFFFF" d="M8 5v14l11-7z"></path>
         </svg>
@@ -233,7 +223,7 @@
     </button>
   </footer>
 
-  <!-- User-supplied audio files (must be in same folder) -->
+  <!-- User-supplied audio files (must be same folder) -->
   <audio id="buttonClick" src="buttonclick.mp3" preload="auto"></audio>
   <audio id="typingSound" src="typingsound.mp3" preload="auto"></audio>
 
@@ -248,60 +238,57 @@
     const buttonClick = document.getElementById('buttonClick');
     const typingSound = document.getElementById('typingSound');
 
-    // The exact intro line you gave
+    // The exact intro line
     const introLine = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
 
-    // Timings aligned with CSS title animations:
-    // Title Move animation finishes at ~ (1.6s + 1.8s) = 3.4s from load start.
-    const TITLE_FINISH_MS = 3400;
-    const TYPING_START_DELAY_AFTER_TITLE = 250; // short pause before typing
-    const TYPING_CHAR_MS = 36; // typing speed per char
-    const POST_TYPING_BUTTON_DELAY = 220; // short pause before showing button
+    // Timing constants (aligned with CSS)
+    const TITLE_FINISH_MS = 3400;               // when title move animation is done
+    const TYPING_START_DELAY_AFTER_TITLE = 250; // small pause
+    const TYPING_CHAR_MS = 36;                  // typing speed
+    const POST_TYPING_BUTTON_DELAY = 220;       // show button after typing
 
     // Initially hide button & footer
     getStartedBtn.classList.remove('show');
     footer.classList.remove('visible');
 
-    // Helper: attempt to play typing audio; if browser blocks (autoplay), clicking Get Started will resume audio context for future audio
-    function playTypingSoundLoop(){
-      if(!typingSound) return;
-      // rewind and play loop
-      typingSound.currentTime = 0;
+    // Try to start typing-sound (autoplay may be blocked)
+    // We'll attempt to play typingSound in loop; if rejected, typing still runs but silent.
+    function tryStartTypingSound(){
+      if(!typingSound) return Promise.reject();
       typingSound.loop = true;
       typingSound.volume = 0.9;
-      typingSound.play().catch(e => {
-        // autoplay blocked; we'll still try to play per-character short sound fallback using cloning during typing
-        typingSound.loop = false;
-      });
+      typingSound.currentTime = 0;
+      return typingSound.play();
     }
     function stopTypingSound(){
-      if(!typingSound) return;
       try{
-        typingSound.pause();
-        typingSound.currentTime = 0;
+        if(typingSound){
+          typingSound.pause();
+          typingSound.currentTime = 0;
+          typingSound.loop = false;
+        }
       }catch(e){}
     }
 
-    // Typing animation routine (plays user-provided typingsound.mp3 while typing)
+    // Typing routine: visual typing always runs. The typingSound plays if autoplay allowed.
     function typeIntroText(text, onComplete){
       introTextEl.textContent = "";
       introTextEl.classList.remove('done');
       introTextEl.classList.add('visible');
 
-      // Start the typing sound loop (attempt)
-      playTypingSoundLoop();
+      // Try to play the typingSound (may be blocked)
+      let soundAllowed = false;
+      tryStartTypingSound().then(()=>{ soundAllowed = true; }).catch(()=>{ soundAllowed = false; });
 
       let i = 0;
-      // We'll also attempt to play a short per-character tick by cloning the typingSound if loop blocked
       const charInterval = setInterval(() => {
         if(i < text.length){
           introTextEl.textContent += text[i];
-          // if typingSound loop couldn't start due to autoplay block, try short one-shot clones for consonants
-          if(typingSound && typingSound.paused){
-            // clone and play a trimmed small volume sound per char
+
+          // if the file couldn't loop (blocked), we attempt per-character clone sound as fallback
+          if(!soundAllowed && typingSound && typingSound.paused){
             const clone = typingSound.cloneNode();
             clone.volume = 0.18;
-            clone.currentTime = 0;
             clone.play().catch(()=>{/*ignore*/});
           }
           i++;
@@ -309,39 +296,35 @@
           clearInterval(charInterval);
           stopTypingSound();
           introTextEl.classList.add('done'); // remove caret
-          if(onComplete) onComplete();
+          if(typeof onComplete === 'function') onComplete();
         }
       }, TYPING_CHAR_MS);
     }
 
-    // After title moves, start typing
+    // Start sequence: after title moves, start typing, then show button and footer when typing done
     setTimeout(() => {
-      // show footer as soon as intro flow starts
-      footer.classList.add('visible');
-
-      // small pause then start typing
       setTimeout(() => {
         typeIntroText(introLine, () => {
-          // on typing complete -> show Get Started button
+          // after typing completes, show Get Started button
           setTimeout(() => {
             getStartedBtn.classList.add('show');
+            // show footer when button appears and keep it visible
+            footer.classList.add('visible');
           }, POST_TYPING_BUTTON_DELAY);
         });
       }, TYPING_START_DELAY_AFTER_TITLE);
-
     }, TITLE_FINISH_MS);
 
     // Get Started click: play click sound and show coming page
     getStartedBtn.addEventListener('click', () => {
-      // try playing provided click sound
       if(buttonClick){
         buttonClick.currentTime = 0;
-        buttonClick.play().catch(()=>{/*ignore autoplay policy errors*/});
+        buttonClick.play().catch(()=>{/* ignore play-policy errors */});
       }
-      // Hide intro content and show coming section
+      // hide intro center area and show coming
       document.querySelector('.center-area').style.display = 'none';
       coming.style.display = 'block';
-      // footer stays visible
+      // footer remains visible (already visible)
       footer.classList.add('visible');
     });
 
@@ -353,24 +336,12 @@
       }
     });
 
-    // Ensure audio resume on first user gesture (some browsers block autoplay)
-    function resumeAudioOnUserGesture(){
-      // try to resume typingSound and buttonClick if suspended
-      try{
-        if(typingSound && typingSound.paused === false){
-          // ok
-        } else {
-          // if we find user clicked, we can attempt to play a tiny silent sound to allow future playback
-          const p = typingSound.play();
-          if(p) p.catch(()=>{/*ignore*/});
-        }
-      }catch(e){}
-      // remove listeners
-      window.removeEventListener('click', resumeAudioOnUserGesture);
-      window.removeEventListener('keydown', resumeAudioOnUserGesture);
-    }
-    window.addEventListener('click', resumeAudioOnUserGesture);
-    window.addEventListener('keydown', resumeAudioOnUserGesture);
+    /* IMPORTANT:
+       Browser autoplay policy can prevent audio from starting before a user gesture.
+       If you find typing audio silent, clicking anywhere (or tapping) before the typing
+       begins will allow audio playback in many browsers. This is a browser security rule,
+       not a code bug.
+    */
   </script>
 </body>
 </html>
