@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avyav Chess</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: #0a0f2b; /* dark navy */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        h1 {
+            color: #00ffff;
+            font-size: 4em;
+            text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: moveText 2s forwards 2s; /* delay 2s, then move */
+        }
+
+        @keyframes moveText {
+            0% {
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+            100% {
+                top: 20px;
+                left: 20px;
+                transform: translate(0, 0);
+                font-size: 2em;
+            }
+        }
+
+        #getStarted {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px 50px;
+            font-size: 1.5em;
+            color: #00ffff;
+            background: transparent;
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            cursor: pointer;
+            text-shadow: 0 0 5px #00ffff;
+            transition: 0.3s;
+            opacity: 0;
+            animation: showButton 1s forwards 4s; /* appears after text moves */
+        }
+
+        #getStarted:hover {
+            box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 60px #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        @keyframes showButton {
+            0% {opacity: 0;}
+            100% {opacity: 1;}
+        }
+    </style>
+</head>
+<body>
+    <h1>Avyav Chess</h1>
+    <button id="getStarted">Get Started</button>
+
+    <audio id="clickSound" src="https://freesound.org/data/previews/256/256113_3263906-lq.mp3"></audio>
+
+    <script>
+        const button = document.getElementById('getStarted');
+        const sound = document.getElementById('clickSound');
+
+        button.addEventListener('click', () => {
+            sound.play();
+            setTimeout(() => {
+                window.location.href = "comingsoon.html";
+            }, 200); // slight delay to let sound play
+        });
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: #0a0f2b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        h1 {
+            color: #00ffff;
+            font-size: 3em;
+            text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff;
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff; }
+            100% { text-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 60px #00ffff; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Contents are coming soon</h1>
+</body>
+</html>
