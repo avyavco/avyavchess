@@ -17,6 +17,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
     }
 
     /* Sharp Inner Glow Text */
@@ -50,14 +51,37 @@
       transition: all 1s ease-in-out;
     }
 
+    /* Introduction text */
+    .intro-text {
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 85%;
+      max-width: 700px;
+      text-align: center;
+      font-size: 18px;
+      color: #00ccff;
+      text-shadow:
+        0 0 1px #00ccff,
+        0 0 3px #00aaff;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      line-height: 1.5;
+    }
+
+    .intro-text.visible {
+      opacity: 1;
+    }
+
     /* Get Started Button */
     .get-started {
       position: absolute;
-      top: 50%;
+      top: 70%;
       left: 50%;
       transform: translate(-50%, -50%);
-      padding: 16px 40px;
-      font-size: 20px;
+      padding: 14px 38px;
+      font-size: 18px;
       font-weight: bold;
       color: #00ccff;
       background: transparent;
@@ -80,7 +104,6 @@
     .visible {
       opacity: 1;
       pointer-events: all;
-      transition: opacity 1s ease-in-out;
     }
 
     /* Second Page */
@@ -100,6 +123,77 @@
         0 0 2px #00ccff,
         0 0 4px #00aaff;
     }
+
+    /* YouTube Footer */
+    footer {
+      position: fixed;
+      bottom: 10px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #00aaff;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    footer.visible {
+      opacity: 1;
+    }
+
+    footer span {
+      margin-right: 10px;
+      text-shadow: 0 0 2px #00ccff;
+    }
+
+    .youtube-btn {
+      width: 36px;
+      height: 36px;
+      border: none;
+      background-color: #ff0000;
+      border-radius: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    .youtube-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 12px #ff0000, 0 0 25px #ff0000;
+    }
+
+    .youtube-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: white;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      .glow {
+        font-size: 40px;
+      }
+      .intro-text {
+        font-size: 15px;
+        top: 48%;
+      }
+      .get-started {
+        font-size: 16px;
+        padding: 12px 30px;
+        top: 72%;
+      }
+      footer span {
+        font-size: 12px;
+      }
+      .youtube-btn {
+        width: 32px;
+        height: 32px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -107,6 +201,9 @@
 
   <div id="intro">
     <h1 id="title" class="glow">Avyav Chess</h1>
+    <p id="introText" class="intro-text">
+      Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.
+    </p>
     <button id="getStarted" class="get-started">Get Started</button>
   </div>
 
@@ -114,19 +211,39 @@
     <h1 class="coming-soon">Contents are coming soon...</h1>
   </div>
 
+  <!-- Persistent Footer -->
+  <footer id="footer">
+    <span>Subscribe to my YouTube channel</span>
+    <button class="youtube-btn" onclick="window.open('https://www.youtube.com/@AvyavChessYT', '_blank')">
+      <svg viewBox="0 0 24 24">
+        <path d="M23.498 6.186a2.978 2.978 0 0 0-2.1-2.106C19.34 3.5 12 3.5 12 3.5s-7.34 0-9.398.58a2.978 2.978 0 0 0-2.1 2.106A31.174 31.174 0 0 0 .5 12a31.174 31.174 0 0 0 .002 5.814 2.978 2.978 0 0 0 2.1 2.106C4.66 20.5 12 20.5 12 20.5s7.34 0 9.398-.58a2.978 2.978 0 0 0 2.1-2.106A31.174 31.174 0 0 0 23.5 12a31.174 31.174 0 0 0-.002-5.814zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/>
+      </svg>
+    </button>
+  </footer>
+
   <script>
     const title = document.getElementById('title');
     const button = document.getElementById('getStarted');
+    const introText = document.getElementById('introText');
     const clickSound = document.getElementById('clickSound');
     const intro = document.getElementById('intro');
     const secondPage = document.getElementById('second-page');
+    const footer = document.getElementById('footer');
 
-    // Move the title to top-left after 2.5 seconds
+    // Title animation and sequence
     setTimeout(() => {
       title.classList.add('move-top-left');
+
+      // Show intro text after title moves
+      setTimeout(() => {
+        introText.classList.add('visible');
+      }, 1000);
+
+      // Show button slightly after text
       setTimeout(() => {
         button.classList.add('visible');
-      }, 1200);
+        footer.classList.add('visible');
+      }, 2000);
     }, 2500);
 
     // Button click action
@@ -135,6 +252,7 @@
       clickSound.play();
       intro.style.display = 'none';
       secondPage.style.display = 'flex';
+      footer.classList.add('visible'); // footer stays visible
     });
   </script>
 </body>
