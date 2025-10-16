@@ -1,177 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Avyav Chess</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avyav Chess</title>
+  <style>
     body {
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-        background: #000000; /* pure black background */
-        font-family: 'Orbitron', sans-serif;
-        overflow: hidden;
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: #00aaff;
+      font-family: 'Orbitron', sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    section {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-        top: 0;
-        left: 0;
+    /* Glowing Text Effect - Sharper Glow */
+    .glow {
+      font-size: 60px;
+      font-weight: bold;
+      color: #00aaff;
+      text-shadow: 
+        0 0 4px #00aaff,
+        0 0 8px #00aaff,
+        0 0 12px #0088ff,
+        0 0 18px #0088ff;
+      transition: all 1s ease;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: fadeIn 2s ease-in-out;
     }
 
-    /* --- Glowing Text --- */
-    #landing h1 {
-        color: #00eaff;
-        font-size: 4em;
-        text-shadow: 
-            0 0 5px #00eaff,
-            0 0 10px #00eaff,
-            0 0 20px #00eaff,
-            0 0 40px #00eaff,
-            0 0 80px #00eaff;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        animation: moveText 2s forwards 2s;
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
-    @keyframes moveText {
-        0% {
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        100% {
-            top: 20px;
-            left: 20px;
-            transform: translate(0, 0);
-            font-size: 2em;
-        }
+    /* Move title to top-left */
+    .move-top-left {
+      top: 30px;
+      left: 40px;
+      transform: translate(0, 0);
+      font-size: 36px;
+      transition: all 1s ease-in-out;
     }
 
-    /* --- Glowing Button --- */
-    #getStarted {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        padding: 20px 50px;
-        font-size: 1.5em;
-        color: #00eaff;
-        background: transparent;
-        border: 2px solid #00eaff;
-        border-radius: 12px;
-        cursor: pointer;
-        text-shadow: 
-            0 0 5px #00eaff,
-            0 0 10px #00eaff,
-            0 0 20px #00eaff;
-        box-shadow:
-            0 0 10px #00eaff,
-            inset 0 0 10px #00eaff;
-        transition: all 0.3s ease;
-        opacity: 0;
-        animation: showButton 1s forwards 4s, pulse 2s infinite alternate 5s;
+    /* Get Started Button */
+    .get-started {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 16px 40px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #00ccff;
+      background: transparent;
+      border: 2px solid #00ccff;
+      border-radius: 8px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      text-shadow: 0 0 6px #00ccff;
+      box-shadow: 0 0 8px #00ccff;
     }
 
-    #getStarted:hover {
-        box-shadow:
-            0 0 20px #00ffff,
-            0 0 40px #00ffff,
-            0 0 80px #00ffff,
-            inset 0 0 20px #00ffff;
-        text-shadow:
-            0 0 10px #00ffff,
-            0 0 20px #00ffff,
-            0 0 40px #00ffff;
-        transform: translate(-50%, -50%) scale(1.05);
+    .get-started:hover {
+      background: #00ccff;
+      color: black;
+      box-shadow: 0 0 25px #00ccff, 0 0 50px #00ccff;
     }
 
-    @keyframes showButton {
-        0% {opacity: 0;}
-        100% {opacity: 1;}
+    .visible {
+      opacity: 1;
+      pointer-events: all;
+      transition: opacity 1s ease-in-out;
     }
 
-    @keyframes pulse {
-        0% {
-            box-shadow:
-                0 0 10px #00eaff,
-                inset 0 0 10px #00eaff;
-        }
-        100% {
-            box-shadow:
-                0 0 25px #00ffff,
-                inset 0 0 25px #00ffff;
-        }
+    /* Second Page */
+    #second-page {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      text-align: center;
     }
 
-    /* --- Coming Soon Page --- */
-    #comingsoon h1 {
-        color: #00eaff;
-        font-size: 3em;
-        text-shadow:
-            0 0 5px #00eaff,
-            0 0 10px #00eaff,
-            0 0 20px #00eaff,
-            0 0 40px #00eaff,
-            0 0 80px #00eaff;
-        animation: glow 1.5s infinite alternate;
+    .coming-soon {
+      font-size: 36px;
+      color: #00ccff;
+      text-shadow: 
+        0 0 5px #00ccff,
+        0 0 10px #00aaff,
+        0 0 20px #0088ff;
     }
-
-    @keyframes glow {
-        0% {
-            text-shadow:
-                0 0 5px #00eaff,
-                0 0 10px #00eaff,
-                0 0 20px #00eaff;
-        }
-        100% {
-            text-shadow:
-                0 0 20px #00ffff,
-                0 0 40px #00ffff,
-                0 0 80px #00ffff;
-        }
-    }
-</style>
+  </style>
 </head>
 <body>
+  <audio id="clickSound" src="buttonclick.mp3"></audio>
 
-<!-- Landing Section -->
-<section id="landing">
-    <h1>Avyav Chess</h1>
-    <button id="getStarted">Get Started</button>
-</section>
+  <div id="intro">
+    <h1 id="title" class="glow">Avyav Chess</h1>
+    <button id="getStarted" class="get-started">Get Started</button>
+  </div>
 
-<!-- Coming Soon Section -->
-<section id="comingsoon" style="display:none; flex-direction: column;">
-    <h1>Contents are coming soon</h1>
-</section>
+  <div id="second-page">
+    <h1 class="coming-soon">Contents are coming soon...</h1>
+  </div>
 
-<!-- Sound -->
-<audio id="clickSound" src="buttonclick.mp3"></audio>
-
-<script>
+  <script>
+    const title = document.getElementById('title');
     const button = document.getElementById('getStarted');
-    const landing = document.getElementById('landing');
-    const coming = document.getElementById('comingsoon');
-    const sound = document.getElementById('clickSound');
+    const clickSound = document.getElementById('clickSound');
+    const intro = document.getElementById('intro');
+    const secondPage = document.getElementById('second-page');
 
+    // Move the title to top-left after 2.5 seconds
+    setTimeout(() => {
+      title.classList.add('move-top-left');
+      setTimeout(() => {
+        button.classList.add('visible');
+      }, 1200);
+    }, 2500);
+
+    // Button click action
     button.addEventListener('click', () => {
-        sound.play();
-        setTimeout(() => {
-            landing.style.display = 'none';
-            coming.style.display = 'flex';
-        }, 200);
+      clickSound.currentTime = 0;
+      clickSound.play();
+      intro.style.display = 'none';
+      secondPage.style.display = 'flex';
     });
-</script>
-
+  </script>
 </body>
 </html>
