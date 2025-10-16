@@ -1,378 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Avyav Chess</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avyav Chess Website</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: black;
+    color: cyan;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+    overflow: hidden;
+  }
 
-  <!-- Orbitron font (same as before) -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
+  .container {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
-  <style>
-    :root{
-      --cyan: #00ccff;
-      --cyan-strong: #00e6ff;
-      --bg: #000000;
-      --yt-red: #FF0000;
-    }
+  h1 {
+    font-size: 3em;
+    color: cyan;
+    text-shadow: 0 0 15px cyan;
+    margin-bottom: 30px;
+  }
 
-    html,body{
-      height:100%;
-      margin:0;
-      background:var(--bg);
-      font-family:'Orbitron', sans-serif;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      color:var(--cyan);
-      overflow:hidden;
-    }
+  #introText {
+    font-size: 1.3em;
+    color: cyan;
+    text-shadow: 0 0 10px cyan;
+    margin-bottom: 40px;
+    white-space: pre-wrap;
+    display: none;
+  }
 
-    /* Layout wrapper so footer doesn't overlap content */
-    .wrapper{
-      min-height:100%;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      position:relative;
-    }
+  #getStartedBtn {
+    background: transparent;
+    color: cyan;
+    border: 2px solid cyan;
+    padding: 15px 40px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 12px;
+    text-shadow: 0 0 15px cyan;
+    box-shadow: 0 0 20px cyan;
+    transition: all 0.3s;
+  }
 
-    /* Title (center -> top-left) */
-    #title {
-      position:absolute;
-      top:50%;
-      left:50%;
-      transform:translate(-50%,-50%);
-      font-size:4rem;
-      color:var(--cyan);
-      /* sharp inner glow */
-      text-shadow:
-        0 0 1px var(--cyan),
-        0 0 2px var(--cyan),
-        0 0 4px var(--cyan-strong);
-      opacity:0;
-      animation: titleFadeIn 1.6s ease forwards, titleMove 2s ease 1.8s forwards;
-      will-change: transform, top, left, font-size;
-      z-index:5;
-      white-space:nowrap;
-    }
+  #getStartedBtn:hover {
+    background: cyan;
+    color: black;
+    box-shadow: 0 0 30px cyan;
+  }
 
-    @keyframes titleFadeIn {
-      from{opacity:0;}
-      to{opacity:1;}
-    }
+  footer {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    color: cyan;
+    font-size: 1em;
+    text-shadow: 0 0 10px cyan;
+  }
 
-    @keyframes titleMove {
-      from{
-        top:50%; left:50%; transform:translate(-50%,-50%); font-size:4rem;
-      }
-      to{
-        top:22px; left:28px; transform:translate(0,0); font-size:1.6rem;
-      }
-    }
+  .youtube-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    text-decoration: none;
+  }
 
-    /* Center area that holds intro text + button */
-    .center-area{
-      width:100%;
-      max-width:900px;
-      padding: 0 20px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:18px;
-      pointer-events:none; /* child controls enable when visible */
-    }
+  .youtube-logo {
+    width: 55px;
+    height: 40px;
+    background: red;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 0 25px red, 0 0 50px red;
+    transition: transform 0.3s ease;
+  }
 
-    /* Intro typing text - above the button */
-    #introText {
-      color:var(--cyan);
-      font-size:1.05rem;
-      line-height:1.45;
-      text-align:center;
-      max-width:820px;
-      width:100%;
-      opacity:0;
-      white-space:pre-wrap;
-      border-right: 2px solid var(--cyan);
-      padding-right:6px;
-      box-sizing:border-box;
-      transition:opacity .5s ease;
-      pointer-events:auto;
-    }
+  .youtube-logo::before {
+    content: '';
+    position: absolute;
+    top: 9px;
+    left: 19px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 16px solid white;
+  }
 
-    /* Remove caret once done */
-    #introText.done { border-right: none; }
+  .youtube-logo:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 40px red, 0 0 70px red;
+  }
 
-    /* Get Started button */
-    #getStarted {
-      pointer-events:auto;
-      opacity:0;
-      transform:translateY(8px);
-      transition: all .35s ease;
-      border:2px solid var(--cyan);
-      background:transparent;
-      color:var(--cyan);
-      padding:12px 36px;
-      font-size:1rem;
-      border-radius:8px;
-      cursor:pointer;
-      text-shadow: 0 0 2px var(--cyan);
-      box-shadow: inset 0 0 6px rgba(0,204,255,0.12), 0 0 6px rgba(0,204,255,0.06);
-    }
-
-    #getStarted.visible {
-      opacity:1;
-      transform:translateY(0);
-      pointer-events:auto;
-    }
-
-    #getStarted:hover{
-      background:var(--cyan);
-      color:#000;
-      box-shadow: 0 0 18px var(--cyan), 0 0 36px rgba(0,204,255,0.25);
-      transform:scale(1.04);
-    }
-
-    /* Coming soon page (simple) */
-    #coming {
-      display:none;
-      color:var(--cyan);
-      text-align:center;
-      padding-top:110px;
-      font-size:1.6rem;
-    }
-
-    /* Footer - persistent, minimal */
-    footer{
-      position:fixed;
-      bottom:10px;
-      left:0;
-      width:100%;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:10px;
-      pointer-events:auto;
-      z-index:20;
-      font-size:14px;
-      opacity:0;
-      transition:opacity .6s ease;
-    }
-
-    footer.visible{ opacity:1; }
-
-    footer span { color:var(--cyan); text-shadow: 0 0 2px var(--cyan); }
-
-    /* YouTube button (inline svg) */
-    .youtube-btn {
-      background:var(--yt-red);
-      border:none;
-      padding:6px;
-      border-radius:8px;
-      width:40px;
-      height:28px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      box-shadow: 0 0 18px rgba(255,0,0,0.35), 0 0 40px rgba(255,0,0,0.18);
-      transition:transform .18s ease, box-shadow .18s ease;
-    }
-
-    .youtube-btn:hover{
-      transform:scale(1.06);
-      box-shadow: 0 0 30px rgba(255,0,0,0.6), 0 0 80px rgba(255,0,0,0.25);
-    }
-
-    /* small and non-obstructive on mobile */
-    @media (max-width:600px){
-      #title{ font-size:2.2rem; top:18px; left:18px; }
-      .youtube-btn { width:34px; height:24px; }
-      #introText { font-size:0.95rem; padding: 0 6px; }
-      #getStarted { padding:10px 26px; font-size:0.95rem; }
-      footer { font-size:13px; gap:8px; }
-    }
-  </style>
+  @media (max-width: 600px) {
+    h1 { font-size: 2.2em; }
+    #introText { font-size: 1.1em; margin: 20px; }
+    #getStartedBtn { font-size: 1em; padding: 10px 25px; }
+  }
+</style>
 </head>
 <body>
-  <div class="wrapper">
-    <!-- Title -->
-    <div id="title">Avyav Chess</div>
 
-    <!-- Center area with intro text above button -->
-    <div class="center-area" aria-hidden="false">
-      <div id="introText" aria-live="polite"></div>
-      <button id="getStarted" aria-label="Get Started">Get Started</button>
-    </div>
+  <div class="container">
+    <h1>Korustech Chess</h1>
 
-    <!-- Coming / next page -->
-    <div id="coming">Contents are coming soon</div>
+    <p id="introText"></p>
+
+    <button id="getStartedBtn">Get Started</button>
   </div>
 
-  <!-- Footer with YouTube subscribe (inline SVG icon) -->
-  <footer id="footer">
-    <span>Subscribe to my YouTube channel</span>
-    <button class="youtube-btn" id="youtubeBtn" title="Subscribe on YouTube" aria-label="YouTube"
-      onclick="window.open('https://www.youtube.com/@AvyavChessYT','_blank')">
-      <!-- Inline YouTube play icon - white triangle -->
-      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
-        <path fill="#FFFFFF" d="M10 8.5v7l6-3.5z"></path>
-      </svg>
-    </button>
+  <footer>
+    <div class="youtube-btn" onclick="window.open('https://www.youtube.com/@AvyavChessYT', '_blank')">
+      <span>Subscribe to my YouTube channel</span>
+      <div class="youtube-logo"></div>
+    </div>
   </footer>
 
-  <!-- Local click sound (user-provided) -->
-  <audio id="clickSound" src="buttonclick.mp3"></audio>
+  <audio id="clickSound" src="buttonclick.mp3" preload="auto"></audio>
+  <audio id="typingSound" src="typingsound.mp3" preload="auto"></audio>
 
   <script>
-    /* Elements */
-    const title = document.getElementById('title');
-    const introTextEl = document.getElementById('introText');
-    const getStarted = document.getElementById('getStarted');
-    const footer = document.getElementById('footer');
-    const coming = document.getElementById('coming');
+    const getStartedBtn = document.getElementById('getStartedBtn');
     const clickSound = document.getElementById('clickSound');
+    const typingSound = document.getElementById('typingSound');
+    const introText = document.getElementById('introText');
+    const introMessage = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
 
-    // The line the user requested
-    const introLine = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
+    // Delay showing Get Started button
+    getStartedBtn.style.opacity = 0;
+    setTimeout(() => {
+      getStartedBtn.style.transition = "opacity 1s ease";
+      getStartedBtn.style.opacity = 1;
+      // Start typing intro after button appears
+      setTimeout(startTyping, 1200);
+    }, 1500);
 
-    // Sequence timings (tuned for good UX)
-    const TITLE_TOTAL = 2500;     // time until title moved (ms) - matches animations
-    const BUTTON_SHOW_DELAY = 1200; // after title move, wait before showing button
-    const TYPING_START_AFTER_BUTTON = 500; // start typing after button visible
-
-    // Ensure footer is hidden initially, will show after intro flow
-    footer.classList.remove('visible');
-
-    /* AUDIO: typing sound via Web Audio API for reliable short clicks per character.
-       This avoids external file loading issues and works on most browsers (requires a user gesture for autoplay).
-       We'll play a short click for each typed character.
-    */
-    let audioCtx = null;
-    function makeTypingClick(time, volume=0.08, frequency=1200){
-      if(!audioCtx) return;
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.type = 'square';
-      o.frequency.value = frequency;
-      g.gain.value = volume;
-      o.connect(g);
-      g.connect(audioCtx.destination);
-      o.start();
-      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.032);
-      o.stop(audioCtx.currentTime + 0.04);
-    }
-
-    // Initialize audio context on first user gesture (to satisfy browser autoplay policies)
-    function ensureAudioContext(){
-      if(!audioCtx){
-        try{
-          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }catch(e){
-          audioCtx = null;
-        }
-      }
-    }
-
-    // Typing routine
-    function typeText(text, onComplete){
+    // Typing animation with sound
+    function startTyping() {
+      introText.style.display = "block";
       let i = 0;
-      introTextEl.textContent = "";
-      introTextEl.classList.remove('done');
-      introTextEl.style.opacity = '1';
-      // typing interval: make it human-like but snappy
-      const baseDelay = 32; // ms per character
-      const variance = 18;
-      // start AudioContext if possible
-      ensureAudioContext();
-
-      // For browsers that block audio until user gesture, we will check and if blocked we won't throw errors.
-      const typingInterval = setInterval(()=>{
-        if(i < text.length){
-          introTextEl.textContent += text[i];
-          // play short click for letters (skip spaces to be natural)
-          if(text[i] !== " "){
-            if(audioCtx){
-              makeTypingClick();
-            } else {
-              // fallback: try to play the local clickSound as per-character "tick" but at low volume
-              // (only if clickSound is loaded and user allowed)
-              if(clickSound && clickSound.readyState >= 2){
-                // play a very short slice (works but may overlap). We'll clone to allow overlap.
-                const clone = clickSound.cloneNode();
-                clone.volume = 0.15;
-                clone.play().catch(()=>{/*ignore autoplay errors*/});
-              }
-            }
-          }
-          i++;
-        } else {
+      typingSound.play();
+      const typingInterval = setInterval(() => {
+        introText.textContent += introMessage[i];
+        i++;
+        if (i === introMessage.length) {
           clearInterval(typingInterval);
-          introTextEl.classList.add('done'); // remove caret
-          if(onComplete) onComplete();
+          typingSound.pause();
+          typingSound.currentTime = 0;
         }
-        // variable delay to mimic human typing
-      }, baseDelay + Math.floor(Math.random()*variance));
+      }, 50);
     }
 
-    /* Sequence control:
-       1) Title fades in and moves (CSS animation). After TITLE_TOTAL ms, we reveal button and footer.
-       2) Once button visible, start typing after small delay.
-       3) Typing sound will play during typing via WebAudio.
-       4) Button click plays user buttonclick.mp3 and navigates to next "page" (for now shows Coming section).
-    */
-
-    // After the initial CSS animations complete, show button and footer:
-    setTimeout(()=>{
-      // show the Get Started button
-      getStarted.classList.add('visible');
-      // show footer (persistent)
-      footer.classList.add('visible');
-
-      // ensure audio context activated once user interacts - attach a one-time listener
-      const resumeHandler = () => {
-        ensureAudioContext();
-        if(audioCtx && audioCtx.state === 'suspended'){
-          audioCtx.resume().catch(()=>{/*ignore*/});
-        }
-        // remove this listener after first gesture
-        window.removeEventListener('click', resumeHandler);
-        window.removeEventListener('keydown', resumeHandler);
-      };
-      window.addEventListener('click', resumeHandler);
-      window.addEventListener('keydown', resumeHandler);
-
-      // Start typing after button is visible + small pause
-      setTimeout(()=>{
-        typeText(introLine);
-      }, TYPING_START_AFTER_BUTTON);
-
-    }, TITLE_TOTAL + BUTTON_SHOW_DELAY); // time aligned with CSS animations
-
-    // Button click behavior: play the provided click sound and show coming page
-    getStarted.addEventListener('click', (e)=>{
-      // try to play the local clickSound (user-supplied file)
-      if(clickSound){
-        // reset in case previous was playing
-        clickSound.currentTime = 0;
-        clickSound.play().catch(()=>{/* ignore play-policy errors */});
-      }
-      // hide intro content and show coming section
-      document.querySelector('.center-area').style.display = 'none';
-      coming.style.display = 'block';
-      // keep footer visible
-      footer.classList.add('visible');
+    // Button click sound
+    getStartedBtn.addEventListener('click', () => {
+      clickSound.currentTime = 0;
+      clickSound.play();
     });
-
-    // Accessibility: allow Enter key to trigger Get Started when focused
-    getStarted.addEventListener('keyup', (ev)=>{
-      if(ev.key === 'Enter' || ev.key === ' '){
-        getStarted.click();
-      }
-    });
-
-    // Make sure clicking the YouTube button focuses opens in new tab (handled inline)
   </script>
 </body>
 </html>
