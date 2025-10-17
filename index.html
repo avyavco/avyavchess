@@ -23,11 +23,10 @@
   .home-btn:hover { background-color: cyan; color: #000428; }
   .home-icon { position: absolute; top: 20px; right: 25px; width: 40px; height: 40px; background: cyan; mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center; mask-size: contain; -webkit-mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center; -webkit-mask-size: contain; cursor: pointer; }
   @media (max-width: 600px) { #animation { font-size: 2.3rem; } #intro-text { font-size: 1rem; } .home-btn { font-size: 1rem; padding: 12px 28px; } }
-  /* Chess bot page styles */
-  #bot-play-page h2 { margin-bottom: 15px; font-size: 1.5rem; }
+  #bot-play-page h2, #bot-label, #player-label { margin: 5px 0; }
   #chessboard { width: 320px; max-width: 90vw; margin: 0 auto; }
-  #bot-label { margin-bottom: 10px; font-size: 1.3rem; }
-  #player-label { margin-top: 10px; font-size: 1.2rem; }
+  #bot-label { font-size: 1.3rem; margin-bottom: 10px; }
+  #player-label { font-size: 1.2rem; margin-top: 10px; }
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/css/chessboard.min.css">
 </head>
@@ -64,7 +63,6 @@
 <audio id="typingSound" src="typingsound.mp3"></audio>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/js/chessboard.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/niklasf/stockfish.js/stockfish.js"></script>
 <script>
 const animation = document.getElementById('animation');
 const introContainer = document.getElementById('intro-container');
@@ -83,38 +81,17 @@ function openPage(page){ homeContainer.style.display='none'; document.querySelec
 function goHome(){ document.querySelectorAll('.content-page').forEach(p=>p.style.display='none'); homeContainer.style.display='flex';}
 homeIcon.addEventListener('click',goHome);
 
-// Chess bot integration
+// Simple playable chessboard with random AI moves
 let board = null;
 let game = new Chess();
-let stockfish = null;
 function initChessBot(){
-  if(board) board.clear();
   game.reset();
-  stockfish = new Worker('https://cdn.jsdelivr.net/gh/niklasf/stockfish.js/stockfish.js');
-  board = Chessboard('chessboard', {
+  const boardEl = document.getElementById('chessboard');
+  board = Chessboard(boardEl, {
     position: 'start',
     draggable: true,
     onDrop: function(source, target) {
-      let move = game.move({ from: source, to: target, promotion: 'q' });
-      if(move === null) return 'snapback';
-      updateBotMove();
+      const move = game.move({from: source, to: target, promotion:'q'});
+      if(!move) return 'snapback';
+      setTimeout(botMove, 300);
     }
-  });
-}
-function updateBotMove(){
-  stockfish.onmessage = function(event){
-    let line = event.data;
-    if(line.startsWith('bestmove')){
-      let bestMove = line.split(' ')[1];
-      let from = bestMove.substring(0,2);
-      let to = bestMove.substring(2,4);
-      game.move({from: from, to: to, promotion:'q'});
-      board.position(game.fen());
-    }
-  };
-  stockfish.postMessage('position fen '+game.fen());
-  stockfish.postMessage('go depth 15');
-}
-</script>
-</body>
-</html>
