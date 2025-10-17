@@ -38,14 +38,19 @@ body {
   opacity: 1 !important;
 }
 
-/* === Typing Intro Text === */
+/* === Intro Typing Text === */
+#introContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  max-width: 80%;
+}
 #introText {
   font-size: 20px;
-  margin-top: 140px;
   white-space: nowrap;
   overflow: hidden;
   border-right: 2px solid cyan;
-  width: 0ch;
   opacity: 0;
   display: inline-block;
 }
@@ -120,6 +125,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 20px;
 }
 
 /* === Content Page === */
@@ -138,11 +144,11 @@ body {
   <!-- Avyav Chess Title -->
   <div id="avyavChess">Avyav Chess</div>
 
-  <!-- Intro Text -->
-  <div id="introText"></div>
-
-  <!-- Get Started Button -->
-  <button id="getStartedBtn">Get Started</button>
+  <!-- Intro Typing Container -->
+  <div id="introContainer">
+    <div id="introText"></div>
+    <button id="getStartedBtn">Get Started</button>
+  </div>
 
   <!-- Subscribe Footer -->
   <div id="subscribe">
@@ -178,6 +184,7 @@ body {
 <script>
 const avyavText = document.getElementById('avyavChess');
 const introText = document.getElementById('introText');
+const introContainer = document.getElementById('introContainer');
 const getStartedBtn = document.getElementById('getStartedBtn');
 const subscribe = document.getElementById('subscribe');
 const typingSound = document.getElementById('typingSound');
@@ -185,6 +192,7 @@ const homePage = document.getElementById('homePage');
 const contentPage = document.getElementById('contentPage');
 const homeIcon = document.getElementById('homeIcon');
 
+// === Step 1: Avyav Chess animation ===
 window.onload = () => {
   setTimeout(() => {
     avyavText.style.opacity = 1;
@@ -195,7 +203,7 @@ window.onload = () => {
   }, 300);
 };
 
-// Typing animation with sound
+// === Step 2: Typing animation ===
 function startTyping() {
   const text = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 on chess.com, I created this website for the love of chess.";
   let index = 0;
@@ -205,7 +213,6 @@ function startTyping() {
 
   const typingInterval = setInterval(() => {
     introText.textContent = text.substring(0, index);
-    introText.style.width = index + 'ch';
     index++;
     if (index > text.length) {
       clearInterval(typingInterval);
@@ -214,19 +221,19 @@ function startTyping() {
       getStartedBtn.style.display = 'block';
       setTimeout(() => { subscribe.style.display = 'flex'; }, 600);
     }
-  }, 60);
+  }, 50);
 }
 
-// Get Started → Home Page
+// === Step 3: Get Started → Home Page ===
 getStartedBtn.addEventListener('click', () => {
-  introText.style.display = 'none';
+  introContainer.style.display = 'none';
   getStartedBtn.style.display = 'none';
   subscribe.style.display = 'flex';
   homePage.style.display = 'flex';
   homeIcon.style.display = 'block';
 });
 
-// Each Menu Button → Content Page
+// === Step 4: Menu buttons → Content Page ===
 function openContent() {
   homePage.style.display = 'none';
   contentPage.style.display = 'block';
@@ -235,7 +242,7 @@ document.querySelectorAll('.menuBtn').forEach(btn => {
   btn.addEventListener('click', openContent);
 });
 
-// Home Icon → Back to Home Page
+// === Step 5: Home Icon → Back to Home Page ===
 homeIcon.addEventListener('click', () => {
   contentPage.style.display = 'none';
   homePage.style.display = 'flex';
