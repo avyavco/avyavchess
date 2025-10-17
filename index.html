@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Avyav Chess</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Courier New', monospace;
       background: linear-gradient(to bottom right, #000428, #004e92);
@@ -16,30 +22,33 @@
       justify-content: center;
       align-items: center;
     }
-    #board {
-      width: 400px;
-      height: 400px;
-      margin-bottom: 20px;
+
+    #animation {
+      font-size: 3rem;
+      font-weight: bold;
+      animation: fadeIn 2s ease forwards;
     }
-    #status {
-      font-size: 1.2rem;
-      margin-top: 20px;
-      color: white;
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
     }
+
     footer {
       position: fixed;
       bottom: 10px;
-      left: 0;
-      right: 0;
       text-align: center;
       color: cyan;
       font-size: 1rem;
+      display: none;
     }
+
     .youtube-container {
       display: inline-flex;
       align-items: center;
       gap: 10px;
     }
+
     .youtube-logo {
       width: 40px;
       height: 30px;
@@ -52,69 +61,90 @@
       cursor: pointer;
       transition: transform 0.2s ease;
     }
+
     .youtube-logo:hover {
       transform: scale(1.1);
     }
+
     .youtube-logo::before {
       content: '';
       border-style: solid;
       border-width: 8px 0 8px 14px;
       border-color: transparent transparent transparent white;
     }
+
+    @media (max-width: 600px) {
+      #animation { font-size: 2.3rem; }
+    }
   </style>
 </head>
 <body>
 
-<div id="board"></div>
-<div id="status">Your move...</div>
+<div id="animation">Avyav Chess</div>
 
-<footer>
+<div id="intro-container" style="display: none;">
+  <div id="intro-text"></div>
+  <button id="get-started">Get Started</button>
+</div>
+
+<div id="home-container" style="display: none;">
+  <div id="lichess-board" style="width: 400px; height: 400px;"></div>
+</div>
+
+<footer id="footer">
   <div class="youtube-container">
     <span>Subscribe to my YouTube Channel</span>
     <div class="youtube-logo" onclick="window.open('https://www.youtube.com/@AvyavChessYT', '_blank')"></div>
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@chriso/stockfish.js"></script>
-<script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
-<script src="https://unpkg.com/chess.js"></script>
-
 <script>
-  const boardElement = document.getElementById('board');
-  const statusElement = document.getElementById('status');
+  const animation = document.getElementById('animation');
+  const introContainer = document.getElementById('intro-container');
+  const introText = document.getElementById('intro-text');
+  const getStarted = document.getElementById('get-started');
+  const footer = document.getElementById('footer');
 
-  const board = Chessboard(boardElement, {
-    draggable: true,
-    dropOffBoard: 'trash',
-    sparePieces: true
+  const fullText = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
+
+  // Step 1: After animation, show intro container and start typing
+  setTimeout(() => {
+    animation.style.display = "none";
+    introContainer.style.display = "flex";
+    typeText();
+  }, 2500);
+
+  // Typing effect
+  let i = 0;
+  function typeText() {
+    if (i < fullText.length) {
+      introText.textContent += fullText.charAt(i);
+      i++;
+      setTimeout(typeText, 50);
+    } else {
+      getStarted.style.display = "inline-block";
+      setTimeout(() => footer.style.display = "block", 800);
+    }
+  }
+
+  // Step 2: When Get Started clicked → go to home
+  getStarted.addEventListener('click', () => {
+    introContainer.style.display = "none";
+    footer.style.display = "block";
+    document.getElementById('home-container').style.display = "flex";
+    loadLichessBoard();
   });
 
-  const game = new Chess();
-  const stockfish = new Worker('https://cdn.jsdelivr.net/npm/@chriso/stockfish.js@0.1.0/dist/stockfish.js');
-
-  stockfish.onmessage = function(event) {
-    const message = event.data;
-    if (message.includes('bestmove')) {
-      const bestMove = message.split(' ')[1];
-      game.uci(bestMove);
-      board.position(game.fen());
-      updateStatus();
-    }
-  };
-
-  function makeBestMove() {
-    stockfish.postMessage('position fen ' + game.fen());
-    stockfish.postMessage('go depth 10');
+  // Step 3: Load Lichess Analysis Board
+  function loadLichessBoard() {
+    const boardContainer = document.getElementById('lichess-board');
+    const iframe = document.createElement('iframe');
+    iframe.src = 'https://lichess.org/editor?theme=blue&bg=light&pieceSet=cburnett&fen=';
+    iframe.width = '100%';
+    iframe.height = '100%';
+    iframe.frameBorder = '0';
+    boardContainer.appendChild(iframe);
   }
-
-  function updateStatus() {
-    const status = game.game_over() ? 'Game over' :
-      'Your move...';
-    statusElement.textContent = status;
-  }
-
-  board.position(game.fen());
-  makeBestMove();
 </script>
 
 </body>
