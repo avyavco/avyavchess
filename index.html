@@ -1,94 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Avyav Chess</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Avyav Chess</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-    body {
-      font-family: 'Courier New', monospace;
-      background: linear-gradient(to bottom right, #000428, #004e92);
-      color: cyan;
-      overflow: hidden;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
+  body {
+    font-family: 'Courier New', monospace; /* Your original style */
+    background: linear-gradient(to bottom right, #000428, #004e92);
+    color: cyan;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-    #animation {
-      font-size: 3rem;
-      font-weight: bold;
-      animation: fadeIn 2s ease forwards;
-    }
+  /* Animation container */
+  #intro-container, #home-container, .content-page {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    height: 100vh;
+  }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
-    }
+  #animation {
+    font-size: 3rem;
+    font-weight: bold;
+    animation: fadeIn 2s ease forwards;
+  }
 
-    footer {
-      position: fixed;
-      bottom: 10px;
-      text-align: center;
-      color: cyan;
-      font-size: 1rem;
-      display: none;
-    }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
 
-    .youtube-container {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
+  #intro-text {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    width: 80%;
+    max-width: 700px;
+    white-space: pre-wrap;
+    text-align: center;
+  }
 
-    .youtube-logo {
-      width: 40px;
-      height: 30px;
-      background-color: red;
-      border-radius: 8px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 0 20px red;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
+  #get-started {
+    margin-top: 2rem;
+    padding: 12px 30px;
+    font-size: 1rem;
+    border: 2px solid cyan;
+    color: cyan;
+    background: transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: none;
+  }
 
-    .youtube-logo:hover {
-      transform: scale(1.1);
-    }
+  #get-started:hover {
+    background-color: cyan;
+    color: #000428;
+  }
 
-    .youtube-logo::before {
-      content: '';
-      border-style: solid;
-      border-width: 8px 0 8px 14px;
-      border-color: transparent transparent transparent white;
-    }
+  footer {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: cyan;
+    font-size: 1rem;
+    display: none;
+  }
 
-    @media (max-width: 600px) {
-      #animation { font-size: 2.3rem; }
-    }
-  </style>
+  .youtube-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .youtube-logo {
+    width: 40px;
+    height: 30px;
+    background-color: red;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px red;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .youtube-logo:hover {
+    transform: scale(1.1);
+  }
+
+  .youtube-logo::before {
+    content: '';
+    border-style: solid;
+    border-width: 8px 0 8px 14px;
+    border-color: transparent transparent transparent white;
+  }
+
+  /* Home page layout */
+  #home-container {
+    display: none;
+  }
+
+  #home-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  .home-btn {
+    padding: 15px 35px;
+    border: 2px solid cyan;
+    color: cyan;
+    background: transparent;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .home-btn:hover {
+    background-color: cyan;
+    color: #000428;
+  }
+
+  /* Home icon */
+  .home-icon {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    width: 40px;
+    height: 40px;
+    background: cyan;
+    mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
+    mask-size: contain;
+    -webkit-mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
+    -webkit-mask-size: contain;
+    cursor: pointer;
+  }
+
+  @media (max-width: 600px) {
+    #animation { font-size: 2.3rem; }
+    #intro-text { font-size: 1rem; }
+    .home-btn { font-size: 1rem; padding: 12px 28px; }
+  }
+</style>
 </head>
 <body>
 
 <div id="animation">Avyav Chess</div>
 
-<div id="intro-container" style="display: none;">
+<div id="intro-container">
   <div id="intro-text"></div>
   <button id="get-started">Get Started</button>
 </div>
 
-<div id="home-container" style="display: none;">
-  <div id="lichess-board" style="width: 400px; height: 400px;"></div>
+<div id="home-container">
+  <div class="home-icon" id="home-icon"></div>
+  <div id="home-buttons">
+    <button class="home-btn" onclick="openPage('bot')">Play Chess with Bot</button>
+    <button class="home-btn" onclick="openPage('learn')">Learn Chess</button>
+    <button class="home-btn" onclick="openPage('videos')">Videos</button>
+    <button class="home-btn" onclick="openPage('contact')">Contact Us for Feedback</button>
+  </div>
+</div>
+
+<!-- Content Coming Soon Pages -->
+<div id="bot-page" class="content-page">
+  <div class="home-icon" onclick="goHome()"></div>
+  <h2>Contents Coming Soon...</h2>
+</div>
+
+<div id="learn-page" class="content-page">
+  <div class="home-icon" onclick="goHome()"></div>
+  <h2>Contents Coming Soon...</h2>
+</div>
+
+<div id="videos-page" class="content-page">
+  <div class="home-icon" onclick="goHome()"></div>
+  <h2>Contents Coming Soon...</h2>
+</div>
+
+<div id="contact-page" class="content-page">
+  <div class="home-icon" onclick="goHome()"></div>
+  <h2>Contents Coming Soon...</h2>
 </div>
 
 <footer id="footer">
@@ -98,12 +207,15 @@
   </div>
 </footer>
 
+<audio id="typingSound" src="typingsound.mp3"></audio>
+
 <script>
   const animation = document.getElementById('animation');
   const introContainer = document.getElementById('intro-container');
   const introText = document.getElementById('intro-text');
   const getStarted = document.getElementById('get-started');
   const footer = document.getElementById('footer');
+  const typingSound = document.getElementById('typingSound');
 
   const fullText = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
 
@@ -114,14 +226,19 @@
     typeText();
   }, 2500);
 
-  // Typing effect
+  // Typing effect with sound
   let i = 0;
   function typeText() {
     if (i < fullText.length) {
       introText.textContent += fullText.charAt(i);
+      if (typingSound.paused) {
+        typingSound.play();
+      }
       i++;
       setTimeout(typeText, 50);
     } else {
+      typingSound.pause();
+      typingSound.currentTime = 0;
       getStarted.style.display = "inline-block";
       setTimeout(() => footer.style.display = "block", 800);
     }
@@ -132,19 +249,21 @@
     introContainer.style.display = "none";
     footer.style.display = "block";
     document.getElementById('home-container').style.display = "flex";
-    loadLichessBoard();
   });
 
-  // Step 3: Load Lichess Analysis Board
-  function loadLichessBoard() {
-    const boardContainer = document.getElementById('lichess-board');
-    const iframe = document.createElement('iframe');
-    iframe.src = 'https://lichess.org/editor?theme=blue&bg=light&pieceSet=cburnett&fen=';
-    iframe.width = '100%';
-    iframe.height = '100%';
-    iframe.frameBorder = '0';
-    boardContainer.appendChild(iframe);
+  // Step 3: Navigation
+  function openPage(page) {
+    document.getElementById('home-container').style.display = "none";
+    document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
+    document.getElementById(`${page}-page`).style.display = "flex";
   }
+
+  function goHome() {
+    document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
+    document.getElementById('home-container').style.display = "flex";
+  }
+
+  document.getElementById('home-icon').addEventListener('click', goHome);
 </script>
 
 </body>
