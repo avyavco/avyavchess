@@ -4,10 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Avyav Chess</title>
-
-<!-- Orbitron Font -->
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
-
 <style>
 body {
   margin: 0;
@@ -19,7 +16,7 @@ body {
   text-align: center;
 }
 
-/* === Avyav Chess Title === */
+/* Avyav Chess Title */
 #avyavChess {
   position: absolute;
   top: 50%;
@@ -29,7 +26,6 @@ body {
   opacity: 0;
   transition: all 1.5s ease-in-out;
 }
-
 .moveToTopLeft {
   top: 20px !important;
   left: 40px !important;
@@ -38,7 +34,7 @@ body {
   opacity: 1 !important;
 }
 
-/* === Intro Typing Text === */
+/* Intro Text Container */
 #introContainer {
   position: absolute;
   top: 50%;
@@ -55,10 +51,10 @@ body {
   display: inline-block;
 }
 
-/* === Get Started Button === */
-#getStartedBtn, .menuBtn {
+/* Get Started Button */
+#getStartedBtn {
   display: none;
-  margin: 25px auto;
+  margin-top: 25px;
   padding: 15px 45px;
   font-size: 20px;
   color: cyan;
@@ -68,13 +64,13 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
 }
-#getStartedBtn:hover, .menuBtn:hover {
+#getStartedBtn:hover {
   background: cyan;
   color: black;
   transform: scale(1.1);
 }
 
-/* === Subscribe Footer === */
+/* Subscribe Footer */
 #subscribe {
   display: none;
   position: fixed;
@@ -90,15 +86,15 @@ body {
 #youtubeLogo {
   width: 42px;
   height: auto;
-  filter: drop-shadow(0 0 10px red);
+  filter: drop-shadow(0 0 15px red);
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 #youtubeLogo:hover {
   transform: scale(1.2);
-  filter: drop-shadow(0 0 20px red);
+  filter: drop-shadow(0 0 25px red);
 }
 
-/* === Home Icon === */
+/* Home Icon */
 #homeIcon {
   display: none;
   position: absolute;
@@ -115,7 +111,7 @@ body {
   filter: drop-shadow(0 0 25px cyan);
 }
 
-/* === Home Page Buttons === */
+/* Home Page Buttons */
 #homePage {
   display: none;
   position: absolute;
@@ -127,59 +123,74 @@ body {
   align-items: center;
   gap: 20px;
 }
+.menuBtn {
+  padding: 15px 45px;
+  font-size: 20px;
+  color: cyan;
+  background: transparent;
+  border: 2px solid cyan;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.menuBtn:hover {
+  background: cyan;
+  color: black;
+  transform: scale(1.1);
+}
 
-/* === Content Page === */
+/* Content Page */
 #contentPage {
   display: none;
-  text-align: center;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  font-size: 22px;
 }
 </style>
 </head>
-
 <body>
-  <!-- Avyav Chess Title -->
-  <div id="avyavChess">Avyav Chess</div>
 
-  <!-- Intro Typing Container -->
-  <div id="introContainer">
-    <div id="introText"></div>
-    <button id="getStartedBtn">Get Started</button>
-  </div>
+<!-- Avyav Chess Title -->
+<div id="avyavChess">Avyav Chess</div>
 
-  <!-- Subscribe Footer -->
-  <div id="subscribe">
-    <span>Subscribe to my YouTube Channel</span>
-    <a href="https://www.youtube.com/@AvyavChessYT" target="_blank">
-      <img id="youtubeLogo"
-        src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_play_button_icon_%282013-2017%29.svg"
-        alt="YouTube Logo">
-    </a>
-  </div>
+<!-- Intro Container -->
+<div id="introContainer">
+  <div id="introText"></div>
+  <button id="getStartedBtn">Get Started</button>
+</div>
 
-  <!-- Home Icon -->
-  <img id="homeIcon"
-    src="https://upload.wikimedia.org/wikipedia/commons/5/53/Home_icon.svg"
-    alt="Home Icon">
+<!-- Subscribe Footer -->
+<div id="subscribe">
+  <span>Subscribe to my YouTube Channel</span>
+  <a href="https://www.youtube.com/@AvyavChessYT" target="_blank">
+    <img id="youtubeLogo"
+      src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_play_button_icon_%282013-2017%29.svg"
+      alt="YouTube Logo">
+  </a>
+</div>
 
-  <!-- Home Page -->
-  <div id="homePage">
-    <button class="menuBtn" id="playChess">Play Chess with Bot</button>
-    <button class="menuBtn" id="learnChess">Learn Chess</button>
-    <button class="menuBtn" id="videos">Videos</button>
-    <button class="menuBtn" id="contactUs">Contact Us for Feedback</button>
-  </div>
+<!-- Home Icon -->
+<img id="homeIcon"
+  src="https://upload.wikimedia.org/wikipedia/commons/5/53/Home_icon.svg"
+  alt="Home Icon">
 
-  <!-- Content Page -->
-  <div id="contentPage">
-    <h2>Contents Coming Soon...</h2>
-  </div>
+<!-- Home Page -->
+<div id="homePage">
+  <button class="menuBtn" id="playChess">Play Chess with Bot</button>
+  <button class="menuBtn" id="learnChess">Learn Chess</button>
+  <button class="menuBtn" id="videos">Videos</button>
+  <button class="menuBtn" id="contactUs">Contact Us</button>
+</div>
 
-  <!-- Typing Sound -->
-  <audio id="typingSound" src="typingsound.mp3"></audio>
+<!-- Content Page -->
+<div id="contentPage">
+  <h2>Contents Coming Soon...</h2>
+</div>
+
+<!-- Typing Sound -->
+<audio id="typingSound" src="typingsound.mp3"></audio>
 
 <script>
 const avyavText = document.getElementById('avyavChess');
@@ -192,7 +203,7 @@ const homePage = document.getElementById('homePage');
 const contentPage = document.getElementById('contentPage');
 const homeIcon = document.getElementById('homeIcon');
 
-// === Step 1: Avyav Chess animation ===
+// Step 1: Avyav Chess animation
 window.onload = () => {
   setTimeout(() => {
     avyavText.style.opacity = 1;
@@ -203,7 +214,7 @@ window.onload = () => {
   }, 300);
 };
 
-// === Step 2: Typing animation ===
+// Step 2: Typing animation
 function startTyping() {
   const text = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 on chess.com, I created this website for the love of chess.";
   let index = 0;
@@ -224,7 +235,7 @@ function startTyping() {
   }, 50);
 }
 
-// === Step 3: Get Started → Home Page ===
+// Step 3: Get Started → Home Page
 getStartedBtn.addEventListener('click', () => {
   introContainer.style.display = 'none';
   getStartedBtn.style.display = 'none';
@@ -233,7 +244,7 @@ getStartedBtn.addEventListener('click', () => {
   homeIcon.style.display = 'block';
 });
 
-// === Step 4: Menu buttons → Content Page ===
+// Step 4: Menu buttons → Content Page
 function openContent() {
   homePage.style.display = 'none';
   contentPage.style.display = 'block';
@@ -242,7 +253,7 @@ document.querySelectorAll('.menuBtn').forEach(btn => {
   btn.addEventListener('click', openContent);
 });
 
-// === Step 5: Home Icon → Back to Home Page ===
+// Step 5: Home Icon → Back to Home Page
 homeIcon.addEventListener('click', () => {
   contentPage.style.display = 'none';
   homePage.style.display = 'flex';
