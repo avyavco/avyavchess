@@ -128,13 +128,13 @@
   <div class="container" id="homePage" style="display:none;">
     <button id="homeBtn">🏠 Home</button>
     <h1>Welcome to Avyav Chess</h1>
-    <button id="playBtn">Play Chess with Bot</button>
-    <button id="learnBtn">Learn Chess</button>
-    <button id="videosBtn">Videos</button>
-    <button id="contactBtn">Contact Us for Feedback</button>
+    <button id="btnBot">Play Chess with Bot</button>
+    <button id="btnLearn">Learn Chess</button>
+    <button id="btnVideos">Videos</button>
+    <button id="btnContact">Contact Us for Feedback</button>
   </div>
 
-  <!-- CONTENT PAGE -->
+  <!-- CONTENT COMING SOON PAGE -->
   <div class="container" id="contentPage" style="display:none;">
     <button id="homeBtn2">🏠 Home</button>
     <h1>Contents Coming Soon...</h1>
@@ -158,17 +158,15 @@
     const contentPage = document.getElementById('contentPage');
     const clickSound = document.getElementById('clickSound');
     const typingSound = document.getElementById('typingSound');
-
-    const playBtn = document.getElementById('playBtn');
-    const learnBtn = document.getElementById('learnBtn');
-    const videosBtn = document.getElementById('videosBtn');
-    const contactBtn = document.getElementById('contactBtn');
     const homeBtn = document.getElementById('homeBtn');
     const homeBtn2 = document.getElementById('homeBtn2');
+    const btnBot = document.getElementById('btnBot');
+    const btnLearn = document.getElementById('btnLearn');
+    const btnVideos = document.getElementById('btnVideos');
+    const btnContact = document.getElementById('btnContact');
 
     const introMessage = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
 
-    // Typing animation with sound
     function startTyping() {
       introText.style.display = "block";
       let i = 0;
@@ -186,47 +184,47 @@
       }, 45);
     }
 
-    // Start typing when loaded
     window.onload = () => {
       setTimeout(startTyping, 1000);
     };
 
-    // Sound helper
-    function playClick() {
+    getStartedBtn.addEventListener('click', () => {
       clickSound.currentTime = 0;
       clickSound.play();
-    }
-
-    // Button handlers
-    getStartedBtn.addEventListener('click', () => {
-      playClick();
       introScreen.style.display = "none";
       homePage.style.display = "flex";
     });
 
     homeBtn.addEventListener('click', () => {
-      playClick();
-      homePage.style.display = "flex";
-      contentPage.style.display = "none";
+      clickSound.currentTime = 0;
+      clickSound.play();
+      showHome();
     });
 
     homeBtn2.addEventListener('click', () => {
-      playClick();
-      contentPage.style.display = "none";
-      homePage.style.display = "flex";
+      clickSound.currentTime = 0;
+      clickSound.play();
+      showHome();
     });
 
-    // Navigation for the four buttons
-    function openContentPage() {
-      playClick();
+    // Button click functions for homepage
+    function goToContent() {
+      clickSound.currentTime = 0;
+      clickSound.play();
       homePage.style.display = "none";
       contentPage.style.display = "flex";
     }
 
-    playBtn.addEventListener('click', openContentPage);
-    learnBtn.addEventListener('click', openContentPage);
-    videosBtn.addEventListener('click', openContentPage);
-    contactBtn.addEventListener('click', openContentPage);
+    btnBot.addEventListener('click', goToContent);
+    btnLearn.addEventListener('click', goToContent);
+    btnVideos.addEventListener('click', goToContent);
+    btnContact.addEventListener('click', goToContent);
+
+    function showHome() {
+      contentPage.style.display = "none";
+      introScreen.style.display = "none";
+      homePage.style.display = "flex";
+    }
   </script>
 </body>
 </html>
