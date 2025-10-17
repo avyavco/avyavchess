@@ -62,8 +62,9 @@
   </div>
 </footer>
 <audio id="typingSound" src="typingsound.mp3"></audio>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/1.0.0/chess.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/js/chessboard.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/niklasf/stockfish.js/stockfish.js"></script>
 <script>
 const animation = document.getElementById('animation');
 const introContainer = document.getElementById('intro-container');
@@ -78,10 +79,42 @@ let i = 0;
 setTimeout(() => { animation.style.display = 'none'; introContainer.style.display = 'flex'; typeText(); }, 2500);
 function typeText() { if (i<fullText.length){ introText.textContent += fullText.charAt(i); if(typingSound.paused) typingSound.play(); i++; setTimeout(typeText,50);} else {typingSound.pause(); typingSound.currentTime=0; getStarted.style.display='inline-block'; setTimeout(()=>footer.style.display='block',800);}}
 getStarted.addEventListener('click',()=>{introContainer.style.display='none'; footer.style.display='block'; homeContainer.style.display='flex';});
-function openPage(page){ homeContainer.style.display='none'; document.querySelectorAll('.content-page').forEach(p=>p.style.display='none'); document.getElementById(`${page}-page`).style.display='flex'; if(page==='bot-play') initChessBot(); }
+function openPage(page){ homeContainer.style.display='none'; document.querySelectorAll('.content-page').forEach(p=>p.style.display='none'); document.getElementById(`${page}-page`).style.display='flex'; if(page==='bot-play') initChessBot();}
 function goHome(){ document.querySelectorAll('.content-page').forEach(p=>p.style.display='none'); homeContainer.style.display='flex';}
 homeIcon.addEventListener('click',goHome);
-function initChessBot(){ const board = Chessboard('chessboard', {position:'start', draggable:true, onDrop:(source,target, piece, newPos, oldPos, orientation)=>{ /* Here you can integrate Stockfish moves using chess.js or API */}});}
+
+// Chess bot integration
+let board = null;
+let game = new Chess();
+let stockfish = null;
+function initChessBot(){
+  if(board) board.clear();
+  game.reset();
+  stockfish = new Worker('https://cdn.jsdelivr.net/gh/niklasf/stockfish.js/stockfish.js');
+  board = Chessboard('chessboard', {
+    position: 'start',
+    draggable: true,
+    onDrop: function(source, target) {
+      let move = game.move({ from: source, to: target, promotion: 'q' });
+      if(move === null) return 'snapback';
+      updateBotMove();
+    }
+  });
+}
+function updateBotMove(){
+  stockfish.onmessage = function(event){
+    let line = event.data;
+    if(line.startsWith('bestmove')){
+      let bestMove = line.split(' ')[1];
+      let from = bestMove.substring(0,2);
+      let to = bestMove.substring(2,4);
+      game.move({from: from, to: to, promotion:'q'});
+      board.position(game.fen());
+    }
+  };
+  stockfish.postMessage('position fen '+game.fen());
+  stockfish.postMessage('go depth 15');
+}
 </script>
 </body>
 </html>
