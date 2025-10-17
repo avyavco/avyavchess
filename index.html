@@ -12,7 +12,7 @@
   }
 
   body {
-    font-family: 'Courier New', monospace; /* Your original style */
+    font-family: 'Courier New', monospace;
     background: linear-gradient(to bottom right, #000428, #004e92);
     color: cyan;
     overflow: hidden;
@@ -21,7 +21,6 @@
     flex-direction: column;
   }
 
-  /* Animation container */
   #intro-container, #home-container, .content-page {
     display: none;
     justify-content: center;
@@ -69,6 +68,21 @@
     color: #000428;
   }
 
+  /* Dragon image */
+  #dragon-image {
+    margin-top: 1.5rem;
+    width: 180px;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  /* Dragon enlarge + fade animation */
+  @keyframes dragonEnlargeFade {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+  }
+
   footer {
     position: fixed;
     bottom: 10px;
@@ -99,9 +113,7 @@
     transition: transform 0.2s ease;
   }
 
-  .youtube-logo:hover {
-    transform: scale(1.1);
-  }
+  .youtube-logo:hover { transform: scale(1.1); }
 
   .youtube-logo::before {
     content: '';
@@ -110,10 +122,7 @@
     border-color: transparent transparent transparent white;
   }
 
-  /* Home page layout */
-  #home-container {
-    display: none;
-  }
+  #home-container { display: none; }
 
   #home-buttons {
     display: flex;
@@ -138,7 +147,6 @@
     color: #000428;
   }
 
-  /* Home icon */
   .home-icon {
     position: absolute;
     top: 20px;
@@ -166,7 +174,8 @@
 
 <div id="intro-container">
   <div id="intro-text"></div>
-  <button id="get-started">Get Started</button>
+  <button id="get-started">Enter Avyav Chess</button>
+  <img id="dragon-image" src="dragon.png" alt="Dragon">
 </div>
 
 <div id="home-container">
@@ -179,26 +188,11 @@
   </div>
 </div>
 
-<!-- Content Coming Soon Pages -->
-<div id="bot-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
-
-<div id="learn-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
-
-<div id="videos-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
-
-<div id="contact-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
+<!-- Other Pages -->
+<div id="bot-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="learn-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="videos-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="contact-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 
 <footer id="footer">
   <div class="youtube-container">
@@ -214,44 +208,48 @@
   const introContainer = document.getElementById('intro-container');
   const introText = document.getElementById('intro-text');
   const getStarted = document.getElementById('get-started');
+  const dragon = document.getElementById('dragon-image');
   const footer = document.getElementById('footer');
   const typingSound = document.getElementById('typingSound');
 
   const fullText = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
 
-  // Step 1: After animation, show intro container and start typing
   setTimeout(() => {
     animation.style.display = "none";
     introContainer.style.display = "flex";
     typeText();
   }, 2500);
 
-  // Typing effect with sound
   let i = 0;
   function typeText() {
     if (i < fullText.length) {
       introText.textContent += fullText.charAt(i);
-      if (typingSound.paused) {
-        typingSound.play();
-      }
+      if (typingSound.paused) typingSound.play();
       i++;
       setTimeout(typeText, 50);
     } else {
       typingSound.pause();
       typingSound.currentTime = 0;
       getStarted.style.display = "inline-block";
-      setTimeout(() => footer.style.display = "block", 800);
+
+      // Show dragon image next
+      setTimeout(() => {
+        dragon.style.opacity = "1";
+        footer.style.display = "block";
+      }, 1000);
     }
   }
 
-  // Step 2: When Get Started clicked → go to home
   getStarted.addEventListener('click', () => {
-    introContainer.style.display = "none";
-    footer.style.display = "block";
-    document.getElementById('home-container').style.display = "flex";
+    // Animate dragon enlarge + fade
+    dragon.style.animation = "dragonEnlargeFade 1.5s forwards";
+
+    setTimeout(() => {
+      introContainer.style.display = "none";
+      document.getElementById('home-container').style.display = "flex";
+    }, 1500);
   });
 
-  // Step 3: Navigation
   function openPage(page) {
     document.getElementById('home-container').style.display = "none";
     document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
@@ -265,6 +263,5 @@
 
   document.getElementById('home-icon').addEventListener('click', goHome);
 </script>
-
 </body>
 </html>
