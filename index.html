@@ -1,259 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Avyav Chess</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
 <style>
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Orbitron', sans-serif;
-  background-color: black;
-  color: cyan;
-  overflow: hidden;
-  text-align: center;
-}
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-/* Avyav Chess Title */
-#avyavChess {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 60px;
-  opacity: 0;
-  transition: all 1.5s ease-in-out;
-}
-.moveToTopLeft {
-  top: 20px !important;
-  left: 40px !important;
-  transform: none !important;
-  font-size: 30px !important;
-  opacity: 1 !important;
-}
+  body {
+    font-family: 'Courier New', monospace; /* Your original style */
+    background: linear-gradient(to bottom right, #000428, #004e92);
+    color: cyan;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-/* Intro Text Container */
-#introContainer {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, 0);
-  max-width: 80%;
-}
-#introText {
-  font-size: 20px;
-  white-space: nowrap;
-  overflow: hidden;
-  border-right: 2px solid cyan;
-  opacity: 0;
-  display: inline-block;
-}
+  /* Animation container */
+  #intro-container, #home-container, .content-page {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    height: 100vh;
+  }
 
-/* Get Started Button */
-#getStartedBtn {
-  display: none;
-  margin-top: 25px;
-  padding: 15px 45px;
-  font-size: 20px;
-  color: cyan;
-  background: transparent;
-  border: 2px solid cyan;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-#getStartedBtn:hover {
-  background: cyan;
-  color: black;
-  transform: scale(1.1);
-}
+  #animation {
+    font-size: 3rem;
+    font-weight: bold;
+    animation: fadeIn 2s ease forwards;
+  }
 
-/* Subscribe Footer */
-#subscribe {
-  display: none;
-  position: fixed;
-  bottom: 15px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  color: cyan;
-  font-size: 18px;
-}
-#youtubeLogo {
-  width: 42px;
-  height: auto;
-  filter: drop-shadow(0 0 15px red);
-  transition: transform 0.3s ease, filter 0.3s ease;
-}
-#youtubeLogo:hover {
-  transform: scale(1.2);
-  filter: drop-shadow(0 0 25px red);
-}
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
 
-/* Home Icon */
-#homeIcon {
-  display: none;
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  width: 35px;
-  height: 35px;
-  cursor: pointer;
-  filter: drop-shadow(0 0 15px cyan);
-  transition: transform 0.3s, filter 0.3s;
-}
-#homeIcon:hover {
-  transform: scale(1.2);
-  filter: drop-shadow(0 0 25px cyan);
-}
+  #intro-text {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    width: 80%;
+    max-width: 700px;
+    white-space: pre-wrap;
+    text-align: center;
+  }
 
-/* Home Page Buttons */
-#homePage {
-  display: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-.menuBtn {
-  padding: 15px 45px;
-  font-size: 20px;
-  color: cyan;
-  background: transparent;
-  border: 2px solid cyan;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.menuBtn:hover {
-  background: cyan;
-  color: black;
-  transform: scale(1.1);
-}
+  #get-started {
+    margin-top: 2rem;
+    padding: 12px 30px;
+    font-size: 1rem;
+    border: 2px solid cyan;
+    color: cyan;
+    background: transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: none;
+  }
 
-/* Content Page */
-#contentPage {
-  display: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 22px;
-}
+  #get-started:hover {
+    background-color: cyan;
+    color: #000428;
+  }
+
+  footer {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: cyan;
+    font-size: 1rem;
+    display: none;
+  }
+
+  .youtube-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .youtube-logo {
+    width: 40px;
+    height: 30px;
+    background-color: red;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px red;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .youtube-logo:hover {
+    transform: scale(1.1);
+  }
+
+  .youtube-logo::before {
+    content: '';
+    border-style: solid;
+    border-width: 8px 0 8px 14px;
+    border-color: transparent transparent transparent white;
+  }
+
+  /* Home page layout */
+  #home-container {
+    display: none;
+  }
+
+  #home-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  .home-btn {
+    padding: 15px 35px;
+    border: 2px solid cyan;
+    color: cyan;
+    background: transparent;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .home-btn:hover {
+    background-color: cyan;
+    color: #000428;
+  }
+
+  /* Home icon */
+  .home-icon {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    width: 40px;
+    height: 40px;
+    background: cyan;
+    mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
+    mask-size: contain;
+    -webkit-mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
+    -webkit-mask-size: contain;
+    cursor: pointer;
+  }
+
+  @media (max-width: 600px) {
+    #animation { font-size: 2.3rem; }
+    #intro-text { font-size: 1rem; }
+    .home-btn { font-size: 1rem; padding: 12px 28px; }
+  }
 </style>
 </head>
 <body>
 
-<!-- Avyav Chess Title -->
-<div id="avyavChess">Avyav Chess</div>
+<div id="animation">Avyav Chess</div>
 
-<!-- Intro Container -->
-<div id="introContainer">
-  <div id="introText"></div>
-  <button id="getStartedBtn">Get Started</button>
+<div id="intro-container">
+  <div id="intro-text"></div>
+  <button id="get-started">Get Started</button>
 </div>
 
-<!-- Subscribe Footer -->
-<div id="subscribe">
-  <span>Subscribe to my YouTube Channel</span>
-  <a href="https://www.youtube.com/@AvyavChessYT" target="_blank">
-    <img id="youtubeLogo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHBhdGggZmlsbD0icmVkIiBkPSJNNDIuNTggMjAuNTggMzIuMjMgMjYuNCA0Mi41OCAzMi4yMiAyNC4yMyAyNy42OSIvPjwvc3ZnPg==" alt="YouTube Logo">
-  </a>
+<div id="home-container">
+  <div class="home-icon" id="home-icon"></div>
+  <div id="home-buttons">
+    <button class="home-btn" onclick="openPage('bot')">Play Chess with Bot</button>
+    <button class="home-btn" onclick="openPage('learn')">Learn Chess</button>
+    <button class="home-btn" onclick="openPage('videos')">Videos</button>
+    <button class="home-btn" onclick="openPage('contact')">Contact Us for Feedback</button>
+  </div>
 </div>
 
-<!-- Home Icon -->
-<img id="homeIcon" src="data:image/svg+xml;base64,PHN2ZyBmaWxsPSJjeWFuIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCI+PHBhdGggZD0iTTI1IDIgTDIuNSA0Ny41IEgyNy41IE0yNSAyIEw0Ny41IDI1IEwyNSAyIiBzdHJva2U9ImN5YW4iIHN0cm9rZS13aWR0aD0iMiIvPjwvc3ZnPg==" alt="Home Icon">
-
-<!-- Home Page -->
-<div id="homePage">
-  <button class="menuBtn" id="playChess">Play Chess with Bot</button>
-  <button class="menuBtn" id="learnChess">Learn Chess</button>
-  <button class="menuBtn" id="videos">Videos</button>
-  <button class="menuBtn" id="contactUs">Contact Us</button>
-</div>
-
-<!-- Content Page -->
-<div id="contentPage">
+<!-- Content Coming Soon Pages -->
+<div id="bot-page" class="content-page">
+  <div class="home-icon" onclick="goHome()"></div>
   <h2>Contents Coming Soon...</h2>
 </div>
 
-<!-- Typing Sound -->
+<div id="learn-page" class="content-page">
+  <div class="home-icon" onclick="goHome()"></div>
+  <h2>Contents Coming Soon...</h2>
+</div>
+
+<div id="videos-page" class="content-page">
+  <div class="home-icon" onclick="goHome()"></div>
+  <h2>Contents Coming Soon...</h2>
+</div>
+
+<div id="contact-page" class="content-page">
+  <div class="home-icon" onclick="goHome()"></div>
+  <h2>Contents Coming Soon...</h2>
+</div>
+
+<footer id="footer">
+  <div class="youtube-container">
+    <span>Subscribe to my YouTube Channel</span>
+    <div class="youtube-logo" onclick="window.open('https://www.youtube.com/@AvyavChessYT', '_blank')"></div>
+  </div>
+</footer>
+
 <audio id="typingSound" src="typingsound.mp3"></audio>
 
 <script>
-const avyavText = document.getElementById('avyavChess');
-const introText = document.getElementById('introText');
-const introContainer = document.getElementById('introContainer');
-const getStartedBtn = document.getElementById('getStartedBtn');
-const subscribe = document.getElementById('subscribe');
-const typingSound = document.getElementById('typingSound');
-const homePage = document.getElementById('homePage');
-const contentPage = document.getElementById('contentPage');
-const homeIcon = document.getElementById('homeIcon');
+  const animation = document.getElementById('animation');
+  const introContainer = document.getElementById('intro-container');
+  const introText = document.getElementById('intro-text');
+  const getStarted = document.getElementById('get-started');
+  const footer = document.getElementById('footer');
+  const typingSound = document.getElementById('typingSound');
 
-// Step 1: Avyav Chess animation
-window.onload = () => {
+  const fullText = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
+
+  // Step 1: After animation, show intro container and start typing
   setTimeout(() => {
-    avyavText.style.opacity = 1;
-    setTimeout(() => {
-      avyavText.classList.add('moveToTopLeft');
-      setTimeout(startTyping, 1500);
-    }, 1000);
-  }, 300);
-};
+    animation.style.display = "none";
+    introContainer.style.display = "flex";
+    typeText();
+  }, 2500);
 
-// Step 2: Typing animation
-function startTyping() {
-  const text = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 on chess.com, I created this website for the love of chess.";
-  let index = 0;
-  introText.style.opacity = 1;
-  typingSound.currentTime = 0;
-  typingSound.play();
-
-  const typingInterval = setInterval(() => {
-    introText.textContent = text.substring(0, index);
-    index++;
-    if (index > text.length) {
-      clearInterval(typingInterval);
+  // Typing effect with sound
+  let i = 0;
+  function typeText() {
+    if (i < fullText.length) {
+      introText.textContent += fullText.charAt(i);
+      if (typingSound.paused) {
+        typingSound.play();
+      }
+      i++;
+      setTimeout(typeText, 50);
+    } else {
       typingSound.pause();
-      introText.style.borderRight = 'none';
-      getStartedBtn.style.display = 'block';
-      setTimeout(() => { subscribe.style.display = 'flex'; }, 600);
+      typingSound.currentTime = 0;
+      getStarted.style.display = "inline-block";
+      setTimeout(() => footer.style.display = "block", 800);
     }
-  }, 50);
-}
+  }
 
-// Step 3: Get Started → Home Page
-getStartedBtn.addEventListener('click', () => {
-  introContainer.style.display = 'none';
-  getStartedBtn.style.display = 'none';
-  subscribe.style.display = 'flex';
-  homePage.style.display = 'flex';
-  homeIcon.style.display = 'block';
-});
+  // Step 2: When Get Started clicked → go to home
+  getStarted.addEventListener('click', () => {
+    introContainer.style.display = "none";
+    footer.style.display = "block";
+    document.getElementById('home-container').style.display = "flex";
+  });
 
-// Step 4: Menu buttons → Content Page
-function openContent() {
-  homePage.style.display = 'none';
-  contentPage.style.display = 'block';
-}
-document.querySelectorAll('.menuBtn').forEach(btn => {
-  btn.addEventListener('click', openContent);
-});
+  // Step 3: Navigation
+  function openPage(page) {
+    document.getElementById('home-container').style.display = "none";
+    document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
+    document.getElementById(`${page}-page`).style.display = "flex";
+  }
 
-// Step 5: Home Icon → Back to Home Page
-homeIcon.addEventListener('click', () => {
-  contentPage.style.display = 'none';
-  homePage.style.display = 'flex';
-});
+  function goHome() {
+    document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
+    document.getElementById('home-container').style.display = "flex";
+  }
+
+  document.getElementById('home-icon').addEventListener('click', goHome);
 </script>
+
 </body>
 </html>
