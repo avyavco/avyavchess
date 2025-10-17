@@ -13,45 +13,43 @@ body {
   padding: 0;
   font-family: 'Orbitron', sans-serif;
   background-color: black;
-  overflow: hidden;
   color: cyan;
+  overflow: hidden;
   text-align: center;
 }
 
+/* === Avyav Chess intro === */
 #avyavChess {
-  font-size: 60px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  font-size: 60px;
   opacity: 0;
   animation: fadeInCenter 2s forwards;
 }
-
 @keyframes fadeInCenter {
-  to {
-    opacity: 1;
-  }
+  to { opacity: 1; }
 }
-
 .moveToTopLeft {
   animation: moveTopLeft 1.5s forwards;
 }
-
 @keyframes moveTopLeft {
-  from {
+  0% {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    font-size: 60px;
   }
-  to {
+  100% {
     top: 20px;
     left: 40px;
-    transform: translate(0, 0);
+    transform: none;
     font-size: 28px;
   }
 }
 
+/* === Intro typing text === */
 #introText {
   font-size: 22px;
   margin-top: 120px;
@@ -62,9 +60,10 @@ body {
   opacity: 0;
 }
 
-#getStartedBtn {
+/* === Buttons === */
+#getStartedBtn, .menuBtn {
   display: none;
-  margin-top: 40px;
+  margin: 20px auto;
   padding: 15px 40px;
   font-size: 20px;
   color: cyan;
@@ -74,13 +73,13 @@ body {
   cursor: pointer;
   transition: transform 0.3s, background 0.3s;
 }
-
-#getStartedBtn:hover {
+#getStartedBtn:hover, .menuBtn:hover {
   background: cyan;
   color: black;
   transform: scale(1.1);
 }
 
+/* === Subscribe footer === */
 #subscribe {
   display: none;
   position: absolute;
@@ -92,49 +91,27 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-}
-
-#subscribeText {
-  display: inline-block;
+  gap: 12px;
 }
 
 #youtubeLogo {
-  width: 40px;
+  width: 42px;
   height: auto;
   filter: drop-shadow(0 0 15px red);
   transition: transform 0.3s ease, filter 0.3s ease;
 }
-
 #youtubeLogo:hover {
   transform: scale(1.2);
   filter: drop-shadow(0 0 25px red);
 }
 
+/* === Home & content pages === */
 #homePage, #contentPage {
   display: none;
   margin-top: 120px;
 }
 
-button.menuBtn {
-  display: block;
-  margin: 20px auto;
-  padding: 15px 40px;
-  font-size: 20px;
-  color: cyan;
-  background: transparent;
-  border: 2px solid cyan;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: transform 0.3s, background 0.3s;
-}
-
-button.menuBtn:hover {
-  background: cyan;
-  color: black;
-  transform: scale(1.1);
-}
-
+/* === Home icon === */
 #homeIcon {
   display: none;
   position: absolute;
@@ -146,7 +123,6 @@ button.menuBtn:hover {
   filter: drop-shadow(0 0 15px cyan);
   transition: transform 0.3s, filter 0.3s;
 }
-
 #homeIcon:hover {
   transform: scale(1.2);
   filter: drop-shadow(0 0 25px cyan);
@@ -155,19 +131,27 @@ button.menuBtn:hover {
 </head>
 
 <body>
+  <!-- Intro Animation -->
   <div id="avyavChess">Avyav Chess</div>
   <div id="introText"></div>
   <button id="getStartedBtn">Get Started</button>
 
+  <!-- Subscribe footer -->
   <div id="subscribe">
-    <span id="subscribeText">Subscribe to my YouTube Channel</span>
+    <span>Subscribe to my YouTube Channel</span>
     <a href="https://www.youtube.com" target="_blank">
-      <img id="youtubeLogo" src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_(2017).svg" alt="YouTube Logo">
+      <img id="youtubeLogo"
+           src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_play_button_icon_(2013-2017).svg"
+           alt="YouTube Logo">
     </a>
   </div>
 
-  <img id="homeIcon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Home_icon.svg" alt="Home">
+  <!-- Home Icon -->
+  <img id="homeIcon"
+       src="https://upload.wikimedia.org/wikipedia/commons/5/53/Home_icon.svg"
+       alt="Home Icon">
 
+  <!-- Home Page -->
   <div id="homePage">
     <button class="menuBtn" id="playChess">Play Chess with Bot</button>
     <button class="menuBtn" id="learnChess">Learn Chess</button>
@@ -175,10 +159,12 @@ button.menuBtn:hover {
     <button class="menuBtn" id="contactUs">Contact Us for Feedback</button>
   </div>
 
+  <!-- Content Page -->
   <div id="contentPage">
     <h2>Contents Coming Soon...</h2>
   </div>
 
+  <!-- Typing sound -->
   <audio id="typingSound" src="typingsound.mp3"></audio>
 
 <script>
@@ -191,20 +177,20 @@ const homePage = document.getElementById('homePage');
 const contentPage = document.getElementById('contentPage');
 const homeIcon = document.getElementById('homeIcon');
 
+// Start intro animation
 window.onload = () => {
-  // Step 1: Avyav Chess fade-in
   setTimeout(() => {
     avyavText.classList.add('moveToTopLeft');
-
-    // Step 2: Start typing animation after Avyav Chess moves
     setTimeout(startTyping, 1800);
   }, 1000);
 };
 
+// Typing animation
 function startTyping() {
   const text = "Welcome to Avyav Chess — where your chess journey begins!";
   let index = 0;
   introText.style.opacity = 1;
+  typingSound.currentTime = 0;
   typingSound.play();
   const typeInterval = setInterval(() => {
     if (index < text.length) {
@@ -215,13 +201,16 @@ function startTyping() {
       typingSound.pause();
       typingSound.currentTime = 0;
       getStartedBtn.style.display = 'block';
-      subscribe.style.display = 'flex';
+      setTimeout(() => {
+        subscribe.style.display = 'flex';
+      }, 600);
     }
   }, 80);
 }
 
+// Navigation logic
 getStartedBtn.addEventListener('click', () => {
-  document.getElementById('introText').style.display = 'none';
+  introText.style.display = 'none';
   getStartedBtn.style.display = 'none';
   subscribe.style.display = 'flex';
   homePage.style.display = 'block';
