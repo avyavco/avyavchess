@@ -1,230 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Avyav Chess</title>
 <style>
-  body {
+  * {
     margin: 0;
     padding: 0;
-    background: black;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Courier New', monospace; /* Your original style */
+    background: linear-gradient(to bottom right, #000428, #004e92);
     color: cyan;
-    font-family: 'Segoe UI', sans-serif;
-    text-align: center;
     overflow: hidden;
-  }
-
-  h1 {
-    font-size: 3em;
-    color: cyan;
-    margin-bottom: 30px;
-  }
-
-  #introText {
-    font-size: 1.3em;
-    color: cyan;
-    margin-bottom: 40px;
-    white-space: pre-wrap;
-    display: none;
-  }
-
-  button {
-    background: transparent;
-    color: cyan;
-    border: 2px solid cyan;
-    padding: 15px 40px;
-    font-size: 1.2em;
-    cursor: pointer;
-    border-radius: 12px;
-    transition: all 0.3s;
-    margin: 15px;
-  }
-
-  button:hover {
-    background: cyan;
-    color: black;
-  }
-
-  #homeBtn {
-    position: absolute;
-    top: 20px;
-    right: 25px;
-    font-size: 1.5em;
-    border-radius: 10px;
-    padding: 10px 20px;
-  }
-
-  .container {
-    position: relative;
     height: 100vh;
     display: flex;
     flex-direction: column;
+  }
+
+  /* Animation container */
+  #intro-container, #home-container, .content-page {
+    display: none;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    text-align: center;
+    height: 100vh;
+  }
+
+  #animation {
+    font-size: 3rem;
+    font-weight: bold;
+    animation: fadeIn 2s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  #intro-text {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    width: 80%;
+    max-width: 700px;
+    white-space: pre-wrap;
+    text-align: center;
+  }
+
+  #get-started {
+    margin-top: 2rem;
+    padding: 12px 30px;
+    font-size: 1rem;
+    border: 2px solid cyan;
+    color: cyan;
+    background: transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: none;
+  }
+
+  #get-started:hover {
+    background-color: cyan;
+    color: #000428;
   }
 
   footer {
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
     text-align: center;
     color: cyan;
-    font-size: 1em;
+    font-size: 1rem;
+    display: none;
   }
 
-  .youtube-btn {
+  .youtube-container {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    cursor: pointer;
-    text-decoration: none;
   }
 
   .youtube-logo {
-    width: 55px;
-    height: 40px;
-    background: red;
-    border-radius: 10px;
-    position: relative;
-    box-shadow: 0 0 25px red, 0 0 50px red;
-    transition: transform 0.3s ease;
-  }
-
-  .youtube-logo::before {
-    content: '';
-    position: absolute;
-    top: 9px;
-    left: 19px;
-    width: 0;
-    height: 0;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-left: 16px solid white;
+    width: 40px;
+    height: 30px;
+    background-color: red;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px red;
+    cursor: pointer;
+    transition: transform 0.2s ease;
   }
 
   .youtube-logo:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 40px red, 0 0 70px red;
+  }
+
+  .youtube-logo::before {
+    content: '';
+    border-style: solid;
+    border-width: 8px 0 8px 14px;
+    border-color: transparent transparent transparent white;
+  }
+
+  /* Home page layout */
+  #home-container {
+    display: none;
+  }
+
+  #home-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  .home-btn {
+    padding: 15px 35px;
+    border: 2px solid cyan;
+    color: cyan;
+    background: transparent;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .home-btn:hover {
+    background-color: cyan;
+    color: #000428;
+  }
+
+  /* Home icon */
+  .home-icon {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    width: 40px;
+    height: 40px;
+    background: cyan;
+    mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
+    mask-size: contain;
+    -webkit-mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
+    -webkit-mask-size: contain;
+    cursor: pointer;
   }
 
   @media (max-width: 600px) {
-    h1 { font-size: 2.2em; }
-    #introText { font-size: 1.1em; margin: 20px; }
-    button { font-size: 1em; padding: 10px 25px; }
+    #animation { font-size: 2.3rem; }
+    #intro-text { font-size: 1rem; }
+    .home-btn { font-size: 1rem; padding: 12px 28px; }
   }
 </style>
 </head>
 <body>
 
-  <!-- INTRO SCREEN -->
-  <div class="container" id="introScreen">
-    <h1>Avyav Chess</h1>
-    <p id="introText"></p>
-    <button id="getStartedBtn" style="display:none;">Get Started</button>
+<div id="animation">Avyav Chess</div>
+
+<div id="intro-container">
+  <div id="intro-text"></div>
+  <button id="get-started">Get Started</button>
+</div>
+
+<div id="home-container">
+  <div class="home-icon" id="home-icon"></div>
+  <div id="home-buttons">
+    <button class="home-btn" onclick="openPage('bot')">Play Chess with Bot</button>
+    <button class="home-btn" onclick="openPage('learn')">Learn Chess</button>
+    <button class="home-btn" onclick="openPage('videos')">Videos</button>
+    <button class="home-btn" onclick="openPage('contact')">Contact Us for Feedback</button>
   </div>
+</div>
 
-  <!-- HOME PAGE -->
-  <div class="container" id="homePage" style="display:none;">
-    <button id="homeBtn">🏠 Home</button>
-    <h1>Welcome to Avyav Chess</h1>
-    <button id="btnBot">Play Chess with Bot</button>
-    <button id="btnLearn">Learn Chess</button>
-    <button id="btnVideos">Videos</button>
-    <button id="btnContact">Contact Us for Feedback</button>
+<!-- Content Coming Soon Pages -->
+<div id="bot-page" class="content-page">
+  <div class="home-icon" onclick="goHome()"></div>
+  <h2>Contents Coming Soon...</h2>
+</div>
+
+<div id="learn-page" class="content-page">
+  <div class="home-icon" onclick="goHome()"></div>
+  <h2>Contents Coming Soon...</h2>
+</div>
+
+<div id="videos-page" class="content-page">
+  <div class="home-icon" onclick="goHome()"></div>
+  <h2>Contents Coming Soon...</h2>
+</div>
+
+<div id="contact-page" class="content-page">
+  <div class="home-icon" onclick="goHome()"></div>
+  <h2>Contents Coming Soon...</h2>
+</div>
+
+<footer id="footer">
+  <div class="youtube-container">
+    <span>Subscribe to my YouTube Channel</span>
+    <div class="youtube-logo" onclick="window.open('https://www.youtube.com/@AvyavChessYT', '_blank')"></div>
   </div>
+</footer>
 
-  <!-- CONTENT COMING SOON PAGE -->
-  <div class="container" id="contentPage" style="display:none;">
-    <button id="homeBtn2">🏠 Home</button>
-    <h1>Contents Coming Soon...</h1>
-  </div>
+<audio id="typingSound" src="typingsound.mp3"></audio>
 
-  <footer>
-    <div class="youtube-btn" onclick="window.open('https://www.youtube.com/@AvyavChessYT', '_blank')">
-      <span>Subscribe to my YouTube channel</span>
-      <div class="youtube-logo"></div>
-    </div>
-  </footer>
+<script>
+  const animation = document.getElementById('animation');
+  const introContainer = document.getElementById('intro-container');
+  const introText = document.getElementById('intro-text');
+  const getStarted = document.getElementById('get-started');
+  const footer = document.getElementById('footer');
+  const typingSound = document.getElementById('typingSound');
 
-  <audio id="clickSound" src="buttonclick.mp3" preload="auto"></audio>
-  <audio id="typingSound" src="typingsound.mp3" preload="auto"></audio>
+  const fullText = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
 
-  <script>
-    const introText = document.getElementById('introText');
-    const getStartedBtn = document.getElementById('getStartedBtn');
-    const introScreen = document.getElementById('introScreen');
-    const homePage = document.getElementById('homePage');
-    const contentPage = document.getElementById('contentPage');
-    const clickSound = document.getElementById('clickSound');
-    const typingSound = document.getElementById('typingSound');
-    const homeBtn = document.getElementById('homeBtn');
-    const homeBtn2 = document.getElementById('homeBtn2');
-    const btnBot = document.getElementById('btnBot');
-    const btnLearn = document.getElementById('btnLearn');
-    const btnVideos = document.getElementById('btnVideos');
-    const btnContact = document.getElementById('btnContact');
+  // Step 1: After animation, show intro container and start typing
+  setTimeout(() => {
+    animation.style.display = "none";
+    introContainer.style.display = "flex";
+    typeText();
+  }, 2500);
 
-    const introMessage = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
-
-    function startTyping() {
-      introText.style.display = "block";
-      let i = 0;
+  // Typing effect with sound
+  let i = 0;
+  function typeText() {
+    if (i < fullText.length) {
+      introText.textContent += fullText.charAt(i);
+      if (typingSound.paused) {
+        typingSound.play();
+      }
+      i++;
+      setTimeout(typeText, 50);
+    } else {
+      typingSound.pause();
       typingSound.currentTime = 0;
-      typingSound.play();
-      const typingInterval = setInterval(() => {
-        introText.textContent += introMessage[i];
-        i++;
-        if (i === introMessage.length) {
-          clearInterval(typingInterval);
-          typingSound.pause();
-          typingSound.currentTime = 0;
-          getStartedBtn.style.display = "inline-block";
-        }
-      }, 45);
+      getStarted.style.display = "inline-block";
+      setTimeout(() => footer.style.display = "block", 800);
     }
+  }
 
-    window.onload = () => {
-      setTimeout(startTyping, 1000);
-    };
+  // Step 2: When Get Started clicked → go to home
+  getStarted.addEventListener('click', () => {
+    introContainer.style.display = "none";
+    footer.style.display = "block";
+    document.getElementById('home-container').style.display = "flex";
+  });
 
-    getStartedBtn.addEventListener('click', () => {
-      clickSound.currentTime = 0;
-      clickSound.play();
-      introScreen.style.display = "none";
-      homePage.style.display = "flex";
-    });
+  // Step 3: Navigation
+  function openPage(page) {
+    document.getElementById('home-container').style.display = "none";
+    document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
+    document.getElementById(`${page}-page`).style.display = "flex";
+  }
 
-    homeBtn.addEventListener('click', () => {
-      clickSound.currentTime = 0;
-      clickSound.play();
-      showHome();
-    });
+  function goHome() {
+    document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
+    document.getElementById('home-container').style.display = "flex";
+  }
 
-    homeBtn2.addEventListener('click', () => {
-      clickSound.currentTime = 0;
-      clickSound.play();
-      showHome();
-    });
+  document.getElementById('home-icon').addEventListener('click', goHome);
+</script>
 
-    // Button click functions for homepage
-    function goToContent() {
-      clickSound.currentTime = 0;
-      clickSound.play();
-      homePage.style.display = "none";
-      contentPage.style.display = "flex";
-    }
-
-    btnBot.addEventListener('click', goToContent);
-    btnLearn.addEventListener('click', goToContent);
-    btnVideos.addEventListener('click', goToContent);
-    btnContact.addEventListener('click', goToContent);
-
-    function showHome() {
-      contentPage.style.display = "none";
-      introScreen.style.display = "none";
-      homePage.style.display = "flex";
-    }
-  </script>
 </body>
 </html>
