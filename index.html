@@ -123,7 +123,6 @@
     overflow: hidden;
   }
 
-  /* Horse image left side */
   #horse-image {
     position: absolute;
     left: 0;
@@ -139,27 +138,25 @@
     left: 20px;
     top: 20%;
     width: 60px;
-    height: 300px;
+    height: 350px;
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid cyan;
     border-radius: 15px;
     display: flex;
-    justify-content: center;
-    align-items: start;
-    padding-top: 20px;
     flex-direction: column;
+    align-items: center;
+    padding-top: 15px;
     gap: 10px;
   }
 
   .widget-btn {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     color: cyan;
     background: transparent;
     border: 2px solid cyan;
     border-radius: 10px;
-    padding: 5px 12px;
-    margin-left: 10px;
+    padding: 5px 10px;
     cursor: pointer;
     transition: 0.3s;
   }
@@ -224,14 +221,14 @@
     cursor: pointer;
   }
 
-  /* Korus page */
-  #korus-page {
+  /* KORUS individual pages */
+  #korus-page, #o-page, #r-page, #u-page, #s-page {
     background: black;
     color: cyan;
     font-family: 'Orbitron', sans-serif;
   }
 
-  #korus-page h1 {
+  #korus-page h1, #o-page h1, #r-page h1, #u-page h1, #s-page h1 {
     font-size: 2rem;
     text-align: center;
   }
@@ -261,6 +258,10 @@
   
   <div id="widget">
     <button class="widget-btn" onclick="openPage('korus')">K</button>
+    <button class="widget-btn" onclick="openPage('o')">O</button>
+    <button class="widget-btn" onclick="openPage('r')">R</button>
+    <button class="widget-btn" onclick="openPage('u')">U</button>
+    <button class="widget-btn" onclick="openPage('s')">S</button>
   </div>
 
   <div id="home-buttons">
@@ -271,15 +272,18 @@
   </div>
 </div>
 
+<!-- Existing Pages -->
 <div id="bot-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 <div id="learn-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 <div id="videos-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 <div id="contact-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 
-<div id="korus-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h1>Website developed by Korus</h1>
-</div>
+<!-- New KORUS Pages -->
+<div id="korus-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h1>Website developed by Korus</h1></div>
+<div id="o-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h1>O - Contents Coming Soon...</h1></div>
+<div id="r-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h1>R - Contents Coming Soon...</h1></div>
+<div id="u-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h1>U - Contents Coming Soon...</h1></div>
+<div id="s-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h1>S - Contents Coming Soon...</h1></div>
 
 <footer id="footer">
   <div class="youtube-container">
