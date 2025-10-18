@@ -4,17 +4,13 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Avyav Chess</title>
-
-<!-- Orbitron for K page and widget -->
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  /* global */
   body {
     font-family: 'Courier New', monospace;
-    background: #000; /* black everywhere as requested */
+    background: linear-gradient(to bottom right, #000428, #004e92);
     color: cyan;
     overflow: hidden;
     height: 100vh;
@@ -22,7 +18,6 @@
     flex-direction: column;
   }
 
-  /* main containers */
   #intro-container, #home-container, .content-page {
     display: none;
     justify-content: center;
@@ -30,23 +25,21 @@
     flex-direction: column;
     text-align: center;
     height: 100vh;
-    position: relative;
   }
 
-  /* small persistent top-left title kept out of the way (integrity preserved) */
   #animation {
     font-size: 3rem;
     font-weight: bold;
     animation: fadeIn 2s ease forwards;
-    color: cyan;
   }
+
   @keyframes fadeIn {
     from { opacity: 0; transform: scale(0.8); }
     to { opacity: 1; transform: scale(1); }
   }
 
   #intro-text {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     margin-top: 2rem;
     width: 80%;
     max-width: 700px;
@@ -54,7 +47,6 @@
     text-align: center;
   }
 
-  /* Enter button (renamed) */
   #get-started {
     margin-top: 2rem;
     padding: 12px 30px;
@@ -64,263 +56,228 @@
     background: transparent;
     border-radius: 10px;
     cursor: pointer;
-    transition: 0.25s;
+    transition: 0.3s;
     display: none;
   }
-  #get-started:hover { background-color: cyan; color: #000; }
 
-  /* Dragon image (unchanged) */
+  #get-started:hover {
+    background-color: cyan;
+    color: #000428;
+  }
+
   #dragon-image {
     margin-top: 1.5rem;
     width: 180px;
     opacity: 0;
     transition: opacity 1s ease;
   }
+
   @keyframes dragonEnlargeFade {
     0% { transform: scale(1); opacity: 1; }
     50% { transform: scale(1.5); opacity: 1; }
     100% { transform: scale(2); opacity: 0; }
   }
 
-  /* footer */
   footer {
     position: fixed;
     bottom: 10px;
-    left: 0; right: 0;
+    left: 0;
+    right: 0;
     text-align: center;
     color: cyan;
     font-size: 1rem;
     display: none;
   }
-  .youtube-container { display: inline-flex; align-items: center; gap: 10px; }
-  .youtube-logo {
-    width: 40px; height: 30px; background-color: red; border-radius: 8px;
-    display:flex; justify-content:center; align-items:center; box-shadow:0 0 20px red;
-    cursor:pointer; transition: transform .2s ease;
-  }
-  .youtube-logo:hover { transform: scale(1.1); }
-  .youtube-logo::before { content: ''; border-style: solid; border-width: 8px 0 8px 14px; border-color: transparent transparent transparent white; }
 
-  /* home layout - center column with buttons, left column with horse + widget */
-  #home-inner {
-    width: 100%;
-    max-width: 1100px;
-    height: 70vh;
-    display: flex;
+  .youtube-container {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 30px;
-    position: relative;
+    gap: 10px;
   }
 
-  /* left column: horse image & transparent widget overlay */
-  #left-col {
-    width: 320px;
-    height: 100%;
-    position: relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+  .youtube-logo {
+    width: 40px;
+    height: 30px;
+    background-color: red;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px red;
+    cursor: pointer;
+    transition: transform 0.2s ease;
   }
-  #horse {
+
+  .youtube-logo:hover { transform: scale(1.1); }
+
+  .youtube-logo::before {
+    content: '';
+    border-style: solid;
+    border-width: 8px 0 8px 14px;
+    border-color: transparent transparent transparent white;
+  }
+
+  #home-container {
+    display: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Horse image left side */
+  #horse-image {
     position: absolute;
     left: 0;
-    width: 100%;
-    height: auto;
-    max-height: 90%;
-    object-fit: contain;
-    border-radius: 8px;
-    box-shadow: 0 0 40px rgba(0,255,255,0.05);
-    opacity: 0.95;
+    top: 0;
+    height: 100%;
+    opacity: 0.3;
+    object-fit: cover;
   }
 
-  /* widget overlay (transparent) */
+  /* Sidebar widget */
   #widget {
     position: absolute;
-    top: 32px;
-    left: 18px;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-    width: 100px;
-    align-items:center;
-    background: rgba(0,0,0,0.18); /* slight dark but transparent so horse shows */
-    padding: 10px;
-    border-radius: 10px;
-    backdrop-filter: blur(2px);
+    left: 20px;
+    top: 20%;
+    width: 60px;
+    height: 300px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid cyan;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    padding-top: 20px;
+    flex-direction: column;
+    gap: 10px;
   }
 
-  /* widget buttons - transparent look */
   .widget-btn {
-    width: 56px;
-    height: 56px;
-    border-radius: 8px;
-    border: 2px solid rgba(0,255,255,0.6);
-    background: rgba(0,0,0,0.3);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
     color: cyan;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-family: 'Orbitron', monospace;
-    font-size: 1.25rem;
-    cursor:pointer;
-    transition: transform .15s ease, background .15s;
-  }
-  .widget-btn:hover { transform: scale(1.05); background: rgba(0,255,255,0.06); }
-
-  /* center column: search top + buttons center */
-  #center-col {
-    flex: 1 1 auto;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap: 24px;
-  }
-
-  /* search bar at top center of home page */
-  #search-wrap {
-    width: 100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  #site-search {
-    width: 60%;
-    max-width: 520px;
-    min-width: 220px;
-    padding: 10px 14px;
-    font-size: 1rem;
+    background: transparent;
+    border: 2px solid cyan;
     border-radius: 10px;
-    border: 2px solid rgba(0,255,255,0.5);
-    background: rgba(0,0,0,0.5);
-    color: cyan;
-    outline: none;
-    font-family: 'Orbitron', monospace;
-  }
-  #search-btn {
+    padding: 5px 12px;
     margin-left: 10px;
-    padding: 10px 14px;
-    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .widget-btn:hover {
+    background-color: cyan;
+    color: #000428;
+  }
+
+  /* Search bar */
+  #search-bar {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    padding: 8px 15px;
+    font-size: 1rem;
     border: 2px solid cyan;
+    border-radius: 10px;
     background: transparent;
     color: cyan;
-    cursor: pointer;
+    text-align: center;
+    outline: none;
   }
-  #search-btn:hover { background: cyan; color: #000; }
 
-  /* main home buttons (centered) */
   #home-buttons {
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    z-index: 2;
   }
+
   .home-btn {
-    padding: 12px 30px;
+    padding: 15px 35px;
     border: 2px solid cyan;
     color: cyan;
     background: transparent;
+    font-size: 1.1rem;
     border-radius: 10px;
     cursor: pointer;
-    font-size: 1.05rem;
+    transition: 0.3s;
   }
-  .home-btn:hover { background: cyan; color: #000; transform: scale(1.02); }
 
-  /* search result / no results box */
-  #search-result {
-    margin-top: 8px;
+  .home-btn:hover {
+    background-color: cyan;
+    color: #000428;
+  }
+
+  .home-icon {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    width: 40px;
+    height: 40px;
+    background: cyan;
+    mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
+    mask-size: contain;
+    -webkit-mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
+    -webkit-mask-size: contain;
+    cursor: pointer;
+  }
+
+  /* Korus page */
+  #korus-page {
+    background: black;
     color: cyan;
-    font-size: 0.95rem;
-    min-height: 22px;
+    font-family: 'Orbitron', sans-serif;
   }
 
-  /* content pages & Korus page styling */
-  .content-page { display: none; }
   #korus-page h1 {
-    font-family: 'Orbitron', monospace;
-    color: cyan;
     font-size: 2rem;
-    text-align:center;
+    text-align: center;
   }
 
-  /* small screens */
-  @media (max-width: 900px) {
-    #home-inner { flex-direction: column; padding: 20px; height: auto; }
-    #left-col { width: 90%; order: 2; }
-    #center-col { order: 1; }
-    #site-search { width: 90%; }
-    #widget { left: 8px; top: 8px; display:flex; flex-direction:row; gap:8px; width:auto; padding:8px; }
-    .widget-btn { width:44px; height:44px; font-size:1rem; }
+  @media (max-width: 600px) {
+    #animation { font-size: 2.3rem; }
+    #intro-text { font-size: 1rem; }
+    .home-btn { font-size: 1rem; padding: 12px 28px; }
+    #search-bar { width: 220px; }
   }
 </style>
 </head>
 <body>
 
-<!-- Intro animation (unchanged) -->
 <div id="animation">Avyav Chess</div>
 
-<!-- Intro container (typing, button, dragon) - unchanged -->
 <div id="intro-container">
   <div id="intro-text"></div>
   <button id="get-started">Enter Avyav Chess</button>
   <img id="dragon-image" src="dragon.png" alt="Dragon">
 </div>
 
-<!-- Home container (new layout: left horse + transparent widget, center search + buttons) -->
 <div id="home-container">
-  <div id="home-inner">
-    <!-- left column: horse & widget -->
-    <div id="left-col">
-      <img id="horse" src="horse.jpg" alt="Horse">
-      <div id="widget">
-        <!-- K button (Orbitron font) -->
-        <button class="widget-btn" id="korus-btn">K</button>
-        <!-- you can add more widget buttons below later -->
-      </div>
-    </div>
+  <img id="horse-image" src="horse.jpg" alt="Horse">
+  <div class="home-icon" id="home-icon"></div>
+  <input type="text" id="search-bar" placeholder="Search the site...">
+  
+  <div id="widget">
+    <button class="widget-btn" onclick="openPage('korus')">K</button>
+  </div>
 
-    <!-- center column: search and main buttons -->
-    <div id="center-col">
-      <div id="search-wrap">
-        <input id="site-search" placeholder="Search the site (e.g. bot, learn, videos, contact, korus)"/>
-        <button id="search-btn">Search</button>
-      </div>
-
-      <div id="home-buttons">
-        <button class="home-btn" onclick="openPage('bot')">Play Chess with Bot</button>
-        <button class="home-btn" onclick="openPage('learn')">Learn Chess</button>
-        <button class="home-btn" onclick="openPage('videos')">Videos</button>
-        <button class="home-btn" onclick="openPage('contact')">Contact Us for Feedback</button>
-      </div>
-
-      <div id="search-result"></div>
-    </div>
+  <div id="home-buttons">
+    <button class="home-btn" onclick="openPage('bot')">Play Chess with Bot</button>
+    <button class="home-btn" onclick="openPage('learn')">Learn Chess</button>
+    <button class="home-btn" onclick="openPage('videos')">Videos</button>
+    <button class="home-btn" onclick="openPage('contact')">Contact Us for Feedback</button>
   </div>
 </div>
 
-<!-- Bot & other pages (kept as content pages) -->
-<div id="bot-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
+<div id="bot-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="learn-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="videos-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="contact-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 
-<div id="learn-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
-
-<div id="videos-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
-
-<div id="contact-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
-
-<!-- Korus page (Orbitron font, cyan text) -->
 <div id="korus-page" class="content-page">
+  <div class="home-icon" onclick="goHome()"></div>
   <h1>Website developed by Korus</h1>
 </div>
 
@@ -334,7 +291,6 @@
 <audio id="typingSound" src="typingsound.mp3"></audio>
 
 <script>
-  /* ---------- existing intro + dragon logic (keeps integrity) ---------- */
   const animation = document.getElementById('animation');
   const introContainer = document.getElementById('intro-container');
   const introText = document.getElementById('intro-text');
@@ -362,8 +318,6 @@
       typingSound.pause();
       typingSound.currentTime = 0;
       getStarted.style.display = "inline-block";
-
-      // Show dragon image next, then footer
       setTimeout(() => {
         dragon.style.opacity = "1";
         footer.style.display = "block";
@@ -372,89 +326,38 @@
   }
 
   getStarted.addEventListener('click', () => {
-    // Animate dragon enlarge + fade
-    dragon.style.animation = "dragonEnlargeFade 1.2s forwards";
-
+    dragon.style.animation = "dragonEnlargeFade 1.5s forwards";
     setTimeout(() => {
       introContainer.style.display = "none";
-      // show home container
       document.getElementById('home-container').style.display = "flex";
-    }, 1250);
+    }, 1500);
   });
 
-  /* ---------- Navigation helpers ---------- */
   function openPage(page) {
-    // hide home
     document.getElementById('home-container').style.display = "none";
-    // hide all content pages
-    document.querySelectorAll('.content-page').forEach(p => p.style.display = 'none');
-    // show requested
-    document.getElementById(`${page}-page`).style.display = 'flex';
+    document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
+    document.getElementById(`${page}-page`).style.display = "flex";
   }
 
   function goHome() {
-    document.querySelectorAll('.content-page').forEach(p => p.style.display = 'none');
-    document.getElementById('home-container').style.display = 'flex';
+    document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
+    document.getElementById('home-container').style.display = "flex";
   }
 
-  document.querySelectorAll('.home-icon').forEach(el => {
-    el.addEventListener('click', goHome);
-  });
+  document.getElementById('home-icon').addEventListener('click', goHome);
 
-  /* ---------- Search (simple client-side index) ---------- */
-  const searchInput = document.getElementById('site-search');
-  const searchBtn = document.getElementById('search-btn');
-  const searchResult = document.getElementById('search-result');
-
-  // index: keyword -> page id (you can extend later)
-  const SEARCH_INDEX = [
-    { keys: ['bot','play','play chess','chess','bot-play'], page: 'bot' },
-    { keys: ['learn','lessons','tutorial','study'], page: 'learn' },
-    { keys: ['video','videos','watch'], page: 'videos' },
-    { keys: ['contact','feedback','contact us'], page: 'contact' },
-    { keys: ['korus','k','website','developer','developed by korus'], page: 'korus' }
-  ];
-
-  function performSearch(q) {
-    const ql = q.trim().toLowerCase();
-    if (!ql) {
-      searchResult.textContent = '';
-      return;
+  // Simple search functionality
+  document.getElementById('search-bar').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      const query = e.target.value.toLowerCase();
+      if (query.includes('bot')) openPage('bot');
+      else if (query.includes('learn')) openPage('learn');
+      else if (query.includes('video')) openPage('videos');
+      else if (query.includes('contact')) openPage('contact');
+      else alert('No results found.');
+      e.target.value = '';
     }
-    for (const entry of SEARCH_INDEX) {
-      for (const k of entry.keys) {
-        if (ql.includes(k)) {
-          // match found - navigate
-          searchResult.textContent = `Found: opening ${entry.page}...`;
-          setTimeout(() => {
-            openPage(entry.page);
-            searchResult.textContent = '';
-            searchInput.value = '';
-          }, 400);
-          return;
-        }
-      }
-    }
-    // no match
-    searchResult.textContent = 'No results';
-    setTimeout(()=> searchResult.textContent = '', 1800);
-  }
-
-  searchBtn.addEventListener('click', () => performSearch(searchInput.value));
-  searchInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') performSearch(searchInput.value);
   });
-
-  /* ---------- Widget button K -> Korus page ---------- */
-  const korusBtn = document.getElementById('korus-btn');
-  korusBtn.addEventListener('click', () => {
-    openPage('korus');
-  });
-
-  /* ---------- ensure home icon works when page navigated back ---------- */
-  // (already attached above)
-
-  /* ---------- initial: keep intro as before; home appears after dragon animation ---------- */
 </script>
 </body>
 </html>
