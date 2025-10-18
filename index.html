@@ -69,16 +69,12 @@
   }
 
   #dragon-image {
+    display: none;
     margin-top: 1.5rem;
-    width: 180px;
+    width: 150px;
+    height: auto;
     opacity: 0;
-    transition: opacity 1s ease;
-  }
-
-  @keyframes dragonEnlargeFade {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.5); opacity: 1; }
-    100% { transform: scale(2); opacity: 0; }
+    transition: transform 2s ease, opacity 2s ease;
   }
 
   footer {
@@ -111,7 +107,9 @@
     transition: transform 0.2s ease;
   }
 
-  .youtube-logo:hover { transform: scale(1.1); }
+  .youtube-logo:hover {
+    transform: scale(1.1);
+  }
 
   .youtube-logo::before {
     content: '';
@@ -123,19 +121,6 @@
   #home-container {
     display: none;
     position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-  }
-
-  #horse-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-    z-index: -2;
   }
 
   #home-buttons {
@@ -143,7 +128,6 @@
     flex-direction: column;
     align-items: center;
     gap: 1.2rem;
-    position: relative;
     z-index: 2;
   }
 
@@ -151,7 +135,7 @@
     padding: 15px 35px;
     border: 2px solid cyan;
     color: cyan;
-    background: transparent;
+    background: black; /* Changed from transparent to solid black */
     font-size: 1.1rem;
     border-radius: 10px;
     cursor: pointer;
@@ -175,45 +159,51 @@
     -webkit-mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
     -webkit-mask-size: contain;
     cursor: pointer;
-    z-index: 2;
+  }
+
+  #horse-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: 1;
   }
 
   /* Sidebar widget */
-  .sidebar-widget {
-    position: absolute;
+  #korus-widget {
+    position: fixed;
     left: 15px;
     top: 50%;
     transform: translateY(-50%);
     width: 60px;
-    height: 300px;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid cyan;
-    border-radius: 10px;
+    height: 320px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     z-index: 3;
   }
 
   .widget-btn {
-    background: transparent;
-    border: 2px solid cyan;
-    color: cyan;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem;
     width: 40px;
     height: 40px;
-    border-radius: 5px;
+    border-radius: 50%;
+    background: cyan;
+    color: black;
+    font-weight: bold;
+    border: none;
     cursor: pointer;
-    transition: 0.3s;
+    transition: transform 0.2s ease;
   }
 
   .widget-btn:hover {
-    background-color: cyan;
-    color: #000428;
     transform: scale(1.1);
+    background-color: white;
   }
 
   .content-page {
@@ -222,16 +212,7 @@
     align-items: center;
     flex-direction: column;
     height: 100vh;
-    background-color: black;
-    color: cyan;
     text-align: center;
-    font-size: 1.5rem;
-  }
-
-  .content-page .home-icon {
-    position: absolute;
-    top: 20px;
-    right: 25px;
   }
 
   @media (max-width: 600px) {
@@ -252,17 +233,8 @@
 </div>
 
 <div id="home-container">
-  <img id="horse-image" src="horse.jpg" alt="Horse Background">
-  <div class="sidebar-widget">
-    <button class="widget-btn" onclick="openPage('korus')">K</button>
-    <button class="widget-btn" onclick="openPage('o')">O</button>
-    <button class="widget-btn" onclick="openPage('r')">R</button>
-    <button class="widget-btn" onclick="openPage('u')">U</button>
-    <button class="widget-btn" onclick="openPage('s')">S</button>
-  </div>
-
+  <img id="horse-image" src="horse.png" alt="Horse">
   <div class="home-icon" id="home-icon"></div>
-
   <div id="home-buttons">
     <button class="home-btn" onclick="openPage('bot')">Play Chess with Bot</button>
     <button class="home-btn" onclick="openPage('learn')">Learn Chess</button>
@@ -271,51 +243,29 @@
   </div>
 </div>
 
-<!-- Other Pages -->
+<!-- Sidebar widget -->
+<div id="korus-widget">
+  <button class="widget-btn" onclick="openPage('korus')">K</button>
+  <button class="widget-btn" onclick="openPage('o')">O</button>
+  <button class="widget-btn" onclick="openPage('r')">R</button>
+  <button class="widget-btn" onclick="openPage('u')">U</button>
+  <button class="widget-btn" onclick="openPage('s')">S</button>
+</div>
+
+<!-- Content Pages -->
 <div id="korus-page" class="content-page">
   <div class="home-icon" onclick="goHome()"></div>
-  <h2>Website developed by Korus</h2>
+  <h2>Korustech Page Coming Soon...</h2>
 </div>
+<div id="o-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>O Page Coming Soon...</h2></div>
+<div id="r-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>R Page Coming Soon...</h2></div>
+<div id="u-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>U Page Coming Soon...</h2></div>
+<div id="s-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>S Page Coming Soon...</h2></div>
 
-<div id="o-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>O - Contents Coming Soon...</h2>
-</div>
-
-<div id="r-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>R - Contents Coming Soon...</h2>
-</div>
-
-<div id="u-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>U - Contents Coming Soon...</h2>
-</div>
-
-<div id="s-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>S - Contents Coming Soon...</h2>
-</div>
-
-<div id="bot-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
-
-<div id="learn-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
-
-<div id="videos-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
-
-<div id="contact-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
+<div id="bot-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="learn-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="videos-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="contact-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 
 <footer id="footer">
   <div class="youtube-container">
@@ -331,9 +281,9 @@
   const introContainer = document.getElementById('intro-container');
   const introText = document.getElementById('intro-text');
   const getStarted = document.getElementById('get-started');
-  const dragon = document.getElementById('dragon-image');
   const footer = document.getElementById('footer');
   const typingSound = document.getElementById('typingSound');
+  const dragonImage = document.getElementById('dragon-image');
 
   const fullText = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
 
@@ -354,15 +304,15 @@
       typingSound.pause();
       typingSound.currentTime = 0;
       getStarted.style.display = "inline-block";
-      setTimeout(() => {
-        dragon.style.opacity = "1";
-        footer.style.display = "block";
-      }, 1000);
+      dragonImage.style.display = "block";
+      setTimeout(() => { dragonImage.style.opacity = 1; }, 100);
+      setTimeout(() => footer.style.display = "block", 800);
     }
   }
 
   getStarted.addEventListener('click', () => {
-    dragon.style.animation = "dragonEnlargeFade 1.5s forwards";
+    dragonImage.style.transform = "scale(2)";
+    dragonImage.style.opacity = 0;
     setTimeout(() => {
       introContainer.style.display = "none";
       document.getElementById('home-container').style.display = "flex";
@@ -382,5 +332,6 @@
 
   document.getElementById('home-icon').addEventListener('click', goHome);
 </script>
+
 </body>
 </html>
