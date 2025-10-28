@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Avyav Chess</title>
 <style>
-/* === EXISTING STYLES KEPT INTACT === */
+/* === EXISTING STYLES === */
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Courier New',monospace;background:linear-gradient(to bottom right,#000428,#004e92);color:cyan;overflow:hidden;height:100vh;display:flex;flex-direction:column;}
 #intro-container,#home-container,.content-page{display:none;justify-content:center;align-items:center;flex-direction:column;text-align:center;height:100vh;}
@@ -97,7 +97,7 @@ footer{position:fixed;bottom:10px;left:0;right:0;text-align:center;color:cyan;fo
 <div id="u-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>U - Contents Coming Soon...</h2></div>
 <div id="s-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>S - Contents Coming Soon...</h2></div>
 
-<!-- === SAITAMA GAME PAGE === -->
+<!-- GAME PAGE -->
 <div id="bot-page" class="content-page" style="position:relative;">
   <div class="home-icon" onclick="goHome()"></div>
   <canvas id="gameCanvas" width="800" height="400"></canvas>
@@ -113,7 +113,7 @@ footer{position:fixed;bottom:10px;left:0;right:0;text-align:center;color:cyan;fo
 <audio id="typingSound" src="typingsound.mp3"></audio>
 
 <script>
-/* === INTRO LOGIC (kept same) === */
+/* === INTRO LOGIC === */
 const animation=document.getElementById('animation');
 const introContainer=document.getElementById('intro-container');
 const introText=document.getElementById('intro-text');
@@ -132,67 +132,88 @@ document.getElementById('home-icon').addEventListener('click',goHome);
 </script>
 
 <script>
-/* === GAME SCRIPT === */
+/* === SAITAMA ENDLESS JUMPER === */
 const canvas=document.getElementById("gameCanvas");
 const ctx=canvas.getContext("2d");
-let gameRunning=false,gameOver=false,score=0;
-let gravity=0.8,jumpPower=-12,doubleJumped=false;
-let player={x:100,y:200,vy:0,width:50,height:70,onGround:false,image:new Image()};
-player.image.src="https://i.ibb.co/DrfxhL0/saitama-cartoon.png"; // Cartoon Saitama
+
+let gameRunning=false, gameOver=false, score=0, speed=5, gravity=0.8, jumpPower=-12, doubleJumped=false;
+const player={x:100,y:200,width:50,height:70,vy:0,onGround:false,image:new Image()};
+player.image.src="saitama.png";
+
 let tiles=[{x:0,y:350,width:800,height:50}];
-let coinImage=new Image(); coinImage.src="https://i.ibb.co/5YjDdFt/coin.png";
-let coins=[];
+let coins=[]; 
+let coinImage=new Image(); 
+coinImage.src="https://i.ibb.co/5YjDdFt/coin.png";
+
 function resetGame(){
-  gameOver=false;score=0;player.y=200;player.vy=0;doubleJumped=false;
-  tiles=[{x:0,y:350,width:800,height:50}];coins=[];gameRunning=true;
-  document.getElementById("gameOver").style.display="none";
+    gameOver=false; score=0; speed=5; player.y=200; player.vy=0; doubleJumped=false;
+    tiles=[{x:0,y:350,width:800,height:50}]; coins=[]; gameRunning=true;
+    document.getElementById("gameOver").style.display="none";
 }
+
 function addTile(){
-  let last=tiles[tiles.length-1];
-  let newX=last.x+Math.random()*150+200;
-  let newY=350-Math.random()*100;
-  tiles.push({x:newX,y:newY,width:100,height:20});
-  if(Math.random()<0.5)coins.push({x:newX+40,y:newY-30});
+    let last=tiles[tiles.length-1];
+    let newX=last.x+Math.random()*150+200;
+    let newY=350-Math.random()*100;
+    tiles.push({x:newX,y:newY,width:100,height:20});
+    if(Math.random()<0.5)coins.push({x:newX+40,y:newY-30});
 }
+
 function update(){
-  if(!gameRunning)return;
-  player.vy+=gravity;player.y+=player.vy;
-  if(player.y>canvas.height){endGame();}
-  tiles.forEach(t=>{t.x-=5;if(t.x+t.width<0){tiles.shift();addTile();}});
-  coins.forEach(c=>c.x-=5);
-  player.onGround=false;
-  tiles.forEach(t=>{
-    if(player.x+player.width>t.x&&player.x<t.x+t.width&&player.y+player.height>t.y&&player.y+player.height<t.y+20&&player.vy>=0){
-      player.y=t.y-player.height;player.vy=0;player.onGround=true;doubleJumped=false;
-    }
-  });
-  coins=coins.filter(c=>{
-    if(player.x+player.width>c.x&&player.x<c.x+20&&player.y+player.height>c.y&&player.y<c.y+20){score++;return false;}
-    return c.x>-20;
-  });
-  draw();
+    if(!gameRunning) return;
+    player.vy+=gravity; player.y+=player.vy;
+    if(player.y>canvas.height){endGame();}
+    // Move tiles
+    tiles.forEach(t=>{t.x-=speed;});
+    if(tiles[0].x+tiles[0].width<0){tiles.shift(); addTile();}
+    // Move coins
+    coins.forEach(c=>c.x-=speed);
+    // Check collisions
+    player.onGround=false;
+    tiles.forEach(t=>{
+        if(player.x+player.width>t.x&&player.x<t.x+t.width&&player.y+player.height>t.y&&player.y+player.height<t.y+20&&player.vy>=0){
+            player.y=t.y-player.height; player.vy=0; player.onGround=true; doubleJumped=false;
+        }
+    });
+    coins=coins.filter(c=>{
+        if(player.x+player.width>c.x&&player.x<c.x+20&&player.y+player.height>c.y&&player.y<c.y+20){score++; return false;}
+        return c.x>-20;
+    });
+    // Increase speed over time
+    speed += 0.001;
+    draw();
 }
+
 function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.drawImage(player.image,player.x,player.y,player.width,player.height);
-  ctx.fillStyle="#b5651d";
-  tiles.forEach(t=>ctx.fillRect(t.x,t.y,t.width,t.height));
-  coins.forEach(c=>ctx.drawImage(coinImage,c.x,c.y,20,20));
-  document.getElementById("score").innerText="Coins: "+score;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // Draw tiles
+    ctx.fillStyle="#b5651d";
+    tiles.forEach(t=>ctx.fillRect(t.x,t.y,t.width,t.height));
+    // Draw coins
+    coins.forEach(c=>ctx.drawImage(coinImage,c.x,c.y,20,20));
+    // Draw player
+    ctx.drawImage(player.image,player.x,player.y,player.width,player.height);
+    // Score
+    document.getElementById("score").innerText="Coins: "+score;
 }
+
 function jump(){
-  if(player.onGround){player.vy=jumpPower;player.onGround=false;}
-  else if(!doubleJumped){player.vy=jumpPower;doubleJumped=true;}
+    if(player.onGround){player.vy=jumpPower;player.onGround=false;}
+    else if(!doubleJumped){player.vy=jumpPower; doubleJumped=true;}
 }
+
 function endGame(){
-  gameRunning=false;gameOver=true;
-  document.getElementById("gameOver").style.display="block";
+    gameRunning=false; gameOver=true;
+    document.getElementById("gameOver").style.display="block";
 }
+
 setInterval(update,1000/60);
+
 window.addEventListener("keydown",e=>{
-  if(e.key==="w"||e.key==="W")jump();
-  if(gameOver&&e.key==="r"||e.key==="R")resetGame();
+    if(e.key==="w"||e.key==="W") jump();
+    if(gameOver&&(e.key==="r"||e.key==="R")) resetGame();
 });
+
 document.getElementById("bot-page").addEventListener("click",()=>{if(!gameRunning&&!gameOver)resetGame();});
 </script>
 </body>
