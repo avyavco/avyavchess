@@ -123,7 +123,7 @@ const canvas=document.getElementById("gameCanvas");
 canvas.width=window.innerWidth; canvas.height=window.innerHeight;
 const ctx=canvas.getContext("2d");
 
-let player={x:150,y:0,width:50,height:70,vy:0,onGround:false,doubleJumped:false,image:new Image()};
+let player={x:150,y:0,width:80,height:100,vy:0,onGround:false,doubleJumped:false,image:new Image()};
 player.image.src="saitama.png";
 
 let tileImage=new Image();
@@ -136,20 +136,22 @@ const gameOverDisplay=document.getElementById("gameOver");
 function initGame(){
   tiles=[]; coins=[]; score=0; speed=4; gameOver=false; gameRunning=true; player.vy=0; player.onGround=false; player.doubleJumped=false;
   gameOverDisplay.style.display="none";
-  const rows=Math.ceil(canvas.width/tileImage.width)+2;
-  const startY=canvas.height/2+50; // Middle of screen
+
+  const rows=Math.ceil(canvas.width/(tileImage.width*0.5))+2;
+  const startY=canvas.height/2; // middle of screen
+
   for(let i=0;i<rows;i++){
-    tiles.push({x:i*tileImage.width,y:startY,width:tileImage.width*0.8,height:tileImage.height*0.8}); // slightly smaller
+    tiles.push({x:i*(tileImage.width*0.5),y:startY,width:tileImage.width*0.5,height:tileImage.height*0.5});
   }
-  player.y=tiles[0].y-player.height+10; // overlap a bit to appear standing
+  player.y=tiles[0].y-player.height+5; // proper overlap for standing
 }
 
 function addTile(){
   const last=tiles[tiles.length-1];
-  let newY=last.y + (Math.random()*60-30); // small vertical variation
-  newY=Math.min(Math.max(100,newY),canvas.height-100);
+  let newY=last.y + (Math.random()*60-30);
+  newY=Math.min(Math.max(100,newY),canvas.height-150);
   tiles.push({x:last.x+last.width,y:newY,width:last.width,height:last.height});
-  if(Math.random()<0.5) coins.push({x:last.x+last.width+last.width/2-10,y:newY-40,width:20,height:20});
+  if(Math.random()<0.5) coins.push({x:last.x+last.width+last.width/2-10,y:newY-35,width:20,height:20});
 }
 
 function update(){
@@ -164,9 +166,10 @@ function update(){
   coins=coins.filter(c=>c.x+20>0);
 
   player.vy+=gravity; player.y+=player.vy; player.onGround=false;
+
   tiles.forEach(t=>{
-    if(player.x+player.width>t.x && player.x< t.x+t.width && player.y+player.height>t.y && player.y+player.height< t.y+t.height+player.vy && player.vy>=0){
-      player.y=t.y-player.height+1; // overlap for visual standing
+    if(player.x+player.width>t.x && player.x< t.x+t.width && player.y+player.height>t.y && player.y+player.height< t.y+player.height+20 && player.vy>=0){
+      player.y=t.y-player.height+1;
       player.vy=0; player.onGround=true; player.doubleJumped=false;
     }
   });
