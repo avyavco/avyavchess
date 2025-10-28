@@ -5,36 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Avyav Chess + Saitama Runner</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'Courier New',monospace;background:#000428;color:cyan;overflow:hidden;height:100vh;display:flex;flex-direction:column;}
-  #intro-container,#home-container,.content-page{display:none;justify-content:center;align-items:center;flex-direction:column;text-align:center;height:100vh;}
-  #animation{font-size:3rem;font-weight:bold;animation:fadeIn 2s ease forwards;}
-  @keyframes fadeIn{from{opacity:0;transform: scale(0.8);}to{opacity:1;transform:scale(1);}}
-  #intro-text{font-size:1.2rem;margin-top:2rem;width:80%;max-width:700px;white-space:pre-wrap;text-align:center;}
-  #get-started{margin-top:2rem;padding:12px 30px;font-size:1rem;border:2px solid cyan;color:cyan;background:transparent;border-radius:10px;cursor:pointer;transition:0.3s;display:none;}
-  #get-started:hover{background-color:cyan;color:#000428;}
-  #dragon-image{margin-top:1.5rem;width:180px;opacity:0;transition:opacity 1s ease;}
-  @keyframes dragonEnlargeFade{0%{transform: scale(1);opacity:1;}50%{transform: scale(1.5);opacity:1;}100%{transform:scale(2);opacity:0;}}
-  footer{position:fixed;bottom:10px;left:0;right:0;text-align:center;color:cyan;font-size:1rem;display:none;}
-  .youtube-container{display:inline-flex;align-items:center;gap:10px;}
-  .youtube-logo{width:40px;height:30px;background-color:red;border-radius:8px;display:flex;justify-content:center;align-items:center;box-shadow:0 0 20px red;cursor:pointer;transition:transform 0.2s ease;}
-  .youtube-logo:hover{transform:scale(1.1);}
-  .youtube-logo::before{content:'';border-style:solid;border-width:8px 0 8px 14px;border-color:transparent transparent transparent white;}
-  #home-container{display:none;position:relative;width:100vw;height:100vh;overflow:hidden;}
-  #horse-image{position:absolute;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:-2;}
-  #home-buttons{display:flex;flex-direction:column;align-items:center;gap:1.2rem;position:relative;z-index:2;}
-  .home-btn{padding:15px 35px;border:2px solid cyan;color:cyan;background:#000;font-size:1.1rem;border-radius:10px;cursor:pointer;transition:0.3s;}
-  .home-btn:hover{background-color:cyan;color:#000428;}
-  .home-icon{position:absolute;top:20px;right:25px;width:40px;height:40px;background:cyan;mask:url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;mask-size:contain;-webkit-mask:url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;-webkit-mask-size:contain;cursor:pointer;z-index:2;}
-  .sidebar-widget{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:60px;height:300px;background:rgba(0,0,0,0.6);border:1px solid cyan;border-radius:10px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;z-index:3;}
-  .widget-btn{background:transparent;border:2px solid cyan;color:cyan;font-family:'Orbitron',sans-serif;font-size:1.1rem;width:40px;height:40px;border-radius:5px;cursor:pointer;transition:0.3s;}
-  .widget-btn:hover{background-color:cyan;color:#000428;transform:scale(1.1);}
-  .content-page{display:none;justify-content:center;align-items:center;flex-direction:column;height:100vh;background-color:black;color:cyan;text-align:center;font-size:1.5rem;}
-  .content-page .home-icon{position:absolute;top:20px;right:25px;}
-  #score{position:absolute;top:20px;left:50%;transform:translateX(-50%);font-size:1.5rem;z-index:10;color:yellow;}
-  #gameOver{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2rem;color:red;display:none;z-index:10;text-align:center;}
-  canvas{position:absolute;top:0;left:0;z-index:1;width:100vw;height:100vh;}
-  @media(max-width:600px){#animation{font-size:2.3rem;}#intro-text{font-size:1rem;}.home-btn{font-size:1rem;padding:12px 28px;}}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Courier New',monospace;background:#000428;color:cyan;overflow:hidden;height:100vh;display:flex;flex-direction:column;}
+#intro-container,#home-container,.content-page{display:none;justify-content:center;align-items:center;flex-direction:column;text-align:center;height:100vh;}
+#animation{font-size:3rem;font-weight:bold;animation:fadeIn 2s ease forwards;}
+@keyframes fadeIn{from{opacity:0;transform: scale(0.8);}to{opacity:1;transform:scale(1);}}
+#get-started{margin-top:2rem;padding:12px 30px;font-size:1rem;border:2px solid cyan;color:cyan;background:transparent;border-radius:10px;cursor:pointer;transition:0.3s;display:none;}
+#get-started:hover{background-color:cyan;color:#000428;}
+#dragon-image{margin-top:1.5rem;width:180px;opacity:0;transition:opacity 1s ease;}
+footer{position:fixed;bottom:10px;left:0;right:0;text-align:center;color:cyan;font-size:1rem;display:none;}
+.youtube-container{display:inline-flex;align-items:center;gap:10px;}
+.youtube-logo{width:40px;height:30px;background-color:red;border-radius:8px;display:flex;justify-content:center;align-items:center;box-shadow:0 0 20px red;cursor:pointer;transition:transform 0.2s ease;}
+.youtube-logo:hover{transform:scale(1.1);}
+.youtube-logo::before{content:'';border-style:solid;border-width:8px 0 8px 14px;border-color:transparent transparent transparent white;}
+#home-container{display:none;position:relative;width:100vw;height:100vh;overflow:hidden;}
+#horse-image{position:absolute;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:-2;}
+#home-buttons{display:flex;flex-direction:column;align-items:center;gap:1.2rem;position:relative;z-index:2;}
+.home-btn{padding:15px 35px;border:2px solid cyan;color:cyan;background:#000;font-size:1.1rem;border-radius:10px;cursor:pointer;transition:0.3s;}
+.home-btn:hover{background-color:cyan;color:#000428;}
+.home-icon{position:absolute;top:20px;right:25px;width:40px;height:40px;background:cyan;mask:url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;mask-size:contain;-webkit-mask:url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;-webkit-mask-size:contain;cursor:pointer;z-index:2;}
+.sidebar-widget{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:60px;height:300px;background:rgba(0,0,0,0.6);border:1px solid cyan;border-radius:10px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;z-index:3;}
+.widget-btn{background:transparent;border:2px solid cyan;color:cyan;font-family:'Orbitron',sans-serif;font-size:1.1rem;width:40px;height:40px;border-radius:5px;cursor:pointer;transition:0.3s;}
+.widget-btn:hover{background-color:cyan;color:#000428;transform:scale(1.1);}
+.content-page{display:none;justify-content:center;align-items:center;flex-direction:column;height:100vh;background-color:black;color:cyan;text-align:center;font-size:1.5rem;}
+.content-page .home-icon{position:absolute;top:20px;right:25px;}
+#score{position:absolute;top:20px;left:50%;transform:translateX(-50%);font-size:1.5rem;z-index:10;color:yellow;}
+#gameOver{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2rem;color:red;display:none;z-index:10;text-align:center;}
+canvas{position:absolute;top:0;left:0;z-index:1;width:100vw;height:100vh;}
+@media(max-width:600px){#animation{font-size:2.3rem;}#intro-text{font-size:1rem;}.home-btn{font-size:1rem;padding:12px 28px;}}
 </style>
 </head>
 <body>
@@ -64,12 +62,6 @@
   </div>
 </div>
 
-<div id="korus-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Website developed by Korus</h2></div>
-<div id="o-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>O - Contents Coming Soon...</h2></div>
-<div id="r-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>R - Contents Coming Soon...</h2></div>
-<div id="u-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>U - Contents Coming Soon...</h2></div>
-<div id="s-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>S - Contents Coming Soon...</h2></div>
-
 <div id="bot-page" class="content-page">
   <div class="home-icon" onclick="goHome()"></div>
   <div id="score">Coins: 0</div>
@@ -77,6 +69,12 @@
   <canvas id="gameCanvas"></canvas>
 </div>
 
+<!-- Other Pages -->
+<div id="korus-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Website developed by Korus</h2></div>
+<div id="o-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>O - Contents Coming Soon...</h2></div>
+<div id="r-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>R - Contents Coming Soon...</h2></div>
+<div id="u-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>U - Contents Coming Soon...</h2></div>
+<div id="s-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>S - Contents Coming Soon...</h2></div>
 <div id="learn-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 <div id="videos-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 <div id="contact-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
@@ -120,7 +118,7 @@ document.getElementById('home-icon').addEventListener('click',goHome);
 </script>
 
 <script>
-/* === SAITAMA ENDLESS RUNNER === */
+/* === SAITAMA RUNNER WITH TILE IMAGE === */
 const canvas=document.getElementById("gameCanvas");
 canvas.width=window.innerWidth; canvas.height=window.innerHeight;
 const ctx=canvas.getContext("2d");
@@ -128,24 +126,33 @@ const ctx=canvas.getContext("2d");
 let player={x:150,y:0,width:60,height:80,vy:0,onGround:false,doubleJumped:false,image:new Image()};
 player.image.src="saitama.png";
 
+let tileImage=new Image();
+tileImage.src="tile.png";
+
 let tiles=[], coins=[], score=0, speed=4, gravity=0.8, jumpPower=-15, gameRunning=false, gameOver=false;
 const scoreDisplay=document.getElementById("score");
 const gameOverDisplay=document.getElementById("gameOver");
 
 function initGame(){
-  tiles=[{x:0,y:canvas.height-150,width:300,height:20}];
-  player.y=tiles[0].y-player.height;
-  coins=[];
-  score=0; speed=4; gameOver=false; gameRunning=true; player.vy=0; player.onGround=false; player.doubleJumped=false;
+  tiles=[]; coins=[]; score=0; speed=4; gameOver=false; gameRunning=true; player.vy=0; player.onGround=false; player.doubleJumped=false;
   gameOverDisplay.style.display="none";
+  const rows=Math.ceil(canvas.width/tileImage.width)+2;
+  const startY=canvas.height-150;
+  for(let i=0;i<rows;i++){
+    tiles.push({x:i*tileImage.width,y:startY,width:tileImage.width,height:tileImage.height});
+  }
+  player.y=tiles[0].y-player.height;
 }
 
 function addTile(){
   const last=tiles[tiles.length-1];
-  const gapY=Math.random()*200-100; 
-  const newY=Math.min(Math.max(last.y+gapY,100),canvas.height-50);
-  tiles.push({x:last.x+200,y:newY,width:120,height:20});
-  if(Math.random()<0.5) coins.push({x:last.x+220,y:newY-40,width:20,height:20});
+  let newY=last.y;
+  // Randomly adjust Y a bit
+  const deltaY=Math.floor(Math.random()*80-40);
+  newY=Math.min(Math.max(100,newY+deltaY),canvas.height-50);
+  tiles.push({x:last.x+tileImage.width,y:newY,width:tileImage.width,height:tileImage.height});
+  // 50% chance of coin
+  if(Math.random()<0.5) coins.push({x:last.x+tileImage.width+tileImage.width/2-10,y:newY-40,width:20,height:20});
 }
 
 function update(){
@@ -153,12 +160,12 @@ function update(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   ctx.fillStyle="skyblue"; ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  // Move tiles and coins
-  tiles.forEach(t=>{ t.x-=speed; ctx.fillStyle="#654321"; ctx.fillRect(t.x,t.y,t.width,t.height); });
+  // Move tiles and draw
+  tiles.forEach(t=>{ t.x-=speed; ctx.drawImage(tileImage,t.x,t.y,t.width,t.height); });
   coins.forEach(c=>{ c.x-=speed; ctx.fillStyle="gold"; ctx.beginPath(); ctx.arc(c.x+10,c.y+10,10,0,Math.PI*2); ctx.fill(); });
 
   // Remove offscreen tiles
-  while(tiles[0].x+tiles[0].width<0){ tiles.shift(); addTile(); }
+  while(tiles[0].x+tileImage.width<0){ tiles.shift(); addTile(); }
   coins=coins.filter(c=>c.x+20>0);
 
   // Player physics
@@ -169,7 +176,7 @@ function update(){
     }
   });
 
-  // Coins collection
+  // Coin collection
   coins.forEach((c,i)=>{
     if(player.x+player.width>c.x && player.x<c.x+c.width && player.y+player.height>c.y && player.y<c.y+c.height){
       score++; coins.splice(i,1); speed+=0.05;
@@ -180,11 +187,12 @@ function update(){
   scoreDisplay.innerText="Coins: "+score;
 
   if(player.y>canvas.height){ gameRunning=false; gameOver=true; gameOverDisplay.style.display="block"; }
+
   requestAnimationFrame(update);
 }
 
 function jump(){
-  if(player.onGround){ player.vy=jumpPower; player.onGround=false; } 
+  if(player.onGround){ player.vy=jumpPower; player.onGround=false; }
   else if(!player.doubleJumped){ player.vy=jumpPower; player.doubleJumped=true; }
 }
 
@@ -197,6 +205,5 @@ document.querySelector(".home-btn[onclick=\"openPage('bot')\"]").addEventListene
   initGame(); update();
 });
 </script>
-
 </body>
 </html>
