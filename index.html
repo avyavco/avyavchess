@@ -4,12 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Avyav Chess</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
     font-family: 'Courier New', monospace;
@@ -63,10 +60,7 @@
     display: none;
   }
 
-  #get-started:hover {
-    background-color: cyan;
-    color: #000428;
-  }
+  #get-started:hover { background-color: cyan; color: #000428; }
 
   #dragon-image {
     margin-top: 1.5rem;
@@ -234,8 +228,66 @@
     right: 25px;
   }
 
-  @media (max-width: 600px) {
-    #animation { font-size: 2.3rem; }
+  /* ====== Platformer game styles (bot page) ====== */
+  #bot-page .game-wrap {
+    width: 100%;
+    height: 100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(#9ad3ff, #d9f2ff);
+  }
+
+  #platform-canvas {
+    border-radius:12px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    background: linear-gradient(#9ad3ff, #d9f2ff);
+    max-width: 1200px;
+    width: 92%;
+    height: 76vh;
+  }
+
+  .game-ui {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    z-index: 20;
+    display:flex;
+    gap:14px;
+    align-items:center;
+    background: rgba(255,255,255,0.9);
+    color: #001f3f;
+    padding:10px 14px;
+    border-radius:10px;
+    font-weight:700;
+  }
+
+  .game-hint {
+    position: absolute;
+    right: 18px;
+    top: 18px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    padding:8px 12px;
+    border-radius:8px;
+  }
+
+  .center-msg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 30;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    padding:12px 16px;
+    border-radius:12px;
+    display:none;
+  }
+
+  @media (max-width:600px){
     #intro-text { font-size: 1rem; }
     .home-btn { font-size: 1rem; padding: 12px 28px; }
   }
@@ -271,51 +323,38 @@
   </div>
 </div>
 
+<!-- Bot page: platformer -->
+<div id="bot-page" class="content-page">
+  <div class="home-icon" onclick="goHome()"></div>
+
+  <div class="game-wrap" id="game-wrap">
+    <div class="game-ui">
+      <div>Avyav NamDev Platformer</div>
+      <div style="opacity:0.7">• Smooth Cartoon</div>
+    </div>
+    <div class="game-hint">Controls: ← → (A/D) to move • Space/W/↑ to jump • R to restart</div>
+
+    <canvas id="platform-canvas" width="1200" height="700" aria-label="Platformer game"></canvas>
+
+    <div id="game-center-msg" class="center-msg"></div>
+  </div>
+
+</div>
+
 <!-- Other Pages -->
 <div id="korus-page" class="content-page">
   <div class="home-icon" onclick="goHome()"></div>
   <h2>Website developed by Korus</h2>
 </div>
 
-<div id="o-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>O - Contents Coming Soon...</h2>
-</div>
+<div id="o-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>O - Contents Coming Soon...</h2></div>
+<div id="r-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>R - Contents Coming Soon...</h2></div>
+<div id="u-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>U - Contents Coming Soon...</h2></div>
+<div id="s-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>S - Contents Coming Soon...</h2></div>
 
-<div id="r-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>R - Contents Coming Soon...</h2>
-</div>
-
-<div id="u-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>U - Contents Coming Soon...</h2>
-</div>
-
-<div id="s-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>S - Contents Coming Soon...</h2>
-</div>
-
-<div id="bot-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
-
-<div id="learn-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
-
-<div id="videos-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
-
-<div id="contact-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
+<div id="learn-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="videos-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="contact-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 
 <footer id="footer">
   <div class="youtube-container">
@@ -327,6 +366,7 @@
 <audio id="typingSound" src="typingsound.mp3"></audio>
 
 <script>
+  // --- Existing site logic (intro, typing, dragon, navigation) ---
   const animation = document.getElementById('animation');
   const introContainer = document.getElementById('intro-container');
   const introText = document.getElementById('intro-text');
@@ -334,7 +374,6 @@
   const dragon = document.getElementById('dragon-image');
   const footer = document.getElementById('footer');
   const typingSound = document.getElementById('typingSound');
-
   const fullText = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
 
   setTimeout(() => {
@@ -370,24 +409,371 @@
   });
 
   function openPage(page) {
+    // hide homepage first
     document.getElementById('home-container').style.display = "none";
+    // hide all content pages
     document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
+    // show requested
     document.getElementById(`${page}-page`).style.display = "flex";
+
+    // init the platformer when opening bot page
+    if (page === 'bot') {
+      setTimeout(initPlatformer, 80); // small timeout to ensure layout ready
+    }
   }
 
   function goHome() {
     document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
     document.getElementById('home-container').style.display = "flex";
+    // pause or stop game when returning home
+    stopPlatformer();
   }
 
   document.getElementById('home-icon').addEventListener('click', goHome);
 </script>
+
 <script>
-fetch('/.netlify/functions/log-visit')
-  .then(response => response.json())
-  .then(data => console.log('Visitor IP logged:', data.ip))
-  .catch(err => console.error('Logging failed:', err));
+/* =========================
+   Platformer game (smooth cartoon)
+   Integrated into #bot-page canvas #platform-canvas
+   Initialises when openPage('bot') calls initPlatformer()
+   ========================= */
+
+(function(){
+  // Inline SVG assets as data URLs
+  function svgToDataURL(svgText){
+    return 'data:image/svg+xml;utf8,'+encodeURIComponent(svgText);
+  }
+
+  const ASSETS = {
+    hill: svgToDataURL(`<svg xmlns='http://www.w3.org/2000/svg' width='800' height='300' viewBox='0 0 800 300'><ellipse cx='200' cy='220' rx='360' ry='160' fill='#85d07f'/><ellipse cx='620' cy='240' rx='220' ry='120' fill='#7ecb7e' opacity='0.9'/></svg>`),
+    ground: svgToDataURL(`<svg xmlns='http://www.w3.org/2000/svg' width='120' height='80' viewBox='0 0 120 80'><rect width='120' height='80' rx='12' fill='#6b4422'/><rect x='6' y='52' width='108' height='18' rx='8' fill='#5c3a1a'/></svg>`),
+    plat: svgToDataURL(`<svg xmlns='http://www.w3.org/2000/svg' width='140' height='40'><rect width='140' height='40' rx='8' fill='#9abf6b'/><rect x='6' y='24' width='128' height='12' rx='6' fill='#7aa957'/></svg>`),
+    coin: svgToDataURL(`<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><circle cx='24' cy='24' r='18' fill='#ffd26f'/></svg>`),
+    hero: svgToDataURL(`<svg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'><g><ellipse cx='48' cy='68' rx='28' ry='18' fill='#3b72ff'/><rect x='28' y='28' width='40' height='36' rx='10' fill='#4aa3ff'/><circle cx='48' cy='18' r='18' fill='#ffd6a6'/></g></svg>`)
+  };
+
+  // Game state kept in closure so we can init / stop cleanly
+  let running = false;
+  let rafId = null;
+  let canvas, ctx;
+  let W = 1200, H = 700;
+  let imgs = {};
+  let lastTime = 0;
+
+  // level and player (same as earlier simple platformer)
+  const levelTemplate = {
+    width: 4000, height: 1000,
+    gravity: 1600,
+    groundY: 560,
+    platforms: [
+      { x: 0, w: 600, y: 560 },
+      { x: 900, w: 320, y: 460 },
+      { x: 1350, w: 240, y: 400 },
+      { x: 1750, w: 300, y: 500 },
+      { x: 2200, w: 140, y: 420 },
+      { x: 2600, w: 240, y: 360 },
+      { x: 3100, w: 500, y: 520 }
+    ],
+    coins: [
+      {x: 320, y: 500}, {x: 980, y: 400}, {x: 1400, y: 340}, {x: 1800, y: 440}, {x: 2650, y: 300}
+    ]
+  };
+
+  let level = JSON.parse(JSON.stringify(levelTemplate));
+
+  const player = {
+    x: 120, y: levelTemplate.groundY - 96, w: 48, h: 64,
+    vx: 0, vy: 0, speed: 380, jumpForce: 640, onGround: false,
+    lives: 3, score: 0
+  };
+
+  const cam = { x: 0, y: 0 };
+  const keys = {};
+
+  // DOM refs
+  const centerMsg = document.getElementById('game-center-msg');
+  const canvasEl = document.getElementById('platform-canvas');
+
+  function loadImages(done){
+    let toLoad = Object.keys(ASSETS).length;
+    for(const k in ASSETS){
+      const img = new Image();
+      img.src = ASSETS[k];
+      img.onload = () => {
+        imgs[k] = img;
+        toLoad--;
+        if(toLoad === 0) done();
+      };
+      img.onerror = () => {
+        // still decrement to avoid hang
+        imgs[k] = null;
+        toLoad--;
+        if(toLoad === 0) done();
+      };
+    }
+  }
+
+  function resize(){
+    // responsive canvas sizing while maintaining ratio
+    const wrap = document.getElementById('game-wrap');
+    let w = Math.min(window.innerWidth - 80, 1200);
+    let h = Math.round(w * (700/1200));
+    if(h > window.innerHeight - 140){ h = window.innerHeight - 140; w = Math.round(h * (1200/700)); }
+    canvasEl.width = W = w;
+    canvasEl.height = H = h;
+    if(ctx) ctx.imageSmoothingEnabled = true;
+  }
+
+  function worldToScreen(wx, wy){ return { x: Math.round(wx - cam.x), y: Math.round(wy - cam.y) }; }
+
+  function rectsOverlap(a,b){
+    return !(a.x + a.w <= b.x || a.x >= b.x + b.w || a.y + a.h <= b.y || a.y >= b.y + b.h);
+  }
+
+  function getPlatformRects(){
+    const rects = [];
+    for(const p of level.platforms) rects.push({ x: p.x, y: p.y, w: p.w, h: 40 });
+    // large invisible floor to catch falls
+    rects.push({ x: -200, y: level.groundY + 40, w: level.width + 400, h: 2000 });
+    return rects;
+  }
+
+  function updatePhysics(dt){
+    const left = keys['arrowleft'] || keys['a'];
+    const right = keys['arrowright'] || keys['d'];
+    const jump = keys[' '] || keys['w'] || keys['arrowup'];
+
+    if(left && !right) player.vx = -player.speed;
+    else if(right && !left) player.vx = player.speed;
+    else player.vx = 0;
+
+    player.vy += level.gravity * dt;
+
+    if(jump && player.onGround){
+      player.vy = -player.jumpForce;
+      player.onGround = false;
+    }
+
+    player.x += player.vx * dt;
+    player.y += player.vy * dt;
+
+    if(player.x < 0) player.x = 0;
+
+    // collisions
+    player.onGround = false;
+    const plRects = getPlatformRects();
+    for(const r of plRects){
+      const pbox = { x: player.x, y: player.y, w: player.w, h: player.h };
+      if(rectsOverlap(pbox, r)){
+        if(player.vy > 0 && (player.y + player.h - r.y) <= 48){
+          player.y = r.y - player.h;
+          player.vy = 0;
+          player.onGround = true;
+        } else if(player.vy < 0){
+          player.y = r.y + r.h;
+          player.vy = 0;
+        } else {
+          if(player.vx > 0) player.x = r.x - player.w;
+          else if(player.vx < 0) player.x = r.x + r.w;
+        }
+      }
+    }
+
+    // collect coins
+    for(let i = level.coins.length - 1; i >= 0; i--){
+      const c = level.coins[i];
+      const coinRect = { x: c.x - 12, y: c.y - 12, w: 24, h: 24 };
+      if(rectsOverlap({ x: player.x, y: player.y, w: player.w, h: player.h }, coinRect)){
+        level.coins.splice(i,1);
+        player.score += 100;
+        flashMessage('+100');
+      }
+    }
+
+    // fall
+    if(player.y > level.groundY + 500){
+      player.lives -= 1;
+      if(player.lives <= 0){
+        showCenterMessage('Game Over — Press R to Restart');
+        running = false;
+      } else {
+        player.x = Math.max(20, player.x - 400);
+        player.y = level.groundY - player.h - 2;
+        player.vx = player.vy = 0;
+        flashMessage('You fell! -1 life');
+      }
+    }
+
+    // camera follow
+    const margin = W * 0.35;
+    cam.x = player.x - W/2 + player.w/2;
+    cam.x = Math.max(0, Math.min(level.width - W + 200, cam.x));
+    cam.y = 0;
+  }
+
+  function clear(){
+    ctx.fillStyle = '#9ad3ff';
+    ctx.fillRect(0,0,W,H);
+  }
+
+  function drawBackground(){
+    const hillW = 800, hillH = 300;
+    const par1 = 0.35;
+    const h1x = - (cam.x * par1) % hillW;
+    for(let x = h1x - hillW; x < W + hillW; x += hillW){
+      ctx.drawImage(imgs.hill, x, H - 300 - 80, hillW, hillH);
+    }
+    ctx.fillStyle = 'rgba(255,255,255,0.75)';
+    for(let i=0;i<6;i++){
+      const cx = ((i*330) - (cam.x*0.12)) % (W+400) - 200;
+      const cy = 80 + (i%2)*20;
+      roundRect(ctx, cx, cy, 140, 48, 24, true, false);
+    }
+  }
+
+  function roundRect(ctx,x,y,w,h,r, fill=false, stroke=false){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r);
+    ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r);
+    ctx.arcTo(x,y,x+w,y,r);
+    ctx.closePath();
+    if(fill){ ctx.fill(); }
+    if(stroke){ ctx.stroke(); }
+  }
+
+  function drawPlatformsAndGround(){
+    const tileW = 120, tileH = 80;
+    const start = Math.floor((cam.x - 400) / tileW) * tileW;
+    for(let x = start; x < cam.x + W + 400; x += tileW){
+      const sx = x - cam.x;
+      ctx.drawImage(imgs.ground, sx, level.groundY - tileH/2 - cam.y, tileW, tileH);
+    }
+
+    for(const p of level.platforms){
+      const sx = p.x - cam.x;
+      const sy = p.y - 18 - cam.y;
+      const platW = 140, platH = 40;
+      for(let tx = 0; tx < p.w; tx += platW){
+        ctx.drawImage(imgs.plat, sx + tx, sy, platW, platH);
+      }
+    }
+
+    for(const c of level.coins){
+      const sc = worldToScreen(c.x, c.y);
+      ctx.drawImage(imgs.coin, sc.x - 12, sc.y - 12, 24, 24);
+    }
+  }
+
+  function drawPlayer(){
+    const sp = worldToScreen(player.x, player.y);
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.beginPath();
+    ctx.ellipse(sp.x + player.w/2, level.groundY - cam.y + 12, 28, 10, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.drawImage(imgs.hero, sp.x - 12, sp.y - 12, player.w + 24, player.h + 24);
+  }
+
+  let flashTimer = null;
+  function flashMessage(text, duration=700){
+    if(flashTimer) clearTimeout(flashTimer);
+    centerMsg.style.display = 'block';
+    centerMsg.textContent = text;
+    flashTimer = setTimeout(()=>{ centerMsg.style.display = 'none'; flashTimer = null; }, duration);
+  }
+
+  function showCenterMessage(txt){
+    centerMsg.style.display = 'block';
+    centerMsg.innerHTML = txt + '<div style="font-size:12px;margin-top:8px">Press R to restart</div>';
+  }
+
+  function hideCenterMessage(){ centerMsg.style.display = 'none'; }
+
+  function gameLoop(now){
+    if(!running) return;
+    const dt = Math.min(0.032, (now - lastTime) / 1000);
+    lastTime = now;
+    updatePhysics(dt);
+    render();
+    rafId = requestAnimationFrame(gameLoop);
+  }
+
+  function render(){
+    clear();
+    drawBackground();
+    drawPlatformsAndGround();
+    drawPlayer();
+  }
+
+  // keyboard handlers
+  function onKeyDown(e){
+    keys[e.key.toLowerCase()] = true;
+    // prevent page scrolling on space
+    if([' ', 'spacebar'].includes(e.key.toLowerCase())) e.preventDefault();
+    if(e.key.toLowerCase() === 'r'){
+      restartGame();
+    }
+  }
+  function onKeyUp(e){ keys[e.key.toLowerCase()] = false; }
+
+  function restartGame(){
+    player.x = 120; player.y = level.groundY - player.h - 2; player.vx = 0; player.vy = 0;
+    player.lives = 3; player.score = 0;
+    level = JSON.parse(JSON.stringify(levelTemplate));
+    hideCenterMessage();
+    if(!running){
+      startLoop();
+    }
+  }
+
+  function startLoop(){
+    if(running) return;
+    running = true;
+    lastTime = performance.now();
+    rafId = requestAnimationFrame(gameLoop);
+  }
+
+  function stopLoop(){
+    running = false;
+    if(rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+
+  // Public init / stop functions
+  window.initPlatformer = function(){
+    // if already running, do nothing
+    if(running) return;
+    // prepare canvas and context
+    canvas = canvasEl;
+    ctx = canvas.getContext('2d', { alpha: false });
+    // load assets then start
+    loadImages(() => {
+      resize();
+      window.addEventListener('resize', resize);
+      window.addEventListener('keydown', onKeyDown);
+      window.addEventListener('keyup', onKeyUp);
+      // reset player/level
+      Object.assign(player, { x:120, y: levelTemplate.groundY - 96, vx:0, vy:0, lives:3, score:0 });
+      level = JSON.parse(JSON.stringify(levelTemplate));
+      cam.x = 0;
+      centerMsg.style.display = 'none';
+      startLoop();
+    });
+  };
+
+  window.stopPlatformer = function(){
+    // remove listeners and stop loop
+    stopLoop();
+    window.removeEventListener('resize', resize);
+    window.removeEventListener('keydown', onKeyDown);
+    window.removeEventListener('keyup', onKeyUp);
+    centerMsg.style.display = 'none';
+  };
+
+})(); // end closure
 </script>
+
 </body>
 </html>
-
