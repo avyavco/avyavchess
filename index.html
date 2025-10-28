@@ -4,306 +4,68 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Avyav Chess</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+/* === EXISTING STYLES KEPT INTACT === */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Courier New',monospace;background:linear-gradient(to bottom right,#000428,#004e92);color:cyan;overflow:hidden;height:100vh;display:flex;flex-direction:column;}
+#intro-container,#home-container,.content-page{display:none;justify-content:center;align-items:center;flex-direction:column;text-align:center;height:100vh;}
+#animation{font-size:3rem;font-weight:bold;animation:fadeIn 2s ease forwards;}
+@keyframes fadeIn{from{opacity:0;transform:scale(0.8);}to{opacity:1;transform:scale(1);}}
+#intro-text{font-size:1.2rem;margin-top:2rem;width:80%;max-width:700px;white-space:pre-wrap;text-align:center;}
+#get-started{margin-top:2rem;padding:12px 30px;font-size:1rem;border:2px solid cyan;color:cyan;background:transparent;border-radius:10px;cursor:pointer;transition:0.3s;display:none;}
+#get-started:hover{background-color:cyan;color:#000428;}
+#dragon-image{margin-top:1.5rem;width:180px;opacity:0;transition:opacity 1s ease;}
+@keyframes dragonEnlargeFade{0%{transform:scale(1);opacity:1;}50%{transform:scale(1.5);opacity:1;}100%{transform:scale(2);opacity:0;}}
+footer{position:fixed;bottom:10px;left:0;right:0;text-align:center;color:cyan;font-size:1rem;display:none;}
+.youtube-container{display:inline-flex;align-items:center;gap:10px;}
+.youtube-logo{width:40px;height:30px;background-color:red;border-radius:8px;display:flex;justify-content:center;align-items:center;box-shadow:0 0 20px red;cursor:pointer;transition:transform 0.2s ease;}
+.youtube-logo:hover{transform:scale(1.1);}
+.youtube-logo::before{content:'';border-style:solid;border-width:8px 0 8px 14px;border-color:transparent transparent transparent white;}
+#home-container{display:none;position:relative;width:100vw;height:100vh;overflow:hidden;}
+#horse-image{position:absolute;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:-2;}
+#home-buttons{display:flex;flex-direction:column;align-items:center;gap:1.2rem;position:relative;z-index:2;}
+.home-btn{padding:15px 35px;border:2px solid cyan;color:cyan;background:#000000;font-size:1.1rem;border-radius:10px;cursor:pointer;transition:0.3s;}
+.home-btn:hover{background-color:cyan;color:#000428;}
+.home-icon{position:absolute;top:20px;right:25px;width:40px;height:40px;background:cyan;mask:url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;mask-size:contain;-webkit-mask:url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;-webkit-mask-size:contain;cursor:pointer;z-index:2;}
+.sidebar-widget{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:60px;height:300px;background:rgba(0,0,0,0.6);border:1px solid cyan;border-radius:10px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;z-index:3;}
+.widget-btn{background:transparent;border:2px solid cyan;color:cyan;font-family:'Orbitron',sans-serif;font-size:1.1rem;width:40px;height:40px;border-radius:5px;cursor:pointer;transition:0.3s;}
+.widget-btn:hover{background-color:cyan;color:#000428;transform:scale(1.1);}
+.content-page{display:none;justify-content:center;align-items:center;flex-direction:column;height:100vh;background-color:black;color:cyan;text-align:center;font-size:1.5rem;}
+.content-page .home-icon{position:absolute;top:20px;right:25px;}
+@media(max-width:600px){#animation{font-size:2.3rem;}#intro-text{font-size:1rem;}.home-btn{font-size:1rem;padding:12px 28px;}}
 
-  body {
-    font-family: 'Courier New', monospace;
-    background: linear-gradient(to bottom right, #000428, #004e92);
-    color: cyan;
-    overflow: hidden;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  #intro-container, #home-container, .content-page {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-    height: 100vh;
-  }
-
-  #animation {
-    font-size: 3rem;
-    font-weight: bold;
-    animation: fadeIn 2s ease forwards;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.8); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
-  #intro-text {
-    font-size: 1.2rem;
-    margin-top: 2rem;
-    width: 80%;
-    max-width: 700px;
-    white-space: pre-wrap;
-    text-align: center;
-  }
-
-  #get-started {
-    margin-top: 2rem;
-    padding: 12px 30px;
-    font-size: 1rem;
-    border: 2px solid cyan;
-    color: cyan;
-    background: transparent;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.3s;
-    display: none;
-  }
-
-  #get-started:hover { background-color: cyan; color: #000428; }
-
-  #dragon-image {
-    margin-top: 1.5rem;
-    width: 180px;
-    opacity: 0;
-    transition: opacity 1s ease;
-  }
-
-  @keyframes dragonEnlargeFade {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.5); opacity: 1; }
-    100% { transform: scale(2); opacity: 0; }
-  }
-
-  footer {
-    position: fixed;
-    bottom: 10px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    color: cyan;
-    font-size: 1rem;
-    display: none;
-  }
-
-  .youtube-container {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .youtube-logo {
-    width: 40px;
-    height: 30px;
-    background-color: red;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 20px red;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-  }
-
-  .youtube-logo:hover { transform: scale(1.1); }
-
-  .youtube-logo::before {
-    content: '';
-    border-style: solid;
-    border-width: 8px 0 8px 14px;
-    border-color: transparent transparent transparent white;
-  }
-
-  #home-container {
-    display: none;
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-  }
-
-  #horse-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-    z-index: -2;
-  }
-
-  #home-buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.2rem;
-    position: relative;
-    z-index: 2;
-  }
-
-  .home-btn {
-    padding: 15px 35px;
-    border: 2px solid cyan;
-    color: cyan;
-    background: #000000;
-    font-size: 1.1rem;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-
-  .home-btn:hover {
-    background-color: cyan;
-    color: #000428;
-  }
-
-  .home-icon {
-    position: absolute;
-    top: 20px;
-    right: 25px;
-    width: 40px;
-    height: 40px;
-    background: cyan;
-    mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
-    mask-size: contain;
-    -webkit-mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
-    -webkit-mask-size: contain;
-    cursor: pointer;
-    z-index: 2;
-  }
-
-  /* Sidebar widget */
-  .sidebar-widget {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 60px;
-    height: 300px;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid cyan;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    z-index: 3;
-  }
-
-  .widget-btn {
-    background: transparent;
-    border: 2px solid cyan;
-    color: cyan;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem;
-    width: 40px;
-    height: 40px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-
-  .widget-btn:hover {
-    background-color: cyan;
-    color: #000428;
-    transform: scale(1.1);
-  }
-
-  .content-page {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
-    background-color: black;
-    color: cyan;
-    text-align: center;
-    font-size: 1.5rem;
-  }
-
-  .content-page .home-icon {
-    position: absolute;
-    top: 20px;
-    right: 25px;
-  }
-
-  /* Platformer (Saitama-like) */
-  #bot-page .game-wrap {
-    width: 100%;
-    height: 100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    position:relative;
-    overflow:hidden;
-    background: linear-gradient(#87ceeb, #bfe9ff); /* sky */
-  }
-
-  #platform-canvas {
-    border-radius:12px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
-    background: linear-gradient(#87ceeb, #bfe9ff);
-    max-width: 1200px;
-    width: 92%;
-    height: 76vh;
-    display:block;
-  }
-
-  .game-ui {
-    position: absolute;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 20;
-    display:flex;
-    gap:14px;
-    align-items:center;
-    background: rgba(0,0,0,0.25);
-    color: #e9faff;
-    padding:6px 12px;
-    border-radius:10px;
-    font-weight:700;
-    font-size:18px;
-  }
-
-  .game-hint {
-    position:absolute;
-    right: 18px;
-    top: 18px;
-    background: rgba(0,0,0,0.6);
-    color: white;
-    padding:8px 12px;
-    border-radius:8px;
-    z-index:20;
-    font-size:13px;
-  }
-
-  .center-msg {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    z-index: 30;
-    background: rgba(0,0,0,0.6);
-    color: white;
-    padding:12px 16px;
-    border-radius:12px;
-    display:none;
-    text-align:center;
-  }
-
-  @media (max-width:600px){
-    #intro-text { font-size: 1rem; }
-    .home-btn { font-size: 1rem; padding: 12px 28px; }
-    .game-ui { font-size:14px; }
-  }
+/* === GAME STYLES === */
+#gameCanvas{
+  background: linear-gradient(to bottom, #87ceeb 0%, #b0e0e6 100%);
+  display:block;
+  margin:auto;
+  border:2px solid cyan;
+  border-radius:10px;
+}
+#score{
+  position:absolute;
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+  color:yellow;
+  font-size:1.5rem;
+  font-family:'Comic Sans MS', cursive;
+}
+#gameOver{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  color:white;
+  font-size:2rem;
+  text-align:center;
+  display:none;
+}
 </style>
 </head>
 <body>
 
 <div id="animation">Avyav Chess</div>
-
 <div id="intro-container">
   <div id="intro-text"></div>
   <button id="get-started">Enter Avyav Chess</button>
@@ -319,26 +81,12 @@
     <button class="widget-btn" onclick="openPage('u')">U</button>
     <button class="widget-btn" onclick="openPage('s')">S</button>
   </div>
-
   <div class="home-icon" id="home-icon"></div>
-
   <div id="home-buttons">
     <button class="home-btn" onclick="openPage('bot')">Play Chess with Bot</button>
     <button class="home-btn" onclick="openPage('learn')">Learn Chess</button>
     <button class="home-btn" onclick="openPage('videos')">Videos</button>
     <button class="home-btn" onclick="openPage('contact')">Contact Us for Feedback</button>
-  </div>
-</div>
-
-<!-- Bot page: Saitama-like platformer -->
-<div id="bot-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-
-  <div class="game-wrap" id="game-wrap">
-    <div class="game-ui" id="game-ui">Coins: <span id="coin-count">0</span></div>
-    <div class="game-hint">Controls: ← → (A/D) to move • Space/W/↑ to jump • R to restart</div>
-    <canvas id="platform-canvas" width="1200" height="700" aria-label="Platformer game"></canvas>
-    <div id="center-msg" class="center-msg"></div>
   </div>
 </div>
 
@@ -348,473 +96,104 @@
 <div id="r-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>R - Contents Coming Soon...</h2></div>
 <div id="u-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>U - Contents Coming Soon...</h2></div>
 <div id="s-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>S - Contents Coming Soon...</h2></div>
+
+<!-- === SAITAMA GAME PAGE === -->
+<div id="bot-page" class="content-page" style="position:relative;">
+  <div class="home-icon" onclick="goHome()"></div>
+  <canvas id="gameCanvas" width="800" height="400"></canvas>
+  <div id="score">Coins: 0</div>
+  <div id="gameOver">Game Over!<br>Press R to Restart</div>
+</div>
+
 <div id="learn-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 <div id="videos-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 <div id="contact-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 
-<footer id="footer">
-  <div class="youtube-container">
-    <span>Subscribe to my YouTube Channel</span>
-    <div class="youtube-logo" onclick="window.open('https://www.youtube.com/@AvyavChessYT', '_blank')"></div>
-  </div>
-</footer>
-
+<footer id="footer"><div class="youtube-container"><span>Subscribe to my YouTube Channel</span><div class="youtube-logo" onclick="window.open('https://www.youtube.com/@AvyavChessYT','_blank')"></div></div></footer>
 <audio id="typingSound" src="typingsound.mp3"></audio>
 
 <script>
-  // ---------- existing site logic (intro, typing, dragon, navigation) ----------
-  const animation = document.getElementById('animation');
-  const introContainer = document.getElementById('intro-container');
-  const introText = document.getElementById('intro-text');
-  const getStarted = document.getElementById('get-started');
-  const dragon = document.getElementById('dragon-image');
-  const footer = document.getElementById('footer');
-  const typingSound = document.getElementById('typingSound');
-  const fullText = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
-
-  setTimeout(() => {
-    animation.style.display = "none";
-    introContainer.style.display = "flex";
-    typeText();
-  }, 2500);
-
-  let i = 0;
-  function typeText() {
-    if (i < fullText.length) {
-      introText.textContent += fullText.charAt(i);
-      if (typingSound.paused) typingSound.play();
-      i++;
-      setTimeout(typeText, 50);
-    } else {
-      typingSound.pause();
-      typingSound.currentTime = 0;
-      getStarted.style.display = "inline-block";
-      setTimeout(() => {
-        dragon.style.opacity = "1";
-        footer.style.display = "block";
-      }, 1000);
-    }
-  }
-
-  getStarted.addEventListener('click', () => {
-    dragon.style.animation = "dragonEnlargeFade 1.5s forwards";
-    setTimeout(() => {
-      introContainer.style.display = "none";
-      document.getElementById('home-container').style.display = "flex";
-    }, 1500);
-  });
-
-  function openPage(page) {
-    // hide homepage first
-    document.getElementById('home-container').style.display = "none";
-    // hide all content pages
-    document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
-    // show requested
-    document.getElementById(`${page}-page`).style.display = "flex";
-
-    // if opening bot page, init game
-    if (page === 'bot') {
-      setTimeout(initSaitamaPlatformer, 80);
-    }
-  }
-
-  function goHome() {
-    document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
-    document.getElementById('home-container').style.display = "flex";
-    stopSaitamaPlatformer();
-  }
-
-  document.getElementById('home-icon').addEventListener('click', goHome);
+/* === INTRO LOGIC (kept same) === */
+const animation=document.getElementById('animation');
+const introContainer=document.getElementById('intro-container');
+const introText=document.getElementById('intro-text');
+const getStarted=document.getElementById('get-started');
+const dragon=document.getElementById('dragon-image');
+const footer=document.getElementById('footer');
+const typingSound=document.getElementById('typingSound');
+const fullText="Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
+setTimeout(()=>{animation.style.display="none";introContainer.style.display="flex";typeText();},2500);
+let i=0;
+function typeText(){if(i<fullText.length){introText.textContent+=fullText.charAt(i);if(typingSound.paused)typingSound.play();i++;setTimeout(typeText,50);}else{typingSound.pause();typingSound.currentTime=0;getStarted.style.display="inline-block";setTimeout(()=>{dragon.style.opacity="1";footer.style.display="block";},1000);}}
+getStarted.addEventListener('click',()=>{dragon.style.animation="dragonEnlargeFade 1.5s forwards";setTimeout(()=>{introContainer.style.display="none";document.getElementById('home-container').style.display="flex";},1500);});
+function openPage(page){document.getElementById('home-container').style.display="none";document.querySelectorAll('.content-page').forEach(p=>p.style.display="none");document.getElementById(`${page}-page`).style.display="flex";}
+function goHome(){document.querySelectorAll('.content-page').forEach(p=>p.style.display="none");document.getElementById('home-container').style.display="flex";}
+document.getElementById('home-icon').addEventListener('click',goHome);
 </script>
 
 <script>
-/* ==============================
-   Saitama-like Platformer Integration
-   - smooth cartoon Saitama-like hero
-   - bricks continuously generated from right
-   - sky background
-   - coins on bricks
-   - fall into sky -> Game Over
-   - coins score top-center, show on Game Over
-   ============================== */
-
-(function(){
-  // Inline SVG assets for hero, brick, coin
-  function svgToDataURL(svg){ return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg); }
-
-  const ASSETS = {
-    hero: svgToDataURL(`<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'>
-      <!-- Saitama-like stylized bald hero: simple cartoon, not exact copy -->
-      <defs><filter id="s" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.2"/></filter></defs>
-      <g filter="url(#s)">
-        <circle cx="60" cy="36" r="26" fill="#ffd6a6" />
-        <circle cx="50" cy="33" r="3.5" fill="#2b2b2b" />
-        <circle cx="70" cy="33" r="3.5" fill="#2b2b2b" />
-        <path d="M46 42 q14 10 28 0" stroke="#2b2b2b" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <rect x="36" y="56" width="48" height="36" rx="8" fill="#ffdf8a" />
-        <rect x="34" y="74" width="12" height="18" rx="4" fill="#ff9f1c"/>
-        <rect x="74" y="74" width="12" height="18" rx="4" fill="#ff9f1c"/>
-        <ellipse cx="60" cy="98" rx="28" ry="12" fill="#ff9f1c" />
-        <rect x="44" y="56" width="8" height="16" rx="3" fill="#ffd26f" />
-        <rect x="68" y="56" width="8" height="16" rx="3" fill="#ffd26f" />
-      </g>
-    </svg>`),
-
-    brick: svgToDataURL(`<svg xmlns='http://www.w3.org/2000/svg' width='160' height='48' viewBox='0 0 160 48'>
-      <rect width='160' height='48' rx='8' fill='#b04a2c' />
-      <rect x='6' y='28' width='148' height='12' rx='6' fill='#8f3118' />
-      <circle cx='28' cy='18' r='6' fill='#c86b4d' opacity='0.25'/>
-      <circle cx='120' cy='22' r='5' fill='#c86b4d' opacity='0.25'/>
-    </svg>`),
-
-    coin: svgToDataURL(`<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'>
-      <circle cx='24' cy='24' r='18' fill='#ffd26f' />
-      <path d='M20 24 h8' stroke='#b37a22' stroke-width='2' stroke-linecap='round' />
-    </svg>`)
-  };
-
-  // DOM
-  const canvas = document.getElementById('platform-canvas');
-  const centerMsg = document.getElementById('center-msg');
-  const coinCountEl = document.getElementById('coin-count');
-
-  let ctx;
-  let W = 1200, H = 700;
-
-  // Game state
-  let running = false;
-  let raf = null;
-  let last = 0;
-
-  // World parameters
-  let scrollSpeed = 260; // px/sec to left
-  let spawnTimer = 0;
-  const spawnInterval = 0.9; // seconds between platform spawns
-  const minGap = 80, maxGap = 220;
-  const minWidth = 140, maxWidth = 420;
-  const platformYRange = [H*0.45, H*0.75]; // will be recalculated per resize
-
-  // Entities
-  let platforms = []; // each {x, y, w}
-  let coins = []; // each {x, y}
-  let imgs = {};
-  let keys = {};
-
-  // Player: near-left fixed x, jumps on moving platforms
-  const player = {
-    x: 180, // fixed screen x
-    y: 0,
-    vy: 0,
-    w: 48, h: 64,
-    onGround: false,
-    jumpForce: 680,
-    gravity: 2200,
-    score: 0,
-    alive: true
-  };
-
-  // load images
-  function loadAssets(cb){
-    let toLoad = Object.keys(ASSETS).length;
-    for(const k in ASSETS){
-      const i = new Image();
-      i.src = ASSETS[k];
-      i.onload = () => { imgs[k] = i; toLoad--; if(toLoad === 0) cb(); };
-      i.onerror = () => { imgs[k] = null; toLoad--; if(toLoad === 0) cb(); };
+/* === GAME SCRIPT === */
+const canvas=document.getElementById("gameCanvas");
+const ctx=canvas.getContext("2d");
+let gameRunning=false,gameOver=false,score=0;
+let gravity=0.8,jumpPower=-12,doubleJumped=false;
+let player={x:100,y:200,vy:0,width:50,height:70,onGround:false,image:new Image()};
+player.image.src="https://i.ibb.co/DrfxhL0/saitama-cartoon.png"; // Cartoon Saitama
+let tiles=[{x:0,y:350,width:800,height:50}];
+let coinImage=new Image(); coinImage.src="https://i.ibb.co/5YjDdFt/coin.png";
+let coins=[];
+function resetGame(){
+  gameOver=false;score=0;player.y=200;player.vy=0;doubleJumped=false;
+  tiles=[{x:0,y:350,width:800,height:50}];coins=[];gameRunning=true;
+  document.getElementById("gameOver").style.display="none";
+}
+function addTile(){
+  let last=tiles[tiles.length-1];
+  let newX=last.x+Math.random()*150+200;
+  let newY=350-Math.random()*100;
+  tiles.push({x:newX,y:newY,width:100,height:20});
+  if(Math.random()<0.5)coins.push({x:newX+40,y:newY-30});
+}
+function update(){
+  if(!gameRunning)return;
+  player.vy+=gravity;player.y+=player.vy;
+  if(player.y>canvas.height){endGame();}
+  tiles.forEach(t=>{t.x-=5;if(t.x+t.width<0){tiles.shift();addTile();}});
+  coins.forEach(c=>c.x-=5);
+  player.onGround=false;
+  tiles.forEach(t=>{
+    if(player.x+player.width>t.x&&player.x<t.x+t.width&&player.y+player.height>t.y&&player.y+player.height<t.y+20&&player.vy>=0){
+      player.y=t.y-player.height;player.vy=0;player.onGround=true;doubleJumped=false;
     }
-  }
-
-  function resizeCanvas(){
-    // responsive sizing while keeping ratio and ensuring game area tall enough
-    const wrapW = Math.min(window.innerWidth - 80, 1200);
-    const ratio = 1200/700;
-    let w = wrapW;
-    let h = Math.round(w / ratio);
-    if(h > window.innerHeight - 140){ h = window.innerHeight - 140; w = Math.round(h * ratio); }
-    canvas.width = W = w;
-    canvas.height = H = h;
-    // update platformYRange relative to H
-    platformYRange[0] = Math.round(H*0.30);
-    platformYRange[1] = Math.round(H*0.75);
-  }
-
-  function spawnPlatform() {
-    // determine x = W + some offset
-    const gap = randRange(minGap, maxGap);
-    const prevRight = platforms.length ? (platforms[platforms.length-1].x + platforms[platforms.length-1].w) : 0;
-    let startX = platforms.length ? platforms[platforms.length-1].x + platforms[platforms.length-1].w + gap : W + 20;
-    // width and y
-    const w = randRange(minWidth, maxWidth);
-    let y = randRange(platformYRange[0], platformYRange[1]);
-    // clamp y so player can reach
-    if(platforms.length){
-      const lastY = platforms[platforms.length-1].y;
-      y = clamp(y, lastY - 140, lastY + 120);
-      y = clamp(y, platformYRange[0], platformYRange[1]);
-    }
-    platforms.push({ x: startX, y, w });
-    // maybe place a coin on this platform randomly
-    if(Math.random() < 0.45){
-      const cx = startX + randRange(40, Math.max(40, w - 60));
-      const cy = y - 28;
-      coins.push({ x: cx, y: cy, taken: false });
-    }
-  }
-
-  // helpers
-  function randRange(a,b){ return Math.floor(Math.random() * (b - a + 1)) + a; }
-  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
-
-  function update(dt){
-    if(!player.alive) return;
-    // spawn platforms
-    spawnTimer += dt;
-    if(spawnTimer >= spawnInterval){
-      spawnTimer = 0;
-      spawnPlatform();
-    }
-
-    // move platforms and coins left
-    for(const p of platforms) p.x -= scrollSpeed * dt;
-    for(const c of coins) c.x -= scrollSpeed * dt;
-
-    // remove off-screen platforms and coins
-    platforms = platforms.filter(p => (p.x + p.w) > -60);
-    coins = coins.filter(c => c.x > -60 && !c.taken);
-
-    // input
-    const left = keys['arrowleft'] || keys['a'];
-    const right = keys['arrowright'] || keys['d'];
-    const jump = keys[' '] || keys['w'] || keys['arrowup'];
-
-    // horizontal movement for player is minor — we keep player at fixed screen X
-    // gravity
-    player.vy += player.gravity * dt;
-    player.y += player.vy * dt;
-
-    // check collision with any platform beneath player's feet relative to canvas coords
-    player.onGround = false;
-    const playerBox = { x: player.x, y: player.y, w: player.w, h: player.h };
-    for(const p of platforms){
-      const platBox = { x: p.x - camOffset(), y: p.y, w: p.w, h: 22 };
-      // need consistent coordinates: we are moving platforms; player's x is screen x
-      // p.x is world (in screen coords since we move them)
-      const boxA = { x: player.x, y: player.y, w: player.w, h: player.h };
-      const boxB = { x: p.x - 0, y: p.y, w: p.w, h: 22 }; // p.x already in screen coords
-      if(rectsOverlap(boxA, boxB)){
-        // only if falling
-        if(player.vy > 0 && (player.y + player.h - p.y) <= 48){
-          player.y = p.y - player.h;
-          player.vy = 0;
-          player.onGround = true;
-        } else if(player.vy < 0){
-          // bump head
-          player.y = p.y + 22;
-          player.vy = 0;
-        } else {
-          // horizontal collision - shove out
-          if(player.x + player.w/2 < p.x + p.w/2) player.x = p.x - player.w - 2;
-          else player.x = p.x + p.w + 2;
-        }
-      }
-    }
-
-    // jump
-    if(jump && player.onGround){
-      player.vy = -player.jumpForce;
-      player.onGround = false;
-    }
-
-    // collect coins
-    for(const c of coins){
-      if(!c.taken){
-        const cx = c.x, cy = c.y;
-        if( rectsOverlap({x: player.x, y: player.y, w: player.w, h: player.h}, {x: cx-12, y: cy-12, w:24, h:24}) ){
-          c.taken = true;
-          player.score += 1;
-          coinCountEl.textContent = player.score;
-          // little flash
-          flashCenter('+1 coin', 500);
-        }
-      }
-    }
-
-    // fall check: if player's bottom goes above the canvas bottom (y > canvas height) -> game over
-    if(player.y > H + 40){
-      player.alive = false;
-      running = false;
-      showGameOver();
-    }
-  }
-
-  // draw
-  function clear(){
-    // sky gradient already via CSS; draw background elements if needed
-    ctx.clearRect(0,0,W,H);
-    // draw a subtle horizon / parallax clouds
-    ctx.fillStyle = '#87ceeb';
-    ctx.fillRect(0,0,W,H);
-  }
-
-  function draw(){
-    clear();
-    // draw far clouds
-    ctx.fillStyle = 'rgba(255,255,255,0.6)';
-    for(let i=0;i<6;i++){
-      const cx = ((i*280) - (tick*0.12*50)) % (W+400) - 200;
-      roundRect(ctx, cx, 40 + (i%2)*18, 140, 44, 22, true);
-    }
-
-    // draw moving platforms (bricks)
-    for(const p of platforms){
-      const px = p.x;
-      const py = p.y;
-      // draw repeated brick tiles across width
-      const tileW = 160, tileH = 48;
-      for(let tx = 0; tx < p.w; tx += tileW){
-        const sx = Math.round(px + tx);
-        ctx.drawImage(imgs.brick, sx, py - tileH/2, tileW, tileH);
-      }
-    }
-
-    // draw coins
-    for(const c of coins){
-      if(c.taken) continue;
-      ctx.drawImage(imgs.coin, Math.round(c.x-12), Math.round(c.y-12), 24, 24);
-    }
-
-    // draw player (Saitama-like) with small bobbing
-    const bob = Math.sin(tick*0.02) * 1.6;
-    ctx.drawImage(imgs.hero, Math.round(player.x - 12), Math.round(player.y - 12 + bob), player.w + 24, player.h + 24);
-
-    // if paused (game over), overlay slightly
-    if(!player.alive){
-      ctx.fillStyle = 'rgba(0,0,0,0.45)';
-      ctx.fillRect(0,0,W,H);
-    }
-  }
-
-  function roundRect(ctx,x,y,w,h,r, fill=false){
-    ctx.beginPath();
-    ctx.moveTo(x+r,y);
-    ctx.arcTo(x+w,y,x+w,y+h,r);
-    ctx.arcTo(x+w,y+h,x,y+h,r);
-    ctx.arcTo(x,y+h,x,y,r);
-    ctx.arcTo(x,y,x+w,y,r);
-    ctx.closePath();
-    if(fill) ctx.fill();
-  }
-
-  function rectsOverlap(a,b){
-    return !(a.x + a.w <= b.x || a.x >= b.x + b.w || a.y + a.h <= b.y || a.y >= b.y + b.h);
-  }
-
-  // camera offset is zero because we move platforms left; camOffset kept for possible adjustments
-  function camOffset(){ return 0; }
-
-  let tick = 0;
-  function loop(now){
-    if(!running) return;
-    const dt = Math.min(0.032, (now - last) / 1000);
-    last = now;
-    tick++;
-    update(dt);
-    draw();
-    raf = requestAnimationFrame(loop);
-  }
-
-  // input handlers
-  function onKeyDown(e){
-    keys[e.key.toLowerCase()] = true;
-    if(e.key === ' ' || e.key === 'Spacebar') e.preventDefault();
-    if(e.key.toLowerCase() === 'r'){
-      restartGame();
-    }
-  }
-  function onKeyUp(e){ keys[e.key.toLowerCase()] = false; }
-
-  // UI helpers
-  let flashTimer = null;
-  const centerBox = document.getElementById('center-msg');
-  function flashCenter(text, duration=600){
-    centerBox.style.display = 'block';
-    centerBox.textContent = text;
-    if(flashTimer) clearTimeout(flashTimer);
-    flashTimer = setTimeout(()=>{ centerBox.style.display = 'none'; flashTimer = null; }, duration);
-  }
-
-  function showGameOver(){
-    centerBox.style.display = 'block';
-    centerBox.innerHTML = `<div style="font-size:20px;font-weight:700">Game Over</div><div style="margin-top:8px">You collected ${player.score} coin${player.score===1?'':'s'}.</div><div style="margin-top:10px;font-size:13px">Press R to restart</div>`;
-  }
-
-  function restartGame(){
-    // reset state
-    platforms = [];
-    coins = [];
-    player.y = Math.round(H*0.6);
-    player.vy = 0;
-    player.onGround = false;
-    player.score = 0;
-    player.alive = true;
-    coinCountEl.textContent = '0';
-    centerBox.style.display = 'none';
-    spawnTimer = 0;
-    // spawn initial platforms to stand on
-    const baseY = Math.round(H*0.72);
-    platforms.push({ x: 20, y: baseY, w: 480 });
-    platforms.push({ x: 520, y: baseY - 40, w: 320 });
-    platforms.push({ x: 880, y: baseY - 20, w: 300 });
-    running = true;
-    last = performance.now();
-    raf = requestAnimationFrame(loop);
-  }
-
-  function initSaitamaPlatformer(){
-    if(running) return; // already running
-    ctx = canvas.getContext('2d');
-    loadAssets(() => {
-      resizeCanvas();
-      window.addEventListener('resize', resizeCanvas);
-      window.addEventListener('keydown', onKeyDown);
-      window.addEventListener('keyup', onKeyUp);
-      // initial platforms
-      const baseY = Math.round(H*0.72);
-      platforms = [
-        { x: 20, y: baseY, w: 480 },
-        { x: 520, y: baseY - 40, w: 320 },
-        { x: 880, y: baseY - 20, w: 300 }
-      ];
-      coins = [];
-      player.y = baseY - player.h;
-      player.vy = 0;
-      player.score = 0;
-      player.alive = true;
-      coinCountEl.textContent = '0';
-      spawnTimer = 0;
-      last = performance.now();
-      running = true;
-      raf = requestAnimationFrame(loop);
-    });
-  }
-
-  function stopSaitamaPlatformer(){
-    running = false;
-    if(raf) cancelAnimationFrame(raf);
-    raf = null;
-    window.removeEventListener('resize', resizeCanvas);
-    window.removeEventListener('keydown', onKeyDown);
-    window.removeEventListener('keyup', onKeyUp);
-    centerBox.style.display = 'none';
-  }
-
-  // expose to global so main script can call
-  window.initSaitamaPlatformer = initSaitamaPlatformer;
-  window.stopSaitamaPlatformer = stopSaitamaPlatformer;
-  window.restartGame = restartGame;
-
-})(); // end closure
+  });
+  coins=coins.filter(c=>{
+    if(player.x+player.width>c.x&&player.x<c.x+20&&player.y+player.height>c.y&&player.y<c.y+20){score++;return false;}
+    return c.x>-20;
+  });
+  draw();
+}
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.drawImage(player.image,player.x,player.y,player.width,player.height);
+  ctx.fillStyle="#b5651d";
+  tiles.forEach(t=>ctx.fillRect(t.x,t.y,t.width,t.height));
+  coins.forEach(c=>ctx.drawImage(coinImage,c.x,c.y,20,20));
+  document.getElementById("score").innerText="Coins: "+score;
+}
+function jump(){
+  if(player.onGround){player.vy=jumpPower;player.onGround=false;}
+  else if(!doubleJumped){player.vy=jumpPower;doubleJumped=true;}
+}
+function endGame(){
+  gameRunning=false;gameOver=true;
+  document.getElementById("gameOver").style.display="block";
+}
+setInterval(update,1000/60);
+window.addEventListener("keydown",e=>{
+  if(e.key==="w"||e.key==="W")jump();
+  if(gameOver&&e.key==="r"||e.key==="R")resetGame();
+});
+document.getElementById("bot-page").addEventListener("click",()=>{if(!gameRunning&&!gameOver)resetGame();});
 </script>
-
 </body>
 </html>
