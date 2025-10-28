@@ -123,7 +123,7 @@ const canvas=document.getElementById("gameCanvas");
 canvas.width=window.innerWidth; canvas.height=window.innerHeight;
 const ctx=canvas.getContext("2d");
 
-let player={x:150,y:0,width:60,height:80,vy:0,onGround:false,doubleJumped:false,image:new Image()};
+let player={x:150,y:0,width:50,height:70,vy:0,onGround:false,doubleJumped:false,image:new Image()};
 player.image.src="saitama.png";
 
 let tileImage=new Image();
@@ -137,22 +137,19 @@ function initGame(){
   tiles=[]; coins=[]; score=0; speed=4; gameOver=false; gameRunning=true; player.vy=0; player.onGround=false; player.doubleJumped=false;
   gameOverDisplay.style.display="none";
   const rows=Math.ceil(canvas.width/tileImage.width)+2;
-  const startY=canvas.height-150;
+  const startY=canvas.height/2+50; // Middle of screen
   for(let i=0;i<rows;i++){
-    tiles.push({x:i*tileImage.width,y:startY,width:tileImage.width,height:tileImage.height});
+    tiles.push({x:i*tileImage.width,y:startY,width:tileImage.width*0.8,height:tileImage.height*0.8}); // slightly smaller
   }
-  player.y=tiles[0].y-player.height;
+  player.y=tiles[0].y-player.height+10; // overlap a bit to appear standing
 }
 
 function addTile(){
   const last=tiles[tiles.length-1];
-  let newY=last.y;
-  // Randomly adjust Y a bit
-  const deltaY=Math.floor(Math.random()*80-40);
-  newY=Math.min(Math.max(100,newY+deltaY),canvas.height-50);
-  tiles.push({x:last.x+tileImage.width,y:newY,width:tileImage.width,height:tileImage.height});
-  // 50% chance of coin
-  if(Math.random()<0.5) coins.push({x:last.x+tileImage.width+tileImage.width/2-10,y:newY-40,width:20,height:20});
+  let newY=last.y + (Math.random()*60-30); // small vertical variation
+  newY=Math.min(Math.max(100,newY),canvas.height-100);
+  tiles.push({x:last.x+last.width,y:newY,width:last.width,height:last.height});
+  if(Math.random()<0.5) coins.push({x:last.x+last.width+last.width/2-10,y:newY-40,width:20,height:20});
 }
 
 function update(){
@@ -160,23 +157,20 @@ function update(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   ctx.fillStyle="skyblue"; ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  // Move tiles and draw
   tiles.forEach(t=>{ t.x-=speed; ctx.drawImage(tileImage,t.x,t.y,t.width,t.height); });
   coins.forEach(c=>{ c.x-=speed; ctx.fillStyle="gold"; ctx.beginPath(); ctx.arc(c.x+10,c.y+10,10,0,Math.PI*2); ctx.fill(); });
 
-  // Remove offscreen tiles
-  while(tiles[0].x+tileImage.width<0){ tiles.shift(); addTile(); }
+  while(tiles[0].x+tiles[0].width<0){ tiles.shift(); addTile(); }
   coins=coins.filter(c=>c.x+20>0);
 
-  // Player physics
   player.vy+=gravity; player.y+=player.vy; player.onGround=false;
   tiles.forEach(t=>{
-    if(player.x+player.width>t.x && player.x< t.x+t.width && player.y+player.height>t.y && player.y+player.height< t.y+t.height && player.vy>=0){
-      player.y=t.y-player.height; player.vy=0; player.onGround=true; player.doubleJumped=false;
+    if(player.x+player.width>t.x && player.x< t.x+t.width && player.y+player.height>t.y && player.y+player.height< t.y+t.height+player.vy && player.vy>=0){
+      player.y=t.y-player.height+1; // overlap for visual standing
+      player.vy=0; player.onGround=true; player.doubleJumped=false;
     }
   });
 
-  // Coin collection
   coins.forEach((c,i)=>{
     if(player.x+player.width>c.x && player.x<c.x+c.width && player.y+player.height>c.y && player.y<c.y+c.height){
       score++; coins.splice(i,1); speed+=0.05;
