@@ -228,7 +228,7 @@
     right: 25px;
   }
 
-  /* ====== Platformer game styles (bot page) ====== */
+  /* Platformer (Saitama-like) */
   #bot-page .game-wrap {
     width: 100%;
     height: 100%;
@@ -237,41 +237,46 @@
     justify-content:center;
     position:relative;
     overflow:hidden;
-    background:linear-gradient(#9ad3ff, #d9f2ff);
+    background: linear-gradient(#87ceeb, #bfe9ff); /* sky */
   }
 
   #platform-canvas {
     border-radius:12px;
     box-shadow: 0 8px 40px rgba(0,0,0,0.6);
-    background: linear-gradient(#9ad3ff, #d9f2ff);
+    background: linear-gradient(#87ceeb, #bfe9ff);
     max-width: 1200px;
     width: 92%;
     height: 76vh;
+    display:block;
   }
 
   .game-ui {
     position: absolute;
-    top: 18px;
-    left: 18px;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 20;
     display:flex;
     gap:14px;
     align-items:center;
-    background: rgba(255,255,255,0.9);
-    color: #001f3f;
-    padding:10px 14px;
+    background: rgba(0,0,0,0.25);
+    color: #e9faff;
+    padding:6px 12px;
     border-radius:10px;
     font-weight:700;
+    font-size:18px;
   }
 
   .game-hint {
-    position: absolute;
+    position:absolute;
     right: 18px;
     top: 18px;
     background: rgba(0,0,0,0.6);
     color: white;
     padding:8px 12px;
     border-radius:8px;
+    z-index:20;
+    font-size:13px;
   }
 
   .center-msg {
@@ -285,11 +290,13 @@
     padding:12px 16px;
     border-radius:12px;
     display:none;
+    text-align:center;
   }
 
   @media (max-width:600px){
     #intro-text { font-size: 1rem; }
     .home-btn { font-size: 1rem; padding: 12px 28px; }
+    .game-ui { font-size:14px; }
   }
 </style>
 </head>
@@ -323,35 +330,24 @@
   </div>
 </div>
 
-<!-- Bot page: platformer -->
+<!-- Bot page: Saitama-like platformer -->
 <div id="bot-page" class="content-page">
   <div class="home-icon" onclick="goHome()"></div>
 
   <div class="game-wrap" id="game-wrap">
-    <div class="game-ui">
-      <div>Avyav NamDev Platformer</div>
-      <div style="opacity:0.7">• Smooth Cartoon</div>
-    </div>
+    <div class="game-ui" id="game-ui">Coins: <span id="coin-count">0</span></div>
     <div class="game-hint">Controls: ← → (A/D) to move • Space/W/↑ to jump • R to restart</div>
-
     <canvas id="platform-canvas" width="1200" height="700" aria-label="Platformer game"></canvas>
-
-    <div id="game-center-msg" class="center-msg"></div>
+    <div id="center-msg" class="center-msg"></div>
   </div>
-
 </div>
 
 <!-- Other Pages -->
-<div id="korus-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Website developed by Korus</h2>
-</div>
-
+<div id="korus-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Website developed by Korus</h2></div>
 <div id="o-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>O - Contents Coming Soon...</h2></div>
 <div id="r-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>R - Contents Coming Soon...</h2></div>
 <div id="u-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>U - Contents Coming Soon...</h2></div>
 <div id="s-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>S - Contents Coming Soon...</h2></div>
-
 <div id="learn-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 <div id="videos-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 <div id="contact-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
@@ -366,7 +362,7 @@
 <audio id="typingSound" src="typingsound.mp3"></audio>
 
 <script>
-  // --- Existing site logic (intro, typing, dragon, navigation) ---
+  // ---------- existing site logic (intro, typing, dragon, navigation) ----------
   const animation = document.getElementById('animation');
   const introContainer = document.getElementById('intro-container');
   const introText = document.getElementById('intro-text');
@@ -416,223 +412,289 @@
     // show requested
     document.getElementById(`${page}-page`).style.display = "flex";
 
-    // init the platformer when opening bot page
+    // if opening bot page, init game
     if (page === 'bot') {
-      setTimeout(initPlatformer, 80); // small timeout to ensure layout ready
+      setTimeout(initSaitamaPlatformer, 80);
     }
   }
 
   function goHome() {
     document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
     document.getElementById('home-container').style.display = "flex";
-    // pause or stop game when returning home
-    stopPlatformer();
+    stopSaitamaPlatformer();
   }
 
   document.getElementById('home-icon').addEventListener('click', goHome);
 </script>
 
 <script>
-/* =========================
-   Platformer game (smooth cartoon)
-   Integrated into #bot-page canvas #platform-canvas
-   Initialises when openPage('bot') calls initPlatformer()
-   ========================= */
+/* ==============================
+   Saitama-like Platformer Integration
+   - smooth cartoon Saitama-like hero
+   - bricks continuously generated from right
+   - sky background
+   - coins on bricks
+   - fall into sky -> Game Over
+   - coins score top-center, show on Game Over
+   ============================== */
 
 (function(){
-  // Inline SVG assets as data URLs
-  function svgToDataURL(svgText){
-    return 'data:image/svg+xml;utf8,'+encodeURIComponent(svgText);
-  }
+  // Inline SVG assets for hero, brick, coin
+  function svgToDataURL(svg){ return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg); }
 
   const ASSETS = {
-    hill: svgToDataURL(`<svg xmlns='http://www.w3.org/2000/svg' width='800' height='300' viewBox='0 0 800 300'><ellipse cx='200' cy='220' rx='360' ry='160' fill='#85d07f'/><ellipse cx='620' cy='240' rx='220' ry='120' fill='#7ecb7e' opacity='0.9'/></svg>`),
-    ground: svgToDataURL(`<svg xmlns='http://www.w3.org/2000/svg' width='120' height='80' viewBox='0 0 120 80'><rect width='120' height='80' rx='12' fill='#6b4422'/><rect x='6' y='52' width='108' height='18' rx='8' fill='#5c3a1a'/></svg>`),
-    plat: svgToDataURL(`<svg xmlns='http://www.w3.org/2000/svg' width='140' height='40'><rect width='140' height='40' rx='8' fill='#9abf6b'/><rect x='6' y='24' width='128' height='12' rx='6' fill='#7aa957'/></svg>`),
-    coin: svgToDataURL(`<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><circle cx='24' cy='24' r='18' fill='#ffd26f'/></svg>`),
-    hero: svgToDataURL(`<svg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'><g><ellipse cx='48' cy='68' rx='28' ry='18' fill='#3b72ff'/><rect x='28' y='28' width='40' height='36' rx='10' fill='#4aa3ff'/><circle cx='48' cy='18' r='18' fill='#ffd6a6'/></g></svg>`)
+    hero: svgToDataURL(`<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'>
+      <!-- Saitama-like stylized bald hero: simple cartoon, not exact copy -->
+      <defs><filter id="s" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.2"/></filter></defs>
+      <g filter="url(#s)">
+        <circle cx="60" cy="36" r="26" fill="#ffd6a6" />
+        <circle cx="50" cy="33" r="3.5" fill="#2b2b2b" />
+        <circle cx="70" cy="33" r="3.5" fill="#2b2b2b" />
+        <path d="M46 42 q14 10 28 0" stroke="#2b2b2b" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <rect x="36" y="56" width="48" height="36" rx="8" fill="#ffdf8a" />
+        <rect x="34" y="74" width="12" height="18" rx="4" fill="#ff9f1c"/>
+        <rect x="74" y="74" width="12" height="18" rx="4" fill="#ff9f1c"/>
+        <ellipse cx="60" cy="98" rx="28" ry="12" fill="#ff9f1c" />
+        <rect x="44" y="56" width="8" height="16" rx="3" fill="#ffd26f" />
+        <rect x="68" y="56" width="8" height="16" rx="3" fill="#ffd26f" />
+      </g>
+    </svg>`),
+
+    brick: svgToDataURL(`<svg xmlns='http://www.w3.org/2000/svg' width='160' height='48' viewBox='0 0 160 48'>
+      <rect width='160' height='48' rx='8' fill='#b04a2c' />
+      <rect x='6' y='28' width='148' height='12' rx='6' fill='#8f3118' />
+      <circle cx='28' cy='18' r='6' fill='#c86b4d' opacity='0.25'/>
+      <circle cx='120' cy='22' r='5' fill='#c86b4d' opacity='0.25'/>
+    </svg>`),
+
+    coin: svgToDataURL(`<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'>
+      <circle cx='24' cy='24' r='18' fill='#ffd26f' />
+      <path d='M20 24 h8' stroke='#b37a22' stroke-width='2' stroke-linecap='round' />
+    </svg>`)
   };
 
-  // Game state kept in closure so we can init / stop cleanly
-  let running = false;
-  let rafId = null;
-  let canvas, ctx;
+  // DOM
+  const canvas = document.getElementById('platform-canvas');
+  const centerMsg = document.getElementById('center-msg');
+  const coinCountEl = document.getElementById('coin-count');
+
+  let ctx;
   let W = 1200, H = 700;
+
+  // Game state
+  let running = false;
+  let raf = null;
+  let last = 0;
+
+  // World parameters
+  let scrollSpeed = 260; // px/sec to left
+  let spawnTimer = 0;
+  const spawnInterval = 0.9; // seconds between platform spawns
+  const minGap = 80, maxGap = 220;
+  const minWidth = 140, maxWidth = 420;
+  const platformYRange = [H*0.45, H*0.75]; // will be recalculated per resize
+
+  // Entities
+  let platforms = []; // each {x, y, w}
+  let coins = []; // each {x, y}
   let imgs = {};
-  let lastTime = 0;
+  let keys = {};
 
-  // level and player (same as earlier simple platformer)
-  const levelTemplate = {
-    width: 4000, height: 1000,
-    gravity: 1600,
-    groundY: 560,
-    platforms: [
-      { x: 0, w: 600, y: 560 },
-      { x: 900, w: 320, y: 460 },
-      { x: 1350, w: 240, y: 400 },
-      { x: 1750, w: 300, y: 500 },
-      { x: 2200, w: 140, y: 420 },
-      { x: 2600, w: 240, y: 360 },
-      { x: 3100, w: 500, y: 520 }
-    ],
-    coins: [
-      {x: 320, y: 500}, {x: 980, y: 400}, {x: 1400, y: 340}, {x: 1800, y: 440}, {x: 2650, y: 300}
-    ]
-  };
-
-  let level = JSON.parse(JSON.stringify(levelTemplate));
-
+  // Player: near-left fixed x, jumps on moving platforms
   const player = {
-    x: 120, y: levelTemplate.groundY - 96, w: 48, h: 64,
-    vx: 0, vy: 0, speed: 380, jumpForce: 640, onGround: false,
-    lives: 3, score: 0
+    x: 180, // fixed screen x
+    y: 0,
+    vy: 0,
+    w: 48, h: 64,
+    onGround: false,
+    jumpForce: 680,
+    gravity: 2200,
+    score: 0,
+    alive: true
   };
 
-  const cam = { x: 0, y: 0 };
-  const keys = {};
-
-  // DOM refs
-  const centerMsg = document.getElementById('game-center-msg');
-  const canvasEl = document.getElementById('platform-canvas');
-
-  function loadImages(done){
+  // load images
+  function loadAssets(cb){
     let toLoad = Object.keys(ASSETS).length;
     for(const k in ASSETS){
-      const img = new Image();
-      img.src = ASSETS[k];
-      img.onload = () => {
-        imgs[k] = img;
-        toLoad--;
-        if(toLoad === 0) done();
-      };
-      img.onerror = () => {
-        // still decrement to avoid hang
-        imgs[k] = null;
-        toLoad--;
-        if(toLoad === 0) done();
-      };
+      const i = new Image();
+      i.src = ASSETS[k];
+      i.onload = () => { imgs[k] = i; toLoad--; if(toLoad === 0) cb(); };
+      i.onerror = () => { imgs[k] = null; toLoad--; if(toLoad === 0) cb(); };
     }
   }
 
-  function resize(){
-    // responsive canvas sizing while maintaining ratio
-    const wrap = document.getElementById('game-wrap');
-    let w = Math.min(window.innerWidth - 80, 1200);
-    let h = Math.round(w * (700/1200));
-    if(h > window.innerHeight - 140){ h = window.innerHeight - 140; w = Math.round(h * (1200/700)); }
-    canvasEl.width = W = w;
-    canvasEl.height = H = h;
-    if(ctx) ctx.imageSmoothingEnabled = true;
+  function resizeCanvas(){
+    // responsive sizing while keeping ratio and ensuring game area tall enough
+    const wrapW = Math.min(window.innerWidth - 80, 1200);
+    const ratio = 1200/700;
+    let w = wrapW;
+    let h = Math.round(w / ratio);
+    if(h > window.innerHeight - 140){ h = window.innerHeight - 140; w = Math.round(h * ratio); }
+    canvas.width = W = w;
+    canvas.height = H = h;
+    // update platformYRange relative to H
+    platformYRange[0] = Math.round(H*0.30);
+    platformYRange[1] = Math.round(H*0.75);
   }
 
-  function worldToScreen(wx, wy){ return { x: Math.round(wx - cam.x), y: Math.round(wy - cam.y) }; }
-
-  function rectsOverlap(a,b){
-    return !(a.x + a.w <= b.x || a.x >= b.x + b.w || a.y + a.h <= b.y || a.y >= b.y + b.h);
+  function spawnPlatform() {
+    // determine x = W + some offset
+    const gap = randRange(minGap, maxGap);
+    const prevRight = platforms.length ? (platforms[platforms.length-1].x + platforms[platforms.length-1].w) : 0;
+    let startX = platforms.length ? platforms[platforms.length-1].x + platforms[platforms.length-1].w + gap : W + 20;
+    // width and y
+    const w = randRange(minWidth, maxWidth);
+    let y = randRange(platformYRange[0], platformYRange[1]);
+    // clamp y so player can reach
+    if(platforms.length){
+      const lastY = platforms[platforms.length-1].y;
+      y = clamp(y, lastY - 140, lastY + 120);
+      y = clamp(y, platformYRange[0], platformYRange[1]);
+    }
+    platforms.push({ x: startX, y, w });
+    // maybe place a coin on this platform randomly
+    if(Math.random() < 0.45){
+      const cx = startX + randRange(40, Math.max(40, w - 60));
+      const cy = y - 28;
+      coins.push({ x: cx, y: cy, taken: false });
+    }
   }
 
-  function getPlatformRects(){
-    const rects = [];
-    for(const p of level.platforms) rects.push({ x: p.x, y: p.y, w: p.w, h: 40 });
-    // large invisible floor to catch falls
-    rects.push({ x: -200, y: level.groundY + 40, w: level.width + 400, h: 2000 });
-    return rects;
-  }
+  // helpers
+  function randRange(a,b){ return Math.floor(Math.random() * (b - a + 1)) + a; }
+  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
 
-  function updatePhysics(dt){
+  function update(dt){
+    if(!player.alive) return;
+    // spawn platforms
+    spawnTimer += dt;
+    if(spawnTimer >= spawnInterval){
+      spawnTimer = 0;
+      spawnPlatform();
+    }
+
+    // move platforms and coins left
+    for(const p of platforms) p.x -= scrollSpeed * dt;
+    for(const c of coins) c.x -= scrollSpeed * dt;
+
+    // remove off-screen platforms and coins
+    platforms = platforms.filter(p => (p.x + p.w) > -60);
+    coins = coins.filter(c => c.x > -60 && !c.taken);
+
+    // input
     const left = keys['arrowleft'] || keys['a'];
     const right = keys['arrowright'] || keys['d'];
     const jump = keys[' '] || keys['w'] || keys['arrowup'];
 
-    if(left && !right) player.vx = -player.speed;
-    else if(right && !left) player.vx = player.speed;
-    else player.vx = 0;
+    // horizontal movement for player is minor — we keep player at fixed screen X
+    // gravity
+    player.vy += player.gravity * dt;
+    player.y += player.vy * dt;
 
-    player.vy += level.gravity * dt;
+    // check collision with any platform beneath player's feet relative to canvas coords
+    player.onGround = false;
+    const playerBox = { x: player.x, y: player.y, w: player.w, h: player.h };
+    for(const p of platforms){
+      const platBox = { x: p.x - camOffset(), y: p.y, w: p.w, h: 22 };
+      // need consistent coordinates: we are moving platforms; player's x is screen x
+      // p.x is world (in screen coords since we move them)
+      const boxA = { x: player.x, y: player.y, w: player.w, h: player.h };
+      const boxB = { x: p.x - 0, y: p.y, w: p.w, h: 22 }; // p.x already in screen coords
+      if(rectsOverlap(boxA, boxB)){
+        // only if falling
+        if(player.vy > 0 && (player.y + player.h - p.y) <= 48){
+          player.y = p.y - player.h;
+          player.vy = 0;
+          player.onGround = true;
+        } else if(player.vy < 0){
+          // bump head
+          player.y = p.y + 22;
+          player.vy = 0;
+        } else {
+          // horizontal collision - shove out
+          if(player.x + player.w/2 < p.x + p.w/2) player.x = p.x - player.w - 2;
+          else player.x = p.x + p.w + 2;
+        }
+      }
+    }
 
+    // jump
     if(jump && player.onGround){
       player.vy = -player.jumpForce;
       player.onGround = false;
     }
 
-    player.x += player.vx * dt;
-    player.y += player.vy * dt;
-
-    if(player.x < 0) player.x = 0;
-
-    // collisions
-    player.onGround = false;
-    const plRects = getPlatformRects();
-    for(const r of plRects){
-      const pbox = { x: player.x, y: player.y, w: player.w, h: player.h };
-      if(rectsOverlap(pbox, r)){
-        if(player.vy > 0 && (player.y + player.h - r.y) <= 48){
-          player.y = r.y - player.h;
-          player.vy = 0;
-          player.onGround = true;
-        } else if(player.vy < 0){
-          player.y = r.y + r.h;
-          player.vy = 0;
-        } else {
-          if(player.vx > 0) player.x = r.x - player.w;
-          else if(player.vx < 0) player.x = r.x + r.w;
+    // collect coins
+    for(const c of coins){
+      if(!c.taken){
+        const cx = c.x, cy = c.y;
+        if( rectsOverlap({x: player.x, y: player.y, w: player.w, h: player.h}, {x: cx-12, y: cy-12, w:24, h:24}) ){
+          c.taken = true;
+          player.score += 1;
+          coinCountEl.textContent = player.score;
+          // little flash
+          flashCenter('+1 coin', 500);
         }
       }
     }
 
-    // collect coins
-    for(let i = level.coins.length - 1; i >= 0; i--){
-      const c = level.coins[i];
-      const coinRect = { x: c.x - 12, y: c.y - 12, w: 24, h: 24 };
-      if(rectsOverlap({ x: player.x, y: player.y, w: player.w, h: player.h }, coinRect)){
-        level.coins.splice(i,1);
-        player.score += 100;
-        flashMessage('+100');
-      }
+    // fall check: if player's bottom goes above the canvas bottom (y > canvas height) -> game over
+    if(player.y > H + 40){
+      player.alive = false;
+      running = false;
+      showGameOver();
     }
-
-    // fall
-    if(player.y > level.groundY + 500){
-      player.lives -= 1;
-      if(player.lives <= 0){
-        showCenterMessage('Game Over — Press R to Restart');
-        running = false;
-      } else {
-        player.x = Math.max(20, player.x - 400);
-        player.y = level.groundY - player.h - 2;
-        player.vx = player.vy = 0;
-        flashMessage('You fell! -1 life');
-      }
-    }
-
-    // camera follow
-    const margin = W * 0.35;
-    cam.x = player.x - W/2 + player.w/2;
-    cam.x = Math.max(0, Math.min(level.width - W + 200, cam.x));
-    cam.y = 0;
   }
 
+  // draw
   function clear(){
-    ctx.fillStyle = '#9ad3ff';
+    // sky gradient already via CSS; draw background elements if needed
+    ctx.clearRect(0,0,W,H);
+    // draw a subtle horizon / parallax clouds
+    ctx.fillStyle = '#87ceeb';
     ctx.fillRect(0,0,W,H);
   }
 
-  function drawBackground(){
-    const hillW = 800, hillH = 300;
-    const par1 = 0.35;
-    const h1x = - (cam.x * par1) % hillW;
-    for(let x = h1x - hillW; x < W + hillW; x += hillW){
-      ctx.drawImage(imgs.hill, x, H - 300 - 80, hillW, hillH);
-    }
-    ctx.fillStyle = 'rgba(255,255,255,0.75)';
+  function draw(){
+    clear();
+    // draw far clouds
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
     for(let i=0;i<6;i++){
-      const cx = ((i*330) - (cam.x*0.12)) % (W+400) - 200;
-      const cy = 80 + (i%2)*20;
-      roundRect(ctx, cx, cy, 140, 48, 24, true, false);
+      const cx = ((i*280) - (tick*0.12*50)) % (W+400) - 200;
+      roundRect(ctx, cx, 40 + (i%2)*18, 140, 44, 22, true);
+    }
+
+    // draw moving platforms (bricks)
+    for(const p of platforms){
+      const px = p.x;
+      const py = p.y;
+      // draw repeated brick tiles across width
+      const tileW = 160, tileH = 48;
+      for(let tx = 0; tx < p.w; tx += tileW){
+        const sx = Math.round(px + tx);
+        ctx.drawImage(imgs.brick, sx, py - tileH/2, tileW, tileH);
+      }
+    }
+
+    // draw coins
+    for(const c of coins){
+      if(c.taken) continue;
+      ctx.drawImage(imgs.coin, Math.round(c.x-12), Math.round(c.y-12), 24, 24);
+    }
+
+    // draw player (Saitama-like) with small bobbing
+    const bob = Math.sin(tick*0.02) * 1.6;
+    ctx.drawImage(imgs.hero, Math.round(player.x - 12), Math.round(player.y - 12 + bob), player.w + 24, player.h + 24);
+
+    // if paused (game over), overlay slightly
+    if(!player.alive){
+      ctx.fillStyle = 'rgba(0,0,0,0.45)';
+      ctx.fillRect(0,0,W,H);
     }
   }
 
-  function roundRect(ctx,x,y,w,h,r, fill=false, stroke=false){
+  function roundRect(ctx,x,y,w,h,r, fill=false){
     ctx.beginPath();
     ctx.moveTo(x+r,y);
     ctx.arcTo(x+w,y,x+w,y+h,r);
@@ -640,137 +702,116 @@
     ctx.arcTo(x,y+h,x,y,r);
     ctx.arcTo(x,y,x+w,y,r);
     ctx.closePath();
-    if(fill){ ctx.fill(); }
-    if(stroke){ ctx.stroke(); }
+    if(fill) ctx.fill();
   }
 
-  function drawPlatformsAndGround(){
-    const tileW = 120, tileH = 80;
-    const start = Math.floor((cam.x - 400) / tileW) * tileW;
-    for(let x = start; x < cam.x + W + 400; x += tileW){
-      const sx = x - cam.x;
-      ctx.drawImage(imgs.ground, sx, level.groundY - tileH/2 - cam.y, tileW, tileH);
-    }
-
-    for(const p of level.platforms){
-      const sx = p.x - cam.x;
-      const sy = p.y - 18 - cam.y;
-      const platW = 140, platH = 40;
-      for(let tx = 0; tx < p.w; tx += platW){
-        ctx.drawImage(imgs.plat, sx + tx, sy, platW, platH);
-      }
-    }
-
-    for(const c of level.coins){
-      const sc = worldToScreen(c.x, c.y);
-      ctx.drawImage(imgs.coin, sc.x - 12, sc.y - 12, 24, 24);
-    }
+  function rectsOverlap(a,b){
+    return !(a.x + a.w <= b.x || a.x >= b.x + b.w || a.y + a.h <= b.y || a.y >= b.y + b.h);
   }
 
-  function drawPlayer(){
-    const sp = worldToScreen(player.x, player.y);
-    ctx.fillStyle = 'rgba(0,0,0,0.18)';
-    ctx.beginPath();
-    ctx.ellipse(sp.x + player.w/2, level.groundY - cam.y + 12, 28, 10, 0, 0, Math.PI*2);
-    ctx.fill();
-    ctx.drawImage(imgs.hero, sp.x - 12, sp.y - 12, player.w + 24, player.h + 24);
-  }
+  // camera offset is zero because we move platforms left; camOffset kept for possible adjustments
+  function camOffset(){ return 0; }
 
-  let flashTimer = null;
-  function flashMessage(text, duration=700){
-    if(flashTimer) clearTimeout(flashTimer);
-    centerMsg.style.display = 'block';
-    centerMsg.textContent = text;
-    flashTimer = setTimeout(()=>{ centerMsg.style.display = 'none'; flashTimer = null; }, duration);
-  }
-
-  function showCenterMessage(txt){
-    centerMsg.style.display = 'block';
-    centerMsg.innerHTML = txt + '<div style="font-size:12px;margin-top:8px">Press R to restart</div>';
-  }
-
-  function hideCenterMessage(){ centerMsg.style.display = 'none'; }
-
-  function gameLoop(now){
+  let tick = 0;
+  function loop(now){
     if(!running) return;
-    const dt = Math.min(0.032, (now - lastTime) / 1000);
-    lastTime = now;
-    updatePhysics(dt);
-    render();
-    rafId = requestAnimationFrame(gameLoop);
+    const dt = Math.min(0.032, (now - last) / 1000);
+    last = now;
+    tick++;
+    update(dt);
+    draw();
+    raf = requestAnimationFrame(loop);
   }
 
-  function render(){
-    clear();
-    drawBackground();
-    drawPlatformsAndGround();
-    drawPlayer();
-  }
-
-  // keyboard handlers
+  // input handlers
   function onKeyDown(e){
     keys[e.key.toLowerCase()] = true;
-    // prevent page scrolling on space
-    if([' ', 'spacebar'].includes(e.key.toLowerCase())) e.preventDefault();
+    if(e.key === ' ' || e.key === 'Spacebar') e.preventDefault();
     if(e.key.toLowerCase() === 'r'){
       restartGame();
     }
   }
   function onKeyUp(e){ keys[e.key.toLowerCase()] = false; }
 
+  // UI helpers
+  let flashTimer = null;
+  const centerBox = document.getElementById('center-msg');
+  function flashCenter(text, duration=600){
+    centerBox.style.display = 'block';
+    centerBox.textContent = text;
+    if(flashTimer) clearTimeout(flashTimer);
+    flashTimer = setTimeout(()=>{ centerBox.style.display = 'none'; flashTimer = null; }, duration);
+  }
+
+  function showGameOver(){
+    centerBox.style.display = 'block';
+    centerBox.innerHTML = `<div style="font-size:20px;font-weight:700">Game Over</div><div style="margin-top:8px">You collected ${player.score} coin${player.score===1?'':'s'}.</div><div style="margin-top:10px;font-size:13px">Press R to restart</div>`;
+  }
+
   function restartGame(){
-    player.x = 120; player.y = level.groundY - player.h - 2; player.vx = 0; player.vy = 0;
-    player.lives = 3; player.score = 0;
-    level = JSON.parse(JSON.stringify(levelTemplate));
-    hideCenterMessage();
-    if(!running){
-      startLoop();
-    }
-  }
-
-  function startLoop(){
-    if(running) return;
+    // reset state
+    platforms = [];
+    coins = [];
+    player.y = Math.round(H*0.6);
+    player.vy = 0;
+    player.onGround = false;
+    player.score = 0;
+    player.alive = true;
+    coinCountEl.textContent = '0';
+    centerBox.style.display = 'none';
+    spawnTimer = 0;
+    // spawn initial platforms to stand on
+    const baseY = Math.round(H*0.72);
+    platforms.push({ x: 20, y: baseY, w: 480 });
+    platforms.push({ x: 520, y: baseY - 40, w: 320 });
+    platforms.push({ x: 880, y: baseY - 20, w: 300 });
     running = true;
-    lastTime = performance.now();
-    rafId = requestAnimationFrame(gameLoop);
+    last = performance.now();
+    raf = requestAnimationFrame(loop);
   }
 
-  function stopLoop(){
-    running = false;
-    if(rafId) cancelAnimationFrame(rafId);
-    rafId = null;
-  }
-
-  // Public init / stop functions
-  window.initPlatformer = function(){
-    // if already running, do nothing
-    if(running) return;
-    // prepare canvas and context
-    canvas = canvasEl;
-    ctx = canvas.getContext('2d', { alpha: false });
-    // load assets then start
-    loadImages(() => {
-      resize();
-      window.addEventListener('resize', resize);
+  function initSaitamaPlatformer(){
+    if(running) return; // already running
+    ctx = canvas.getContext('2d');
+    loadAssets(() => {
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
       window.addEventListener('keydown', onKeyDown);
       window.addEventListener('keyup', onKeyUp);
-      // reset player/level
-      Object.assign(player, { x:120, y: levelTemplate.groundY - 96, vx:0, vy:0, lives:3, score:0 });
-      level = JSON.parse(JSON.stringify(levelTemplate));
-      cam.x = 0;
-      centerMsg.style.display = 'none';
-      startLoop();
+      // initial platforms
+      const baseY = Math.round(H*0.72);
+      platforms = [
+        { x: 20, y: baseY, w: 480 },
+        { x: 520, y: baseY - 40, w: 320 },
+        { x: 880, y: baseY - 20, w: 300 }
+      ];
+      coins = [];
+      player.y = baseY - player.h;
+      player.vy = 0;
+      player.score = 0;
+      player.alive = true;
+      coinCountEl.textContent = '0';
+      spawnTimer = 0;
+      last = performance.now();
+      running = true;
+      raf = requestAnimationFrame(loop);
     });
-  };
+  }
 
-  window.stopPlatformer = function(){
-    // remove listeners and stop loop
-    stopLoop();
-    window.removeEventListener('resize', resize);
+  function stopSaitamaPlatformer(){
+    running = false;
+    if(raf) cancelAnimationFrame(raf);
+    raf = null;
+    window.removeEventListener('resize', resizeCanvas);
     window.removeEventListener('keydown', onKeyDown);
     window.removeEventListener('keyup', onKeyUp);
-    centerMsg.style.display = 'none';
-  };
+    centerBox.style.display = 'none';
+  }
+
+  // expose to global so main script can call
+  window.initSaitamaPlatformer = initSaitamaPlatformer;
+  window.stopSaitamaPlatformer = stopSaitamaPlatformer;
+  window.restartGame = restartGame;
 
 })(); // end closure
 </script>
