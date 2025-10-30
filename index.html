@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Avyav Chess</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
 <style>
   * {
     margin: 0;
@@ -178,7 +179,6 @@
     z-index: 2;
   }
 
-  /* Sidebar widget */
   .sidebar-widget {
     position: absolute;
     left: 15px;
@@ -234,6 +234,22 @@
     right: 25px;
   }
 
+  /* ✅ Bot Page Custom Styling */
+  #bot-page img {
+    width: 200px;
+    max-width: 70%;
+    border: 2px solid cyan;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 25px cyan;
+  }
+
+  #bot-page h2 {
+    font-family: 'Orbitron', sans-serif;
+    color: cyan;
+    font-size: 1.5rem;
+  }
+
   @media (max-width: 600px) {
     #animation { font-size: 2.3rem; }
     #intro-text { font-size: 1rem; }
@@ -271,51 +287,22 @@
   </div>
 </div>
 
-<!-- Other Pages -->
-<div id="korus-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Website developed by Korus</h2>
-</div>
-
-<div id="o-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>O - Contents Coming Soon...</h2>
-</div>
-
-<div id="r-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>R - Contents Coming Soon...</h2>
-</div>
-
-<div id="u-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>U - Contents Coming Soon...</h2>
-</div>
-
-<div id="s-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>S - Contents Coming Soon...</h2>
-</div>
-
+<!-- ✅ Avyav Bot Page -->
 <div id="bot-page" class="content-page">
   <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
+  <img src="avyavbot.png" alt="Avyav Bot">
+  <h2>Avyav Bot - Rating : 4000 , Coming Soon</h2>
 </div>
 
-<div id="learn-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
-
-<div id="videos-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
-
-<div id="contact-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <h2>Contents Coming Soon...</h2>
-</div>
+<!-- Other Pages -->
+<div id="korus-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Website developed by Korus</h2></div>
+<div id="o-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>O - Contents Coming Soon...</h2></div>
+<div id="r-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>R - Contents Coming Soon...</h2></div>
+<div id="u-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>U - Contents Coming Soon...</h2></div>
+<div id="s-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>S - Contents Coming Soon...</h2></div>
+<div id="learn-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="videos-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="contact-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 
 <footer id="footer">
   <div class="youtube-container">
@@ -382,11 +369,13 @@
 
   document.getElementById('home-icon').addEventListener('click', goHome);
 </script>
+
 <script>
 fetch('/.netlify/functions/log-visit')
   .then(response => response.json())
   .then(data => console.log('Visitor IP logged:', data.ip))
   .catch(err => console.error('Logging failed:', err));
 </script>
+
 </body>
 </html>
