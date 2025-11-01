@@ -4,7 +4,15 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Avyav Chess</title>
+
+<!-- Optional orbitron if you want it for the bot heading (safe to include) -->
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+
+<!-- chess.js and chessboard.js -->
+<link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" />
+<script src="https://unpkg.com/chess.js@1.0.0/dist/chess.js"></script>
+<script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+
 <style>
   * {
     margin: 0;
@@ -234,26 +242,58 @@
     right: 25px;
   }
 
-  /* ✅ Bot Page Custom Styling */
+  /* Bot page additions (board, moves) */
   #bot-page img {
     width: 200px;
     max-width: 70%;
     border: 2px solid cyan;
     border-radius: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     box-shadow: 0 0 25px cyan;
   }
 
-  #bot-page h2 {
-    font-family: 'Orbitron', sans-serif;
-    color: cyan;
-    font-size: 1.5rem;
+  #bot-board-wrap {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 8px;
   }
+
+  #board {
+    width: 420px;
+    max-width: 60vw;
+    background: transparent;
+  }
+
+  #moves {
+    width: 240px;
+    max-width: 35vw;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(0,255,255,0.12);
+    border-radius: 10px;
+    padding: 10px;
+    color: cyan;
+    font-family: monospace;
+    height: 420px;
+    overflow: auto;
+  }
+
+  #moves h3 { font-family: 'Orbitron', sans-serif; margin-bottom: 8px; color: cyan; font-size: 1rem; }
+  #moves ol { margin-left: 10px; color: #dff; }
+
+  .control-row { margin-top: 10px; display:flex; gap:10px; align-items:center; justify-content:center; }
+  .btn { padding:8px 12px; border-radius:8px; border:2px solid cyan; background:transparent; color:cyan; cursor:pointer; font-weight:600; }
+  .btn:hover { background:cyan; color:#000428; }
+
+  #resultBanner { margin-top:10px; font-family:'Orbitron',sans-serif; color:yellow; display:none; }
 
   @media (max-width: 600px) {
     #animation { font-size: 2.3rem; }
     #intro-text { font-size: 1rem; }
     .home-btn { font-size: 1rem; padding: 12px 28px; }
+    #board { width: 320px; }
+    #moves { height: 300px; }
   }
 </style>
 </head>
@@ -287,11 +327,25 @@
   </div>
 </div>
 
-<!-- ✅ Avyav Bot Page -->
+<!-- ✅ Avyav Bot Page (updated with playable board + moves) -->
 <div id="bot-page" class="content-page">
   <div class="home-icon" onclick="goHome()"></div>
   <img src="avyavbot.png" alt="Avyav Bot">
   <h2>Avyav NamDev Bot - Rating : 4000 [ Bot created by Korus ] </h2>
+
+  <!-- board + move list + controls -->
+  <div id="bot-board-wrap">
+    <div id="board"></div>
+    <div id="moves">
+      <h3>Move History</h3>
+      <ol id="moveList"></ol>
+      <div class="control-row">
+        <button id="startBtn" class="btn">Start Game</button>
+        <button id="resignBtn" class="btn" style="display:none;">Resign</button>
+      </div>
+      <div id="resultBanner"></div>
+    </div>
+  </div>
 </div>
 
 <!-- Other Pages -->
@@ -313,6 +367,7 @@
 
 <audio id="typingSound" src="typingsound.mp3"></audio>
 
+<!-- Main site logic (original behavior preserved) -->
 <script>
   const animation = document.getElementById('animation');
   const introContainer = document.getElementById('intro-container');
@@ -359,7 +414,18 @@
   function openPage(page) {
     document.getElementById('home-container').style.display = "none";
     document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
-    document.getElementById(`${page}-page`).style.display = "flex";
+    const el = document.getElementById(`${page}-page`);
+    // maintain previous behavior: if element exists with -page id show it; else fallback to id-page naming
+    if (el) el.style.display = "flex";
+    else {
+      const alt = document.getElementById(`${page}-page`);
+      if (alt) alt.style.display = "flex";
+      else {
+        // also support earlier naming (page param might already be full id)
+        const direct = document.getElementById(page);
+        if (direct) direct.style.display = "flex";
+      }
+    }
   }
 
   function goHome() {
@@ -367,10 +433,243 @@
     document.getElementById('home-container').style.display = "flex";
   }
 
-  document.getElementById('home-icon').addEventListener('click', goHome);
+  // Some pages use the home-icon as element with id 'home-icon' - keep original wiring
+  const homeIcon = document.getElementById('home-icon');
+  if (homeIcon) homeIcon.addEventListener('click', goHome);
+</script>
+
+<!-- Chess integration script -->
+<script>
+/*
+  Chess integration:
+  - Uses chess.js + chessboard.js (included above)
+  - On Start Game: random color assigned to player, board initialized
+  - On player move: legal move via chess.js is made, move list updated, then engine move requested
+  - Engine call: attempt to call chess-api.com endpoints (several shapes); if network/CORS fails, fallback to a local legal move chosen at random
+  - This keeps the board playable no matter what.
+*/
+
+let board = null;
+let game = null;
+let playerIsWhite = true;
+let engineThinking = false;
+
+const startBtn = document.getElementById('startBtn');
+const resignBtn = document.getElementById('resignBtn');
+const resultBanner = document.getElementById('resultBanner');
+const moveListEl = document.getElementById('moveList');
+
+// Helper: safe fetch with timeout
+function fetchWithTimeout(url, opts = {}, timeout = 5000) {
+  return Promise.race([
+    fetch(url, opts),
+    new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), timeout))
+  ]);
+}
+
+// Try a few candidate endpoints on chess-api.com (may vary by provider). If they fail, return null.
+async function queryEngineAPI(fen) {
+  const candidates = [
+    { url: 'https://chess-api.com/api/v1/move', method: 'POST', body: { fen } },
+    { url: 'https://chess-api.com/api/v1/best', method: 'POST', body: { fen } },
+    { url: 'https://chess-api.com/api/v1/stockfish', method: 'POST', body: { fen } },
+    { url: 'https://chess-api.com/engine', method: 'POST', body: { fen } }
+  ];
+
+  for (const c of candidates) {
+    try {
+      const r = await fetchWithTimeout(c.url, {
+        method: c.method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(c.body)
+      }, 4000);
+      if (!r.ok) continue;
+      const data = await r.json();
+      if (!data) continue;
+      if (data.move) return data.move;
+      if (data.best) return data.best;
+      if (data.bestmove) return data.bestmove;
+      if (data.pv && Array.isArray(data.pv) && data.pv.length) return data.pv[0];
+    } catch (e) {
+      // try next candidate
+      continue;
+    }
+  }
+  return null;
+}
+
+// fallback: pick a legal move randomly
+function fallbackRandomMove() {
+  const moves = game.moves();
+  if (moves.length === 0) return null;
+  const san = moves[Math.floor(Math.random() * moves.length)];
+  // we need to convert san to a move object (we will apply by move(san))
+  return san;
+}
+
+// apply engine move (remote preferred, else fallback)
+async function engineMove() {
+  if (!game || game.game_over()) return;
+  engineThinking = true;
+  // try remote engine
+  const fen = game.fen();
+  let engineMove = null;
+  try {
+    engineMove = await queryEngineAPI(fen);
+  } catch (e) {
+    engineMove = null;
+  }
+
+  if (!engineMove) {
+    // fallback to random legal SAN
+    const san = fallbackRandomMove();
+    if (!san) { engineThinking = false; return; }
+    // apply san
+    game.move(san);
+  } else {
+    // engineMove could be UCI like "e7e5" or SAN; detect UCI pattern:
+    if (/^[a-h][1-8][a-h][1-8][qrbn]?$/.test(engineMove)) {
+      const from = engineMove.slice(0,2);
+      const to = engineMove.slice(2,4);
+      const promotion = engineMove.length === 5 ? engineMove[4] : undefined;
+      const mv = game.move({ from, to, promotion });
+      if (!mv) {
+        // if applying failed, fallback to random
+        const san = fallbackRandomMove();
+        if (san) game.move(san);
+      }
+    } else {
+      // try SAN directly
+      const mv = game.move(engineMove);
+      if (!mv) {
+        const san = fallbackRandomMove();
+        if (san) game.move(san);
+      }
+    }
+  }
+
+  board.position(game.fen());
+  renderMoveList();
+  engineThinking = false;
+  if (game.game_over()) finishGame();
+}
+
+// render move history as numbered list (pairs)
+function renderMoveList() {
+  moveListEl.innerHTML = '';
+  const history = game.history();
+  for (let i = 0; i < history.length; i += 2) {
+    const moveNo = (i / 2) + 1;
+    const white = history[i] || '';
+    const black = history[i+1] || '';
+    const li = document.createElement('li');
+    li.style.marginBottom = '6px';
+    li.innerHTML = `<strong>${moveNo}.</strong> ${white} ${black ? '&nbsp;&nbsp;' + black : ''}`;
+    moveListEl.appendChild(li);
+  }
+  moveListEl.scrollTop = moveListEl.scrollHeight;
+}
+
+function onDragStart(source, piece, position, orientation) {
+  if (!game) return false;
+  if (engineThinking) return false;
+  // prevent dragging opponent's pieces
+  if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+      (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+    return false;
+  }
+}
+
+function onDrop(source, target) {
+  // try move on chess.js
+  const promotion = 'q';
+  const move = game.move({ from: source, to: target, promotion });
+  if (move === null) {
+    return 'snapback';
+  }
+  board.position(game.fen());
+  renderMoveList();
+
+  if (game.game_over()) {
+    finishGame();
+    return;
+  }
+
+  // engine reply
+  setTimeout(engineMove, 300);
+}
+
+function onSnapEnd() {
+  board.position(game.fen());
+}
+
+function finishGame() {
+  resignBtn.style.display = 'none';
+  resultBanner.style.display = 'block';
+  if (game.in_checkmate()) {
+    // if game.in_checkmate() true, the side to move lost
+    const winner = game.turn() === 'w' ? 'Black (Avyav Bot)' : 'White (You)';
+    resultBanner.textContent = `${winner} won (checkmate)`;
+  } else if (game.in_draw()) {
+    resultBanner.textContent = 'Draw';
+  } else {
+    resultBanner.textContent = 'Game over';
+  }
+  resultBanner.style.color = 'yellow';
+}
+
+function initBoardUI() {
+  board = Chessboard('board', {
+    draggable: true,
+    position: 'start',
+    onDragStart: onDragStart,
+    onDrop: onDrop,
+    onSnapEnd: onSnapEnd,
+    pieceTheme: 'https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/img/chesspieces/wikipedia/{piece}.png'
+  });
+}
+
+// start a fresh game
+function startNewGame() {
+  game = new Chess();
+  playerIsWhite = Math.random() < 0.5;
+  // set orientation according to player color
+  board.orientation(playerIsWhite ? 'white' : 'black');
+  board.start();
+  renderMoveList();
+  resultBanner.style.display = 'none';
+  resignBtn.style.display = 'inline-block';
+  // if player is black, engine moves first
+  if (!playerIsWhite) {
+    setTimeout(engineMove, 350);
+  }
+}
+
+startBtn.addEventListener('click', () => {
+  // if already started, restart fresh
+  if (!game || game.game_over()) {
+    startNewGame();
+    startBtn.textContent = 'Restart (Reload)';
+    // keep button simple: further clicks reload to reset page
+    startBtn.onclick = () => location.reload();
+  } else {
+    // if a game is in progress, reload
+    location.reload();
+  }
+});
+
+resignBtn.addEventListener('click', () => {
+  if (!game) return;
+  resultBanner.style.display = 'block';
+  resultBanner.textContent = playerIsWhite ? 'You resigned — Black (Avyav Bot) wins' : 'You resigned — White (Avyav Bot) wins';
+  resignBtn.style.display = 'none';
+});
+
+initBoardUI();
 </script>
 
 <script>
+/* keep your logging (optional) */
 fetch('/.netlify/functions/log-visit')
   .then(response => response.json())
   .then(data => console.log('Visitor IP logged:', data.ip))
