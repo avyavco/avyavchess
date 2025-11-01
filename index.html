@@ -1,346 +1,380 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Avyav Chess</title>
-
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
-
-<!-- Chessboard.js CSS -->
-<link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" />
-
 <style>
-body {
-  margin: 0;
-  overflow: hidden;
-  background: linear-gradient(to bottom right, #001133, #000a1a);
-  color: white;
-  font-family: 'Orbitron', sans-serif;
-  text-align: center;
-}
-
-/* Center sections */
-.section {
-  display: none;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-/* Intro */
-#intro {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-#intro h1 {
-  font-size: 3rem;
-  color: cyan;
-  position: absolute;
-  opacity: 0;
-  animation: fadeInCenter 2s forwards, moveTopLeft 2s 3s forwards;
-}
-@keyframes fadeInCenter {
-  to { opacity: 1; }
-}
-@keyframes moveTopLeft {
-  to {
-    top: 20px;
-    left: 30px;
-    transform: scale(0.8);
-    position: fixed;
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
-}
 
-/* Typing text */
-#introText {
-  opacity: 0;
-  font-size: 1.2rem;
-  color: lightblue;
-  margin-top: 100px;
-  white-space: pre-wrap;
-  text-align: center;
-  animation: appear 1s 4s forwards;
-}
-@keyframes appear {
-  to { opacity: 1; }
-}
+  body {
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(to bottom right, #000428, #004e92);
+    color: cyan;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-/* Button */
-button {
-  margin-top: 20px;
-  padding: 12px 24px;
-  background: black;
-  color: cyan;
-  border: 2px solid cyan;
-  border-radius: 12px;
-  cursor: pointer;
-  font-family: 'Orbitron', sans-serif;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 15px cyan;
-}
+  #intro-container, #home-container, .content-page {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    height: 100vh;
+  }
 
-/* Dragon */
-#dragon {
-  width: 200px;
-  opacity: 0;
-  margin-top: 20px;
-  transition: transform 2s, opacity 2s;
-}
+  #animation {
+    font-size: 3rem;
+    font-weight: bold;
+    animation: fadeIn 2s ease forwards;
+  }
 
-/* YouTube footer */
-#subscribeFooter {
-  position: fixed;
-  bottom: 10px;
-  width: 100%;
-  text-align: center;
-  color: white;
-  font-family: 'Orbitron', sans-serif;
-  display: none;
-}
-#subscribeFooter img {
-  width: 30px;
-  vertical-align: middle;
-  margin-left: 10px;
-}
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
 
-/* Homepage */
-#home {
-  background: url('main/horse.png') center/cover no-repeat;
-  display: none;
-}
-#homeButtons {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-}
+  #intro-text {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    width: 80%;
+    max-width: 700px;
+    white-space: pre-wrap;
+    text-align: center;
+  }
 
-/* Sidebar widget */
-#sidebar {
-  position: fixed;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
-  padding: 10px 5px;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-.sidebar-btn {
-  width: 40px;
-  height: 40px;
-  background: black;
-  color: cyan;
-  border: 2px solid cyan;
-  border-radius: 10px;
-  cursor: pointer;
-  font-family: 'Orbitron', sans-serif;
-}
+  #get-started {
+    margin-top: 2rem;
+    padding: 12px 30px;
+    font-size: 1rem;
+    border: 2px solid cyan;
+    color: cyan;
+    background: transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: none;
+  }
 
-/* Play Bot Page */
-#play-bot {
-  padding-top: 50px;
-  display: none;
-}
-#chess-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 40px;
-  margin-top: 40px;
-}
-#move-history {
-  color: white;
-  list-style: none;
-  padding: 0;
-  font-family: monospace;
-  font-size: 14px;
-}
-#gameStatus {
-  margin-top: 20px;
-  color: lightgreen;
-}
+  #get-started:hover {
+    background-color: cyan;
+    color: #000428;
+  }
 
-/* Home icon */
-.home-icon {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-}
+  #dragon-image {
+    margin-top: 1.5rem;
+    width: 180px;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  @keyframes dragonEnlargeFade {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+  }
+
+  footer {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: cyan;
+    font-size: 1rem;
+    display: none;
+  }
+
+  .youtube-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .youtube-logo {
+    width: 40px;
+    height: 30px;
+    background-color: red;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px red;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .youtube-logo:hover { transform: scale(1.1); }
+
+  .youtube-logo::before {
+    content: '';
+    border-style: solid;
+    border-width: 8px 0 8px 14px;
+    border-color: transparent transparent transparent white;
+  }
+
+  #home-container {
+    display: none;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #horse-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -2;
+  }
+
+  #home-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .home-btn {
+    padding: 15px 35px;
+    border: 2px solid cyan;
+    color: cyan;
+    background: #000000;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .home-btn:hover {
+    background-color: cyan;
+    color: #000428;
+  }
+
+  .home-icon {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    width: 40px;
+    height: 40px;
+    background: cyan;
+    mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
+    mask-size: contain;
+    -webkit-mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
+    -webkit-mask-size: contain;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .sidebar-widget {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 300px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid cyan;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    z-index: 3;
+  }
+
+  .widget-btn {
+    background: transparent;
+    border: 2px solid cyan;
+    color: cyan;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .widget-btn:hover {
+    background-color: cyan;
+    color: #000428;
+    transform: scale(1.1);
+  }
+
+  .content-page {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    background-color: black;
+    color: cyan;
+    text-align: center;
+    font-size: 1.5rem;
+  }
+
+  .content-page .home-icon {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+  }
+
+  /* ✅ Bot Page Custom Styling */
+  #bot-page img {
+    width: 200px;
+    max-width: 70%;
+    border: 2px solid cyan;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 25px cyan;
+  }
+
+  #bot-page h2 {
+    font-family: 'Orbitron', sans-serif;
+    color: cyan;
+    font-size: 1.5rem;
+  }
+
+  @media (max-width: 600px) {
+    #animation { font-size: 2.3rem; }
+    #intro-text { font-size: 1rem; }
+    .home-btn { font-size: 1rem; padding: 12px 28px; }
+  }
 </style>
 </head>
 <body>
 
-<!-- INTRO -->
-<section id="intro" class="section" style="display:flex;">
-  <h1 id="avyavText">Avyav Chess</h1>
-  <p id="introText">Welcome to Avyav Chess — Where Strategy Meets Enlightenment</p>
-  <button id="getStarted">Enter Avyav Chess</button>
-  <img id="dragon" src="main/dragon.png" alt="Dragon">
-  <div id="subscribeFooter">
-    Subscribe to my YouTube channel
-    <img src="main/youtubeicon.png" alt="YouTube">
-  </div>
-</section>
+<div id="animation">Avyav Chess</div>
 
-<!-- HOME -->
-<section id="home" class="section">
-  <div id="homeButtons">
-    <button onclick="showSection('play-bot')">Play Chess with Bot</button>
-    <button onclick="alert('Learn Chess content coming soon!')">Learn Chess</button>
-    <button onclick="alert('Videos coming soon!')">Videos</button>
-    <button onclick="alert('Contact form coming soon!')">Contact Us</button>
-  </div>
-  <img class="home-icon" src="main/homeicon.png" alt="Home" onclick="showSection('intro')">
-</section>
-
-<!-- SIDEBAR WIDGET -->
-<div id="sidebar">
-  <button class="sidebar-btn" onclick="showSection('korus')">K</button>
-  <button class="sidebar-btn" onclick="showSection('o')">O</button>
-  <button class="sidebar-btn" onclick="showSection('r')">R</button>
-  <button class="sidebar-btn" onclick="showSection('u')">U</button>
-  <button class="sidebar-btn" onclick="showSection('s')">S</button>
+<div id="intro-container">
+  <div id="intro-text"></div>
+  <button id="get-started">Enter Avyav Chess</button>
+  <img id="dragon-image" src="dragon.png" alt="Dragon">
 </div>
 
-<!-- KORUS PAGE -->
-<section id="korus" class="section">
-  <h2 style="color: lightblue;">Korus Page — Coming Soon</h2>
-  <img class="home-icon" src="main/homeicon.png" alt="Home" onclick="showSection('home')">
-</section>
-
-<!-- OTHER LETTER PAGES -->
-<section id="o" class="section"><h2>O Page — Coming Soon</h2><img class="home-icon" src="main/homeicon.png" alt="Home" onclick="showSection('home')"></section>
-<section id="r" class="section"><h2>R Page — Coming Soon</h2><img class="home-icon" src="main/homeicon.png" alt="Home" onclick="showSection('home')"></section>
-<section id="u" class="section"><h2>U Page — Coming Soon</h2><img class="home-icon" src="main/homeicon.png" alt="Home" onclick="showSection('home')"></section>
-<section id="s" class="section"><h2>S Page — Coming Soon</h2><img class="home-icon" src="main/homeicon.png" alt="Home" onclick="showSection('home')"></section>
-
-<!-- PLAY CHESS WITH BOT -->
-<section id="play-bot" class="section">
-  <div style="text-align: center; margin-top: 30px;">
-    <img src="main/avyavbot.png" alt="Avyav Bot" style="width: 150px; height: auto;">
-    <h2 style="color: cyan;">Avyav Bot - Rating : 4000 , Coming Soon</h2>
+<div id="home-container">
+  <img id="horse-image" src="horse.jpg" alt="Horse Background">
+  <div class="sidebar-widget">
+    <button class="widget-btn" onclick="openPage('korus')">K</button>
+    <button class="widget-btn" onclick="openPage('o')">O</button>
+    <button class="widget-btn" onclick="openPage('r')">R</button>
+    <button class="widget-btn" onclick="openPage('u')">U</button>
+    <button class="widget-btn" onclick="openPage('s')">S</button>
   </div>
-  <div id="chess-container">
-    <div id="board" style="width: 400px;"></div>
-    <div>
-      <h3 style="color: lightblue;">Move History</h3>
-      <ul id="move-history"></ul>
-    </div>
-  </div>
-  <div style="margin-top: 30px;">
-    <button id="startGame">Start Game</button>
-  </div>
-  <div id="gameStatus"></div>
-  <img class="home-icon" src="main/homeicon.png" alt="Home" onclick="showSection('home')">
-</section>
 
-<!-- Scripts -->
-<script src="https://unpkg.com/chess.js@1.0.0/dist/chess.js"></script>
-<script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+  <div class="home-icon" id="home-icon"></div>
+
+  <div id="home-buttons">
+    <button class="home-btn" onclick="openPage('bot')">Play Chess with Bot</button>
+    <button class="home-btn" onclick="openPage('learn')">Learn Chess</button>
+    <button class="home-btn" onclick="openPage('videos')">Videos</button>
+    <button class="home-btn" onclick="openPage('contact')">Contact Us for Feedback</button>
+  </div>
+</div>
+
+<!-- ✅ Avyav Bot Page -->
+<div id="bot-page" class="content-page">
+  <div class="home-icon" onclick="goHome()"></div>
+  <img src="avyavbot.png" alt="Avyav Bot">
+  <h2>Avyav NamDev Bot - Rating : 4000 [ Bot created by Korus ] </h2>
+</div>
+
+<!-- Other Pages -->
+<div id="korus-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Website developed by Korus</h2></div>
+<div id="o-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>O - Contents Coming Soon...</h2></div>
+<div id="r-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>R - Contents Coming Soon...</h2></div>
+<div id="u-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>U - Contents Coming Soon...</h2></div>
+<div id="s-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>S - Contents Coming Soon...</h2></div>
+<div id="learn-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="videos-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="contact-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+
+<footer id="footer">
+  <div class="youtube-container">
+    <span>Subscribe to my YouTube Channel</span>
+    <div class="youtube-logo" onclick="window.open('https://www.youtube.com/@AvyavChessYT', '_blank')"></div>
+  </div>
+</footer>
+
+<audio id="typingSound" src="typingsound.mp3"></audio>
 
 <script>
-let board, game, playerColor;
-let apiUrl = "https://chess-api.com/v1";
+  const animation = document.getElementById('animation');
+  const introContainer = document.getElementById('intro-container');
+  const introText = document.getElementById('intro-text');
+  const getStarted = document.getElementById('get-started');
+  const dragon = document.getElementById('dragon-image');
+  const footer = document.getElementById('footer');
+  const typingSound = document.getElementById('typingSound');
 
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
-  document.getElementById(id).style.display = 'flex';
-  if (id === 'home' || id === 'play-bot') {
-    document.getElementById('sidebar').style.display = 'flex';
-  } else {
-    document.getElementById('sidebar').style.display = 'none';
-  }
-}
+  const fullText = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
 
-document.getElementById("getStarted").addEventListener("click", () => {
-  const dragon = document.getElementById("dragon");
-  dragon.style.opacity = "1";
   setTimeout(() => {
-    dragon.style.transform = "scale(2)";
-    dragon.style.opacity = "0";
-    setTimeout(() => showSection("home"), 2000);
-  }, 300);
-});
+    animation.style.display = "none";
+    introContainer.style.display = "flex";
+    typeText();
+  }, 2500);
 
-setTimeout(() => {
-  document.getElementById("subscribeFooter").style.display = "block";
-}, 7000);
+  let i = 0;
+  function typeText() {
+    if (i < fullText.length) {
+      introText.textContent += fullText.charAt(i);
+      if (typingSound.paused) typingSound.play();
+      i++;
+      setTimeout(typeText, 50);
+    } else {
+      typingSound.pause();
+      typingSound.currentTime = 0;
+      getStarted.style.display = "inline-block";
+      setTimeout(() => {
+        dragon.style.opacity = "1";
+        footer.style.display = "block";
+      }, 1000);
+    }
+  }
 
-/* === CHESS BOT === */
-async function startGame() {
-  document.getElementById("gameStatus").innerText = "Starting game...";
-  playerColor = Math.random() < 0.5 ? "white" : "black";
-  const res = await fetch(apiUrl + "/new");
-  const data = await res.json();
-  game = new Chess(data.fen);
-  initBoard();
-  document.getElementById("gameStatus").innerText = "Game started! You play as " + playerColor.toUpperCase();
-  if (playerColor === "black") botMove();
-}
-
-function initBoard() {
-  board = Chessboard('board', {
-    draggable: true,
-    position: game.fen(),
-    onDrop: handleMove,
-    orientation: playerColor
+  getStarted.addEventListener('click', () => {
+    dragon.style.animation = "dragonEnlargeFade 1.5s forwards";
+    setTimeout(() => {
+      introContainer.style.display = "none";
+      document.getElementById('home-container').style.display = "flex";
+    }, 1500);
   });
-}
 
-async function handleMove(source, target) {
-  const move = game.move({ from: source, to: target, promotion: 'q' });
-  if (move === null) return 'snapback';
-  updateHistory(move);
-  board.position(game.fen());
-  if (game.game_over()) return endGame();
-  await botMove();
-}
-
-async function botMove() {
-  const res = await fetch(apiUrl + "/move?fen=" + encodeURIComponent(game.fen()));
-  const data = await res.json();
-  if (data.move) {
-    game.move(data.move);
-    board.position(game.fen());
-    updateHistory({ san: data.move });
-    if (game.game_over()) return endGame();
+  function openPage(page) {
+    document.getElementById('home-container').style.display = "none";
+    document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
+    document.getElementById(`${page}-page`).style.display = "flex";
   }
-}
 
-function updateHistory(move) {
-  const ul = document.getElementById("move-history");
-  const li = document.createElement("li");
-  li.textContent = move.san;
-  ul.appendChild(li);
-}
-
-function endGame() {
-  const status = document.getElementById("gameStatus");
-  if (game.in_checkmate()) {
-    status.innerText = game.turn() === 'w' ? "Avyav NamDev Enlightened Bot Won!" : "You Won!";
-  } else {
-    status.innerText = "Draw!";
+  function goHome() {
+    document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
+    document.getElementById('home-container').style.display = "flex";
   }
-}
 
-document.getElementById("startGame").addEventListener("click", startGame);
+  document.getElementById('home-icon').addEventListener('click', goHome);
+</script>
+
+<script>
+fetch('/.netlify/functions/log-visit')
+  .then(response => response.json())
+  .then(data => console.log('Visitor IP logged:', data.ip))
+  .catch(err => console.error('Logging failed:', err));
 </script>
 
 </body>
