@@ -5,10 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Avyav Chess</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
-
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
   body {
     font-family: 'Courier New', monospace;
     background: linear-gradient(to bottom right, #000428, #004e92);
@@ -28,125 +31,229 @@
     height: 100vh;
   }
 
-  #animation { font-size: 3rem; font-weight: bold; animation: fadeIn 2s ease forwards; }
-  @keyframes fadeIn { from { opacity: 0; transform: scale(0.8);} to { opacity: 1; transform: scale(1);} }
+  #animation {
+    font-size: 3rem;
+    font-weight: bold;
+    animation: fadeIn 2s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
 
   #intro-text {
-    font-size: 1.2rem; margin-top: 2rem; width: 80%; max-width: 700px;
-    white-space: pre-wrap; text-align: center;
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    width: 80%;
+    max-width: 700px;
+    white-space: pre-wrap;
+    text-align: center;
   }
 
   #get-started {
-    margin-top: 2rem; padding: 12px 30px; font-size: 1rem;
-    border: 2px solid cyan; color: cyan; background: transparent;
-    border-radius: 10px; cursor: pointer; transition: 0.3s; display: none;
+    margin-top: 2rem;
+    padding: 12px 30px;
+    font-size: 1rem;
+    border: 2px solid cyan;
+    color: cyan;
+    background: transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: none;
   }
 
-  #get-started:hover { background-color: cyan; color: #000428; }
+  #get-started:hover {
+    background-color: cyan;
+    color: #000428;
+  }
 
-  #dragon-image { margin-top: 1.5rem; width: 180px; opacity: 0; transition: opacity 1s ease; }
+  #dragon-image {
+    margin-top: 1.5rem;
+    width: 180px;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
   @keyframes dragonEnlargeFade {
     0% { transform: scale(1); opacity: 1; }
     50% { transform: scale(1.5); opacity: 1; }
     100% { transform: scale(2); opacity: 0; }
   }
 
-  footer { position: fixed; bottom: 10px; left: 0; right: 0; text-align: center; color: cyan; font-size: 1rem; display: none; }
+  footer {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: cyan;
+    font-size: 1rem;
+    display: none;
+  }
 
-  .youtube-container { display: inline-flex; align-items: center; gap: 10px; }
+  .youtube-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
   .youtube-logo {
-    width: 40px; height: 30px; background-color: red; border-radius: 8px;
-    display: flex; justify-content: center; align-items: center;
-    box-shadow: 0 0 20px red; cursor: pointer; transition: transform 0.2s ease;
+    width: 40px;
+    height: 30px;
+    background-color: red;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px red;
+    cursor: pointer;
+    transition: transform 0.2s ease;
   }
 
   .youtube-logo:hover { transform: scale(1.1); }
+
   .youtube-logo::before {
-    content: ''; border-style: solid; border-width: 8px 0 8px 14px;
+    content: '';
+    border-style: solid;
+    border-width: 8px 0 8px 14px;
     border-color: transparent transparent transparent white;
   }
 
-  #home-container { display: none; position: relative; width: 100vw; height: 100vh; overflow: hidden; }
-  #horse-image { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: -2; }
+  #home-container {
+    display: none;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #horse-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -2;
+  }
 
   #home-buttons {
-    display: flex; flex-direction: column; align-items: center; gap: 1.2rem;
-    position: relative; z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    position: relative;
+    z-index: 2;
   }
 
   .home-btn {
-    padding: 15px 35px; border: 2px solid cyan; color: cyan; background: #000000;
-    font-size: 1.1rem; border-radius: 10px; cursor: pointer; transition: 0.3s;
+    padding: 15px 35px;
+    border: 2px solid cyan;
+    color: cyan;
+    background: #000000;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
   }
 
-  .home-btn:hover { background-color: cyan; color: #000428; }
+  .home-btn:hover {
+    background-color: cyan;
+    color: #000428;
+  }
 
   .home-icon {
-    position: absolute; top: 20px; right: 25px;
-    width: 40px; height: 40px; background: cyan;
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    width: 40px;
+    height: 40px;
+    background: cyan;
     mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
     mask-size: contain;
     -webkit-mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
     -webkit-mask-size: contain;
-    cursor: pointer; z-index: 2;
+    cursor: pointer;
+    z-index: 2;
   }
 
   .sidebar-widget {
-    position: absolute; left: 15px; top: 50%;
-    transform: translateY(-50%); width: 60px; height: 300px;
-    background: rgba(0,0,0,0.6); border: 1px solid cyan; border-radius: 10px;
-    display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; z-index: 3;
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 300px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid cyan;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    z-index: 3;
   }
 
   .widget-btn {
-    background: transparent; border: 2px solid cyan; color: cyan;
-    font-family: 'Orbitron', sans-serif; font-size: 1.1rem;
-    width: 40px; height: 40px; border-radius: 5px; cursor: pointer; transition: 0.3s;
-  }
-
-  .widget-btn:hover { background-color: cyan; color: #000428; transform: scale(1.1); }
-
-  .content-page {
-    display: none; justify-content: center; align-items: center; flex-direction: column;
-    height: 100vh; background-color: black; color: cyan; text-align: center; font-size: 1.5rem;
-  }
-
-  #bot-page img {
-    width: 200px; max-width: 70%; border: 2px solid cyan;
-    border-radius: 15px; margin-bottom: 20px; box-shadow: 0 0 25px cyan;
-  }
-
-  #bot-page h2 {
-    font-family: 'Orbitron', sans-serif; color: cyan; font-size: 1.5rem; margin-bottom: 20px;
-  }
-
-  #startGame {
-    background: transparent; border: 2px solid cyan; color: cyan;
-    padding: 10px 20px; border-radius: 10px; cursor: pointer; font-size: 1rem;
+    background: transparent;
+    border: 2px solid cyan;
+    color: cyan;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
     transition: 0.3s;
   }
 
-  #startGame:hover { background-color: cyan; color: black; }
-
-  #chessArea {
-    display: none;
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 30px;
-    margin-top: 30px;
+  .widget-btn:hover {
+    background-color: cyan;
+    color: #000428;
+    transform: scale(1.1);
   }
 
-  #board { width: 400px; min-width: 300px; }
-  #moveHistory {
+  .content-page {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    background-color: black;
+    color: cyan;
+    text-align: center;
+    font-size: 1.5rem;
+  }
+
+  .content-page .home-icon {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+  }
+
+  /* ✅ Bot Page Custom Styling */
+  #bot-page img {
     width: 200px;
-    text-align: left;
-    background: #001f3f;
-    padding: 15px;
-    border-radius: 10px;
+    max-width: 70%;
     border: 2px solid cyan;
-    height: 400px;
-    overflow-y: auto;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 25px cyan;
+  }
+
+  #bot-page h2 {
+    font-family: 'Orbitron', sans-serif;
+    color: cyan;
+    font-size: 1.5rem;
+  }
+
+  @media (max-width: 600px) {
+    #animation { font-size: 2.3rem; }
+    #intro-text { font-size: 1rem; }
+    .home-btn { font-size: 1rem; padding: 12px 28px; }
   }
 </style>
 </head>
@@ -169,10 +276,14 @@
     <button class="widget-btn" onclick="openPage('u')">U</button>
     <button class="widget-btn" onclick="openPage('s')">S</button>
   </div>
+
   <div class="home-icon" id="home-icon"></div>
+
   <div id="home-buttons">
     <button class="home-btn" onclick="openPage('bot')">Play Chess with Bot</button>
     <button class="home-btn" onclick="openPage('learn')">Learn Chess</button>
+    <button class="home-btn" onclick="openPage('videos')">Videos</button>
+    <button class="home-btn" onclick="openPage('contact')">Contact Us for Feedback</button>
   </div>
 </div>
 
@@ -180,15 +291,18 @@
 <div id="bot-page" class="content-page">
   <div class="home-icon" onclick="goHome()"></div>
   <img src="avyavbot.png" alt="Avyav Bot">
-  <h2>Avyav Bot - Rating: 4000 (Coming Soon)</h2>
-
-  <button id="startGame">Start Game</button>
-
-  <div id="chessArea">
-    <div id="board"></div>
-    <div id="moveHistory"><strong>Move History:</strong><br></div>
-  </div>
+  <h2>Avyav Bot - Rating : 4000 , Coming Soon</h2>
 </div>
+
+<!-- Other Pages -->
+<div id="korus-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Website developed by Korus</h2></div>
+<div id="o-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>O - Contents Coming Soon...</h2></div>
+<div id="r-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>R - Contents Coming Soon...</h2></div>
+<div id="u-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>U - Contents Coming Soon...</h2></div>
+<div id="s-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>S - Contents Coming Soon...</h2></div>
+<div id="learn-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="videos-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
+<div id="contact-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
 
 <footer id="footer">
   <div class="youtube-container">
@@ -199,112 +313,69 @@
 
 <audio id="typingSound" src="typingsound.mp3"></audio>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chess.js@1.0.0/chess.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+<script>
+  const animation = document.getElementById('animation');
+  const introContainer = document.getElementById('intro-container');
+  const introText = document.getElementById('intro-text');
+  const getStarted = document.getElementById('get-started');
+  const dragon = document.getElementById('dragon-image');
+  const footer = document.getElementById('footer');
+  const typingSound = document.getElementById('typingSound');
+
+  const fullText = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
+
+  setTimeout(() => {
+    animation.style.display = "none";
+    introContainer.style.display = "flex";
+    typeText();
+  }, 2500);
+
+  let i = 0;
+  function typeText() {
+    if (i < fullText.length) {
+      introText.textContent += fullText.charAt(i);
+      if (typingSound.paused) typingSound.play();
+      i++;
+      setTimeout(typeText, 50);
+    } else {
+      typingSound.pause();
+      typingSound.currentTime = 0;
+      getStarted.style.display = "inline-block";
+      setTimeout(() => {
+        dragon.style.opacity = "1";
+        footer.style.display = "block";
+      }, 1000);
+    }
+  }
+
+  getStarted.addEventListener('click', () => {
+    dragon.style.animation = "dragonEnlargeFade 1.5s forwards";
+    setTimeout(() => {
+      introContainer.style.display = "none";
+      document.getElementById('home-container').style.display = "flex";
+    }, 1500);
+  });
+
+  function openPage(page) {
+    document.getElementById('home-container').style.display = "none";
+    document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
+    document.getElementById(`${page}-page`).style.display = "flex";
+  }
+
+  function goHome() {
+    document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
+    document.getElementById('home-container').style.display = "flex";
+  }
+
+  document.getElementById('home-icon').addEventListener('click', goHome);
+</script>
 
 <script>
-const animation = document.getElementById('animation');
-const introContainer = document.getElementById('intro-container');
-const introText = document.getElementById('intro-text');
-const getStarted = document.getElementById('get-started');
-const dragon = document.getElementById('dragon-image');
-const footer = document.getElementById('footer');
-const typingSound = document.getElementById('typingSound');
-
-const fullText = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
-
-setTimeout(() => {
-  animation.style.display = "none";
-  introContainer.style.display = "flex";
-  typeText();
-}, 2500);
-
-let i = 0;
-function typeText() {
-  if (i < fullText.length) {
-    introText.textContent += fullText.charAt(i);
-    if (typingSound.paused) typingSound.play();
-    i++;
-    setTimeout(typeText, 50);
-  } else {
-    typingSound.pause(); typingSound.currentTime = 0;
-    getStarted.style.display = "inline-block";
-    setTimeout(() => {
-      dragon.style.opacity = "1"; footer.style.display = "block";
-    }, 1000);
-  }
-}
-
-getStarted.addEventListener('click', () => {
-  dragon.style.animation = "dragonEnlargeFade 1.5s forwards";
-  setTimeout(() => {
-    introContainer.style.display = "none";
-    document.getElementById('home-container').style.display = "flex";
-  }, 1500);
-});
-
-function openPage(page) {
-  document.getElementById('home-container').style.display = "none";
-  document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
-  const current = document.getElementById(`${page}-page`);
-  current.style.display = "flex";
-  if (page === "bot") window.dispatchEvent(new Event('resize'));
-}
-
-function goHome() {
-  document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
-  document.getElementById('home-container').style.display = "flex";
-}
-
-document.getElementById('home-icon').addEventListener('click', goHome);
-
-/* ✅ Chess Game Logic */
-let board, game;
-const moveHistory = document.getElementById('moveHistory');
-document.getElementById('startGame').addEventListener('click', () => {
-  document.getElementById('startGame').style.display = 'none';
-  document.getElementById('chessArea').style.display = 'flex';
-  setTimeout(startChessGame, 200); // wait for visibility
-});
-
-function startChessGame() {
-  game = new Chess();
-  board = Chessboard('board', {
-    draggable: true,
-    position: 'start',
-    onDrop: onDrop
-  });
-  updateHistory();
-}
-
-async function onDrop(source, target) {
-  const move = game.move({ from: source, to: target, promotion: 'q' });
-  if (move === null) return 'snapback';
-  updateHistory();
-  board.position(game.fen());
-  if (!game.game_over()) await botMove();
-}
-
-async function botMove() {
-  const fen = game.fen();
-  try {
-    const res = await fetch(`https://chess-api.com/v1/?fen=${fen}`);
-    const data = await res.json();
-    if (data && data.move) {
-      game.move(data.move);
-      board.position(game.fen());
-      updateHistory();
-    }
-  } catch (e) {
-    console.error("Bot move failed:", e);
-  }
-}
-
-function updateHistory() {
-  moveHistory.innerHTML = "<strong>Move History:</strong><br>" +
-    game.history().map((m, i) => `${i+1}. ${m}`).join('<br>');
-}
+fetch('/.netlify/functions/log-visit')
+  .then(response => response.json())
+  .then(data => console.log('Visitor IP logged:', data.ip))
+  .catch(err => console.error('Logging failed:', err));
 </script>
+
 </body>
 </html>
