@@ -6,9 +6,9 @@
 <title>Avyav Chess</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     font-family: 'Courier New', monospace;
     background: linear-gradient(to bottom right, #000428, #004e92);
@@ -28,59 +28,30 @@
     height: 100vh;
   }
 
-  #animation {
-    font-size: 3rem;
-    font-weight: bold;
-    animation: fadeIn 2s ease forwards;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.8); }
-    to { opacity: 1; transform: scale(1); }
-  }
+  #animation { font-size: 3rem; font-weight: bold; animation: fadeIn 2s ease forwards; }
+  @keyframes fadeIn { from { opacity: 0; transform: scale(0.8);} to { opacity: 1; transform: scale(1);} }
 
   #intro-text {
-    font-size: 1.2rem;
-    margin-top: 2rem;
-    width: 80%;
-    max-width: 700px;
-    white-space: pre-wrap;
-    text-align: center;
+    font-size: 1.2rem; margin-top: 2rem; width: 80%; max-width: 700px;
+    white-space: pre-wrap; text-align: center;
   }
 
   #get-started {
-    margin-top: 2rem;
-    padding: 12px 30px;
-    font-size: 1rem;
-    border: 2px solid cyan;
-    color: cyan;
-    background: transparent;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.3s;
-    display: none;
+    margin-top: 2rem; padding: 12px 30px; font-size: 1rem;
+    border: 2px solid cyan; color: cyan; background: transparent;
+    border-radius: 10px; cursor: pointer; transition: 0.3s; display: none;
   }
 
   #get-started:hover { background-color: cyan; color: #000428; }
 
-  #dragon-image {
-    margin-top: 1.5rem;
-    width: 180px;
-    opacity: 0;
-    transition: opacity 1s ease;
-  }
-
+  #dragon-image { margin-top: 1.5rem; width: 180px; opacity: 0; transition: opacity 1s ease; }
   @keyframes dragonEnlargeFade {
     0% { transform: scale(1); opacity: 1; }
     50% { transform: scale(1.5); opacity: 1; }
     100% { transform: scale(2); opacity: 0; }
   }
 
-  footer {
-    position: fixed; bottom: 10px; left: 0; right: 0;
-    text-align: center; color: cyan; font-size: 1rem;
-    display: none;
-  }
+  footer { position: fixed; bottom: 10px; left: 0; right: 0; text-align: center; color: cyan; font-size: 1rem; display: none; }
 
   .youtube-container { display: inline-flex; align-items: center; gap: 10px; }
   .youtube-logo {
@@ -96,10 +67,7 @@
   }
 
   #home-container { display: none; position: relative; width: 100vw; height: 100vh; overflow: hidden; }
-  #horse-image {
-    position: absolute; top: 0; left: 0;
-    width: 100vw; height: 100vh; object-fit: cover; z-index: -2;
-  }
+  #horse-image { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: -2; }
 
   #home-buttons {
     display: flex; flex-direction: column; align-items: center; gap: 1.2rem;
@@ -143,9 +111,6 @@
     height: 100vh; background-color: black; color: cyan; text-align: center; font-size: 1.5rem;
   }
 
-  .content-page .home-icon { position: absolute; top: 20px; right: 25px; }
-
-  /* ✅ Bot Page */
   #bot-page img {
     width: 200px; max-width: 70%; border: 2px solid cyan;
     border-radius: 15px; margin-bottom: 20px; box-shadow: 0 0 25px cyan;
@@ -164,14 +129,24 @@
   #startGame:hover { background-color: cyan; color: black; }
 
   #chessArea {
-    display: none; flex-direction: row; justify-content: center; align-items: flex-start;
-    gap: 30px; margin-top: 30px;
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+    margin-top: 30px;
   }
 
-  #board { width: 400px; }
+  #board { width: 400px; min-width: 300px; }
   #moveHistory {
-    width: 200px; text-align: left; background: #001f3f;
-    padding: 15px; border-radius: 10px; border: 2px solid cyan; height: 400px; overflow-y: auto;
+    width: 200px;
+    text-align: left;
+    background: #001f3f;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid cyan;
+    height: 400px;
+    overflow-y: auto;
   }
 </style>
 </head>
@@ -198,8 +173,6 @@
   <div id="home-buttons">
     <button class="home-btn" onclick="openPage('bot')">Play Chess with Bot</button>
     <button class="home-btn" onclick="openPage('learn')">Learn Chess</button>
-    <button class="home-btn" onclick="openPage('videos')">Videos</button>
-    <button class="home-btn" onclick="openPage('contact')">Contact Us</button>
   </div>
 </div>
 
@@ -216,9 +189,6 @@
     <div id="moveHistory"><strong>Move History:</strong><br></div>
   </div>
 </div>
-
-<!-- Other Pages -->
-<div id="korus-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Website developed by Korus</h2></div>
 
 <footer id="footer">
   <div class="youtube-container">
@@ -277,7 +247,9 @@ getStarted.addEventListener('click', () => {
 function openPage(page) {
   document.getElementById('home-container').style.display = "none";
   document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
-  document.getElementById(`${page}-page`).style.display = "flex";
+  const current = document.getElementById(`${page}-page`);
+  current.style.display = "flex";
+  if (page === "bot") window.dispatchEvent(new Event('resize'));
 }
 
 function goHome() {
@@ -287,35 +259,31 @@ function goHome() {
 
 document.getElementById('home-icon').addEventListener('click', goHome);
 
-/* ✅ CHESS BOT LOGIC */
+/* ✅ Chess Game Logic */
 let board, game;
 const moveHistory = document.getElementById('moveHistory');
-
-document.getElementById('startGame').addEventListener('click', async () => {
+document.getElementById('startGame').addEventListener('click', () => {
   document.getElementById('startGame').style.display = 'none';
   document.getElementById('chessArea').style.display = 'flex';
-  startChessGame();
+  setTimeout(startChessGame, 200); // wait for visibility
 });
 
-async function startChessGame() {
+function startChessGame() {
   game = new Chess();
   board = Chessboard('board', {
     draggable: true,
     position: 'start',
     onDrop: onDrop
   });
+  updateHistory();
 }
 
 async function onDrop(source, target) {
   const move = game.move({ from: source, to: target, promotion: 'q' });
   if (move === null) return 'snapback';
-
   updateHistory();
   board.position(game.fen());
-
-  if (!game.game_over()) {
-    await botMove();
-  }
+  if (!game.game_over()) await botMove();
 }
 
 async function botMove() {
@@ -329,7 +297,7 @@ async function botMove() {
       updateHistory();
     }
   } catch (e) {
-    console.error("Bot move failed", e);
+    console.error("Bot move failed:", e);
   }
 }
 
