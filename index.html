@@ -1,381 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Avyav Chess</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+body {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(180deg, #020024, #090979, #00d4ff);
+  color: cyan;
+  overflow: hidden;
+  text-align: center;
+}
 
-  body {
-    font-family: 'Courier New', monospace;
-    background: linear-gradient(to bottom right, #000428, #004e92);
-    color: cyan;
-    overflow: hidden;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+/* Intro Section */
+#intro {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 2s;
+}
+#intro button {
+  margin-top: 20px;
+  background-color: black;
+  color: cyan;
+  border: 2px solid cyan;
+  padding: 10px 20px;
+  font-size: 20px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+#intro button:hover { background-color: cyan; color: black; }
 
-  #intro-container, #home-container, .content-page {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-    height: 100vh;
-  }
+/* Homepage Section */
+#homepage {
+  display: none;
+  height: 100vh;
+  background: url('horse.png') no-repeat center center/cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#homepage button {
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: black;
+  color: cyan;
+  border: 2px solid cyan;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 20px;
+  transition: 0.3s;
+}
+#homepage button:hover { background-color: cyan; color: black; }
 
-  #animation {
-    font-size: 3rem;
-    font-weight: bold;
-    animation: fadeIn 2s ease forwards;
-  }
+/* Sidebar Widget */
+#widget {
+  position: fixed;
+  left: 0;
+  top: 20%;
+  width: 60px;
+  height: 300px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 15px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+#widget button {
+  background-color: black;
+  color: cyan;
+  border: 2px solid cyan;
+  border-radius: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: 0.3s;
+}
+#widget button:hover { background-color: cyan; color: black; }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.8); }
-    to { opacity: 1; transform: scale(1); }
-  }
+/* Korus & Avyav Bot Sections */
+section {
+  display: none;
+  padding: 50px;
+}
 
-  #intro-text {
-    font-size: 1.2rem;
-    margin-top: 2rem;
-    width: 80%;
-    max-width: 700px;
-    white-space: pre-wrap;
-    text-align: center;
-  }
-
-  #get-started {
-    margin-top: 2rem;
-    padding: 12px 30px;
-    font-size: 1rem;
-    border: 2px solid cyan;
-    color: cyan;
-    background: transparent;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.3s;
-    display: none;
-  }
-
-  #get-started:hover {
-    background-color: cyan;
-    color: #000428;
-  }
-
-  #dragon-image {
-    margin-top: 1.5rem;
-    width: 180px;
-    opacity: 0;
-    transition: opacity 1s ease;
-  }
-
-  @keyframes dragonEnlargeFade {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.5); opacity: 1; }
-    100% { transform: scale(2); opacity: 0; }
-  }
-
-  footer {
-    position: fixed;
-    bottom: 10px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    color: cyan;
-    font-size: 1rem;
-    display: none;
-  }
-
-  .youtube-container {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .youtube-logo {
-    width: 40px;
-    height: 30px;
-    background-color: red;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 20px red;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-  }
-
-  .youtube-logo:hover { transform: scale(1.1); }
-
-  .youtube-logo::before {
-    content: '';
-    border-style: solid;
-    border-width: 8px 0 8px 14px;
-    border-color: transparent transparent transparent white;
-  }
-
-  #home-container {
-    display: none;
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-  }
-
-  #horse-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-    z-index: -2;
-  }
-
-  #home-buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.2rem;
-    position: relative;
-    z-index: 2;
-  }
-
-  .home-btn {
-    padding: 15px 35px;
-    border: 2px solid cyan;
-    color: cyan;
-    background: #000000;
-    font-size: 1.1rem;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-
-  .home-btn:hover {
-    background-color: cyan;
-    color: #000428;
-  }
-
-  .home-icon {
-    position: absolute;
-    top: 20px;
-    right: 25px;
-    width: 40px;
-    height: 40px;
-    background: cyan;
-    mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
-    mask-size: contain;
-    -webkit-mask: url('https://cdn-icons-png.flaticon.com/512/25/25694.png') no-repeat center;
-    -webkit-mask-size: contain;
-    cursor: pointer;
-    z-index: 2;
-  }
-
-  .sidebar-widget {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 60px;
-    height: 300px;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid cyan;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    z-index: 3;
-  }
-
-  .widget-btn {
-    background: transparent;
-    border: 2px solid cyan;
-    color: cyan;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem;
-    width: 40px;
-    height: 40px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-
-  .widget-btn:hover {
-    background-color: cyan;
-    color: #000428;
-    transform: scale(1.1);
-  }
-
-  .content-page {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
-    background-color: black;
-    color: cyan;
-    text-align: center;
-    font-size: 1.5rem;
-  }
-
-  .content-page .home-icon {
-    position: absolute;
-    top: 20px;
-    right: 25px;
-  }
-
-  /* ✅ Bot Page Custom Styling */
-  #bot-page img {
-    width: 200px;
-    max-width: 70%;
-    border: 2px solid cyan;
-    border-radius: 15px;
-    margin-bottom: 20px;
-    box-shadow: 0 0 25px cyan;
-  }
-
-  #bot-page h2 {
-    font-family: 'Orbitron', sans-serif;
-    color: cyan;
-    font-size: 1.5rem;
-  }
-
-  @media (max-width: 600px) {
-    #animation { font-size: 2.3rem; }
-    #intro-text { font-size: 1rem; }
-    .home-btn { font-size: 1rem; padding: 12px 28px; }
-  }
+/* Chess Board Page */
+#chessboard {
+  position: relative;
+  width: 480px;
+  height: 480px;
+  background-image: url('chessboard.jpg');
+  background-size: cover;
+  border: 2px solid cyan;
+}
+#moveHistory {
+  width: 200px;
+  height: 480px;
+  overflow-y: auto;
+  border: 2px solid cyan;
+  padding: 10px;
+  text-align: left;
+}
 </style>
 </head>
 <body>
 
-<div id="animation">Avyav Chess</div>
+<!-- Intro Section -->
+<section id="intro">
+  <h1>Welcome to Avyav Chess</h1>
+  <button onclick="showHome()">Enter Avyav Chess</button>
+</section>
 
-<div id="intro-container">
-  <div id="intro-text"></div>
-  <button id="get-started">Enter Avyav Chess</button>
-  <img id="dragon-image" src="dragon.png" alt="Dragon">
+<!-- Homepage Section -->
+<section id="homepage">
+  <button onclick="showBot()">Play with Bot</button>
+  <button onclick="showKorus()">Korus Page</button>
+</section>
+
+<!-- Widget -->
+<div id="widget">
+  <button onclick="showKorus()">K</button>
+  <button onclick="comingSoon('O')">O</button>
+  <button onclick="comingSoon('R')">R</button>
+  <button onclick="comingSoon('U')">U</button>
+  <button onclick="comingSoon('S')">S</button>
 </div>
 
-<div id="home-container">
-  <img id="horse-image" src="horse.jpg" alt="Horse Background">
-  <div class="sidebar-widget">
-    <button class="widget-btn" onclick="openPage('korus')">K</button>
-    <button class="widget-btn" onclick="openPage('o')">O</button>
-    <button class="widget-btn" onclick="openPage('r')">R</button>
-    <button class="widget-btn" onclick="openPage('u')">U</button>
-    <button class="widget-btn" onclick="openPage('s')">S</button>
+<!-- Korus Section -->
+<section id="korus">
+  <button onclick="showHome()" style="position:absolute;top:20px;right:20px;">🏠</button>
+  <h1>Korus Page</h1>
+  <p>Welcome to Korus content page!</p>
+</section>
+
+<!-- Avyav Bot Section -->
+<section id="avyavbot">
+  <button onclick="showHome()" style="position:absolute;top:20px;right:20px;">🏠</button>
+  <img src="avyavbot.png" alt="Avyav Bot" style="width:200px;height:auto;margin-bottom:20px;">
+  <h2>Avyav NamDev Bot, Rating: 4000</h2>
+
+  <div id="bot-content">
+    <button id="startGameBtn" style="margin-top:20px;padding:10px 25px;font-size:18px;border:none;background:cyan;color:black;border-radius:10px;cursor:pointer;">Start Game</button>
   </div>
 
-  <div class="home-icon" id="home-icon"></div>
-
-  <div id="home-buttons">
-    <button class="home-btn" onclick="openPage('bot')">Play Chess with Bot</button>
-    <button class="home-btn" onclick="openPage('learn')">Learn Chess</button>
-    <button class="home-btn" onclick="openPage('videos')">Videos</button>
-    <button class="home-btn" onclick="openPage('contact')">Contact Us for Feedback</button>
+  <div id="gameArea" style="display:none;margin-top:30px;display:flex;justify-content:center;align-items:flex-start;gap:40px;">
+    <div id="chessboard"></div>
+    <div id="moveHistory">
+      <h3 style="text-align:center;">Move History</h3>
+      <ul id="historyList" style="list-style:none;padding-left:10px;"></ul>
+    </div>
   </div>
-</div>
-
-<!-- ✅ Avyav Bot Page -->
-<div id="bot-page" class="content-page">
-  <div class="home-icon" onclick="goHome()"></div>
-  <img src="avyavbot.png" alt="Avyav Bot">
-  <h2>Avyav Bot - Rating : 4000 , Coming Soon</h2>
-</div>
-
-<!-- Other Pages -->
-<div id="korus-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Website developed by Korus</h2></div>
-<div id="o-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>O - Contents Coming Soon...</h2></div>
-<div id="r-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>R - Contents Coming Soon...</h2></div>
-<div id="u-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>U - Contents Coming Soon...</h2></div>
-<div id="s-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>S - Contents Coming Soon...</h2></div>
-<div id="learn-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
-<div id="videos-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
-<div id="contact-page" class="content-page"><div class="home-icon" onclick="goHome()"></div><h2>Contents Coming Soon...</h2></div>
-
-<footer id="footer">
-  <div class="youtube-container">
-    <span>Subscribe to my YouTube Channel</span>
-    <div class="youtube-logo" onclick="window.open('https://www.youtube.com/@AvyavChessYT', '_blank')"></div>
-  </div>
-</footer>
-
-<audio id="typingSound" src="typingsound.mp3"></audio>
+</section>
 
 <script>
-  const animation = document.getElementById('animation');
-  const introContainer = document.getElementById('intro-container');
-  const introText = document.getElementById('intro-text');
-  const getStarted = document.getElementById('get-started');
-  const dragon = document.getElementById('dragon-image');
-  const footer = document.getElementById('footer');
-  const typingSound = document.getElementById('typingSound');
+function showHome() {
+  hideAll();
+  document.getElementById('homepage').style.display = 'flex';
+  document.getElementById('widget').style.display = 'flex';
+}
+function showKorus() {
+  hideAll();
+  document.getElementById('korus').style.display = 'block';
+}
+function showBot() {
+  hideAll();
+  document.getElementById('avyavbot').style.display = 'block';
+}
+function comingSoon(x) {
+  alert(x + " page coming soon!");
+}
+function hideAll() {
+  document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
+  document.getElementById('widget').style.display = 'none';
+}
 
-  const fullText = "Hi, I am Avyav Namdev, welcome to my chess website. I am an advanced player with rating higher than 2100 in chess.com, I created this website for the love of chess.";
+/* --- CHESS GAME --- */
+const pieceImages = {
+  'wK': 'wking.png','wQ': 'wqueen.png','wR': 'wrook.png','wB': 'wbishop.png','wN': 'wknight.png','wP': 'wpawn.png',
+  'bK': 'bking.png','bQ': 'bqueen.png','bR': 'brook.png','bB': 'bbishop.png','bN': 'bknight.png','bP': 'bpawn.png'
+};
+let playerColor = Math.random() < 0.5 ? 'white' : 'black';
+let boardState = initializeBoard();
+let selectedPiece = null;
+let moveHistory = [];
+let isPlayerTurn = (playerColor === 'white');
 
-  setTimeout(() => {
-    animation.style.display = "none";
-    introContainer.style.display = "flex";
-    typeText();
-  }, 2500);
+document.getElementById('startGameBtn').addEventListener('click', () => {
+  document.getElementById('bot-content').style.display = 'none';
+  document.getElementById('gameArea').style.display = 'flex';
+  renderBoard();
+  if (playerColor === 'black') botMove();
+});
 
-  let i = 0;
-  function typeText() {
-    if (i < fullText.length) {
-      introText.textContent += fullText.charAt(i);
-      if (typingSound.paused) typingSound.play();
-      i++;
-      setTimeout(typeText, 50);
-    } else {
-      typingSound.pause();
-      typingSound.currentTime = 0;
-      getStarted.style.display = "inline-block";
-      setTimeout(() => {
-        dragon.style.opacity = "1";
-        footer.style.display = "block";
-      }, 1000);
+function initializeBoard() {
+  return [
+    ['bR','bN','bB','bQ','bK','bB','bN','bR'],
+    ['bP','bP','bP','bP','bP','bP','bP','bP'],
+    [null,null,null,null,null,null,null,null],
+    [null,null,null,null,null,null,null,null],
+    [null,null,null,null,null,null,null,null],
+    [null,null,null,null,null,null,null,null],
+    ['wP','wP','wP','wP','wP','wP','wP','wP'],
+    ['wR','wN','wB','wQ','wK','wB','wN','wR']
+  ];
+}
+
+function renderBoard() {
+  const boardDiv = document.getElementById('chessboard');
+  boardDiv.innerHTML = '';
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      const piece = boardState[r][c];
+      if (piece) {
+        const img = document.createElement('img');
+        img.src = pieceImages[piece];
+        img.style.position = 'absolute';
+        img.style.width = '60px';
+        img.style.height = '60px';
+        img.style.left = (c * 60) + 'px';
+        img.style.top = (r * 60) + 'px';
+        img.style.cursor = 'pointer';
+        img.onclick = () => selectPiece(r, c);
+        boardDiv.appendChild(img);
+      }
     }
   }
+}
 
-  getStarted.addEventListener('click', () => {
-    dragon.style.animation = "dragonEnlargeFade 1.5s forwards";
-    setTimeout(() => {
-      introContainer.style.display = "none";
-      document.getElementById('home-container').style.display = "flex";
-    }, 1500);
-  });
-
-  function openPage(page) {
-    document.getElementById('home-container').style.display = "none";
-    document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
-    document.getElementById(`${page}-page`).style.display = "flex";
+function selectPiece(r, c) {
+  if (!isPlayerTurn) return;
+  if (selectedPiece) {
+    const [sr, sc] = selectedPiece;
+    makeMove(sr, sc, r, c);
+    selectedPiece = null;
+  } else if (boardState[r][c] && boardState[r][c][0] === (playerColor === 'white' ? 'w' : 'b')) {
+    selectedPiece = [r, c];
   }
+}
 
-  function goHome() {
-    document.querySelectorAll('.content-page').forEach(p => p.style.display = "none");
-    document.getElementById('home-container').style.display = "flex";
-  }
+function makeMove(sr, sc, tr, tc) {
+  const move = `${String.fromCharCode(97 + sc)}${8 - sr}${String.fromCharCode(97 + tc)}${8 - tr}`;
+  moveHistory.push(move);
+  boardState[tr][tc] = boardState[sr][sc];
+  boardState[sr][sc] = null;
+  renderBoard();
+  addMoveToHistory(move);
+  isPlayerTurn = false;
+  botMove();
+}
 
-  document.getElementById('home-icon').addEventListener('click', goHome);
+async function botMove() {
+  try {
+    const response = await fetch('https://chess-api.com/v1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fen: getFEN(), depth: 2 })
+    });
+    const data = await response.json();
+    if (data && data.move) {
+      const move = data.move;
+      applyBotMove(move);
+      addMoveToHistory(move);
+    }
+  } catch (e) { console.error('Bot move error:', e); }
+  isPlayerTurn = true;
+}
+
+function applyBotMove(move) {
+  const fromCol = move.charCodeAt(0) - 97;
+  const fromRow = 8 - parseInt(move[1]);
+  const toCol = move.charCodeAt(2) - 97;
+  const toRow = 8 - parseInt(move[3]);
+  boardState[toRow][toCol] = boardState[fromRow][fromCol];
+  boardState[fromRow][fromCol] = null;
+  renderBoard();
+}
+
+function addMoveToHistory(move) {
+  const li = document.createElement('li');
+  li.textContent = move;
+  document.getElementById('historyList').appendChild(li);
+}
+
+function getFEN() {
+  const rows = boardState.map(row => row.map(cell => {
+    if (!cell) return '1';
+    const piece = cell[1].toLowerCase();
+    return cell[0] === 'w' ? piece.toUpperCase() : piece;
+  }).join('').replace(/1+/g, match => match.length));
+  return rows.join('/') + ' ' + (isPlayerTurn ? (playerColor === 'white' ? 'w' : 'b') : (playerColor === 'white' ? 'b' : 'w')) + ' - - 0 1';
+}
 </script>
-
-<script>
-fetch('/.netlify/functions/log-visit')
-  .then(response => response.json())
-  .then(data => console.log('Visitor IP logged:', data.ip))
-  .catch(err => console.error('Logging failed:', err));
-</script>
-
 </body>
 </html>
